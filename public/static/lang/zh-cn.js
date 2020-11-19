@@ -21,7 +21,11 @@ module.exports = {
         empStep5:'收到员工CLA签署生效的邮件签署完成',
         individualStep2:'同意CLA签署平台对您个人Gitee账号的访问授权跳转至个人CLA签署页面',
         individualStep4:'收到个人CLA签署生效的邮件签署完成',
+<<<<<<< HEAD
         admin_platform:'超级管理员后台'
+=======
+        admin_platform:'超级管理员后台',
+>>>>>>> dfa9a00dccfbe6c7642f66bc43588e0ad08e031f
     },
     signPage: {
         claTitle: "贡献者许可协议",
@@ -42,7 +46,9 @@ module.exports = {
         failedTitle:'失败',
         successTitle:'成功',
         dialogBt:'确定',
-        no_cla_binding:'该组织没有可签署的贡献者许可协议',
+        no_cla_binding_corp:'该组织没有可用的企业贡献者许可协议',
+        no_cla_binding_emp:'该组织没有可用的员工贡献者许可协议',
+        no_cla_binding_individual:'该组织没有可用的个人贡献者许可协议',
         has_signed:'已签署过这份贡献者许可协议',
         invalid_parameter:'参数无效，无法签署',
         no_corp_manager:'该公司尚未添加任何管理员。你无法签署',

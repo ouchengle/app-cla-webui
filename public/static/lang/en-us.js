@@ -21,7 +21,11 @@ module.exports = {
         empStep5:'Receive an e-mail indicating that the CLA is signed and activated.',
         individualStep2:'Agree to access your Gitee account on the CLA signing platform and go to the individual CLA signing page.',
         individualStep4:'Receive an e-mail indicating that the the CLA is signed and activated.',
+<<<<<<< HEAD
         admin_platform:' Administrator platform '
+=======
+        admin_platform:' Administrator platform ',
+>>>>>>> dfa9a00dccfbe6c7642f66bc43588e0ad08e031f
     },
     signPage: {
         claTitle: "Contributor License Agreement",
@@ -42,7 +46,9 @@ module.exports = {
         failedTitle:'Failed',
         successTitle:'Successfully',
         dialogBt:'OK',
-        no_cla_binding:'There is no CLA to sign for organization.',
+        no_cla_binding_corp:'There is no CLA to sign for corporation.',
+        no_cla_binding_emp:'There is no CLA to sign for employee.',
+        no_cla_binding_individual:'There is no CLA to sign for individual.',
         has_signed:'The CLA has been signed before.',
         invalid_parameter:'The parameter is invalid and cannot be signed',
         no_corp_manager:'Your company has not added any managers for this project.You can\'t sign',
