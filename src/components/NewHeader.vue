@@ -313,10 +313,6 @@
                 border-bottom: 1px solid black;
             }
         }
-<<<<<<< HEAD
-=======
-
->>>>>>> e72394ab1cfe5bf11caabcdfa725aac8a422f1ac
         .mark {
             height: 6px;
             width: 6px;
