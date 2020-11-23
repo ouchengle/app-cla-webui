@@ -120,7 +120,6 @@
                         let email = this.data[i].email.trim();
                         let name = this.data[i].name.trim();
                         let id = this.data[i].id.trim();
-                        console.log(this.data[i].id,this.data[i].id.match(/^[a-zA-Z0-9_.]+$/));
                         if (!this.data[i].id.match(/^[a-zA-Z0-9_.]+$/)) {
                             isCreate = false;
                             this.$store.commit('errorCodeSet', {
