@@ -107,13 +107,13 @@
             handleCommand(command) {
                 switch (command) {
                     case 'a':
-                        this.toHome();
+                        this.toHome()
                         break;
                     case 'b':
-                        this.toManager();
+                        this.toManager()
                         break;
                     case 'c':
-                        this.toEmployee();
+                        this.toEmployee()
                         break;
                     case 'd':
                         this.toCreateManager()
@@ -233,14 +233,16 @@
     }
 </script>
 
-<style  lang="less">
+<style lang="less">
     .headerBox {
         border-bottom: 2px solid #F2F2F2;
         height: 5.5rem;
         width: 100%;
-        .box{
+
+        .box {
             cursor: pointer;
         }
+
         .visible {
             visibility: hidden;
         }
@@ -311,6 +313,10 @@
                 border-bottom: 1px solid black;
             }
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> e72394ab1cfe5bf11caabcdfa725aac8a422f1ac
         .mark {
             height: 6px;
             width: 6px;
