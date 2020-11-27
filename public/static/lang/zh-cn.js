@@ -92,6 +92,12 @@ module.exports = {
         exits_email:'邮箱已存在，请检查后重试',
         exits_id:'ID已存在，请检查后重试',
         invalid_id:'ID格式错误，ID只能包含a-zA-Z0-9_.',
+        paste_individual_link:'请粘贴应用于个人签署的CLA链接',
+        select_individual_language:'请选择应用于个人签署的CLA的语言',
+        paste_corp_link:'请粘贴应用于企业签署的CLA链接',
+        select_corp_language:'请选择应用于企业签署的CLA的语言',
+        authorized_email:'请为组织或仓库授权一个邮箱用于与签署者通讯',
+        upload_signature_file:'请上传代表社区的签名的PDF文件',
     },
     header:{
         home:'首页',
@@ -130,7 +136,6 @@ module.exports = {
         active:'已激活',
         no_data:'暂无数据',
         manager_email_same_with_admin:'不能添加超级管理员为员工管理员',
-
     },
     index:{
         org_login: '开源社区管理员',
