@@ -92,6 +92,14 @@ module.exports = {
         exits_email:'Email existed.Please check and try again',
         exits_id:'ID existed.Please check and try again',
         invalid_id:'ID format error,ID can only contain a-zA-Z0-9_.',
+        paste_individual_link:'Please paste the cla link applied to the individual signature',
+        select_individual_language:'Please select the language to apply to the cla signed by the individual',
+        paste_corp_link:'Please paste the cla link applied to the corporation signature',
+        select_corp_language:'Please select the language to apply to the cla signed by the corporation',
+        authorized_email:'Please authorize an email for your organization or repository to communicate with the signer',
+        upload_signature_file:'Please upload a PDF file with the signature of the community',
+        not_upload_file:'No file has been uploaded. Please upload and try again',
+        no_file_can_download:'No files available',
     },
     header:{
         home:'Home',
@@ -130,6 +138,8 @@ module.exports = {
         active:'active',
         no_data:'No data',
         manager_email_same_with_admin:'Administrator cannot be added as employee manager',
+        select_community:'Please select the community you want to manage',
+        select_placeholder:'select',
     },
     index:{
        org_login: 'Opensource Community Manager',

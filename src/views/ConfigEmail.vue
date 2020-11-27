@@ -77,10 +77,12 @@
             isEmail() {
                 return `${this.$store.state.isEmail}` === 'true';
             },
+            email() {
+                return this.$store.state.email;
+            },
         },
         data() {
             return {
-                email: '',
                 emailDialogVisible: false,
                 emailTypeArr: [{value: 'G-Mail', label: 'G-Mail'}],
                 emailType: '',
@@ -91,11 +93,16 @@
                 this.$router.push('/config-fields')
             },
             toConfigCheck() {
-                this.$router.push('/config-check')
+                if (this.email) {
+                    this.$router.push('/config-check')
+                } else {
+                    this.$message.closeAll();
+                    this.$message.error(this.$t('tips.authorized_email'));
+                }
             },
             getCookieData() {
                 if (document.cookie !== '') {
-                    let cookieArr = document.cookie.split('; ');
+                    let cookieArr = document.cookie.split(';');
                     let email = '';
                     cookieArr.forEach((item, index) => {
                         let arr = item.split('=');
@@ -104,12 +111,9 @@
                         if (name === 'email') {
                             email = value
                         }
-                        this.$cookie.remove(name, {path: '/'});
                     });
-                    this.email = email;
-                    if (email) {
-                        this.$store.commit('setIsEmail', true)
-                    }
+                    email ? this.$store.commit('setIsEmail', true) : this.$store.commit('setIsEmail', false);
+                    this.$store.commit('setEmail', email);
                 }
             },
             toAuthorizedEmail() {
@@ -140,7 +144,32 @@
                 }).catch(err => {
                 })
             },
-        }
+            init() {
+                this.$store.commit('setEmail', '');
+                this.$store.commit('setIsEmail', false);
+                sessionStorage.removeItem('email');
+            },
+        },
+        created() {
+            this.getCookieData();
+        },
+        beforeRouteEnter(to, from, next) {
+            next(vm => {
+                if (from.path === '/') {
+                    let cookie = document.cookie;
+                    if (cookie){
+                        let cookieArr = cookie.split(';');
+                        cookieArr.forEach((item, index) => {
+                            let arr = item.split('=');
+                            let name = arr[0].trim();
+                            vm.$cookie.remove(name, {path: '/'});
+                        });
+                    } else{
+                        vm.init();
+                    }
+                }
+            })
+        },
     }
 </script>
 
