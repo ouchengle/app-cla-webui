@@ -516,7 +516,7 @@
                                     console.log('case system_error');
                                     this.$store.commit('errorCodeSet', {
                                         dialogVisible: true,
-                                        dialogMessage: this.$t('tips.not_commit_email'),
+                                        dialogMessage: this.$t('tips.not_commit_email',{platform:this.$store.state.repoInfo.platform}),
                                     });
                                     break;
                             }
