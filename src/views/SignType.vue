@@ -497,8 +497,11 @@
                     let cookieArr = cookie.split(';');
                     for (let i = 0; i < cookieArr.length; i++) {
                         let cookieKeyValue = cookieArr[i].split('=');
-                        if (cookieKeyValue[0].trim() === "error_code") {
-                            switch (cookieKeyValue[1].trim()) {
+                        let name = cookieKeyValue[0].trim();
+                        let value = cookieKeyValue[1].trim();
+                        this.$cookie.remove(name, {path: '/'});
+                        if (name === "error_code") {
+                            switch (value) {
                                 case 'auth_failed':
                                     this.$store.commit('errorCodeSet', {
                                         dialogVisible: true,
@@ -514,14 +517,13 @@
                                 case 'system_error':
                                     this.$store.commit('errorCodeSet', {
                                         dialogVisible: true,
-                                        dialogMessage: this.$t('tips.not_commit_email',{platform:this.$store.state.repoInfo.platform}),
+                                        dialogMessage: this.$t('tips.not_commit_email', {platform: this.$store.state.repoInfo.platform}),
                                     });
                                     break;
                             }
-                            break;
                         }
                     }
-                    this.$cookie.remove(name, {path: '/'});
+
                     let params = '';
                     let repoInfo = this.$store.state.repoInfo;
                     this.platform = repoInfo.platform;
