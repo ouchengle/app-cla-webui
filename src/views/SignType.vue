@@ -32,7 +32,7 @@
                                             <div>
 
                                                 <button class="button" @click="submit('corporation')">
-                                                   {{ $t('signType.corpBt') }}
+                                                    {{ $t('signType.corpBt') }}
                                                 </button>
                                             </div>
                                             <div>
@@ -41,7 +41,7 @@
                                                 </button>
                                             </div>
                                             <button class="button" @click="submit('individual')">
-                                               {{ $t('signType.individualBt') }}
+                                                {{ $t('signType.individualBt') }}
                                             </button>
                                         </div>
                                     </el-col>
@@ -96,7 +96,8 @@
                                     </el-col>
                                     <el-col :span="10" class="textCol">
                                         <div class="rightText">
-                                            {{ $t('signType.corpStep1_1') }}<span>{{ $t('signType.corpBt') }}</span>{{ $t('signType.corpStep1_2') }}
+                                            {{ $t('signType.corpStep1_1') }}<span>{{ $t('signType.corpBt') }}</span>{{
+                                            $t('signType.corpStep1_2') }}
                                         </div>
                                     </el-col>
                                 </el-row>
@@ -201,7 +202,8 @@
                                 <el-row class="stepBox">
                                     <el-col :span="10" class="textCol">
                                         <div class="leftText">
-                                            {{ $t('signType.corpStep6_1') }}<span  @click="toCorpLogin()">{{ $t('signType.admin_platform') }}</span>{{ $t('signType.corpStep6_2') }}
+                                            {{ $t('signType.corpStep6_1') }}<span @click="toCorpLogin()">{{ $t('signType.admin_platform') }}</span>{{
+                                            $t('signType.corpStep6_2') }}
                                         </div>
                                     </el-col>
                                     <el-col :span="4">
@@ -222,7 +224,8 @@
                                     </el-col>
                                     <el-col :span="10" class="textCol">
                                         <div class="rightText">
-                                            {{ $t('signType.corpStep1_1') }}<span>{{ $t('signType.empBt') }}</span>{{ $t('signType.corpStep1_2') }}
+                                            {{ $t('signType.corpStep1_1') }}<span>{{ $t('signType.empBt') }}</span>{{
+                                            $t('signType.corpStep1_2') }}
                                         </div>
                                     </el-col>
                                 </el-row>
@@ -326,7 +329,9 @@
                                     </el-col>
                                     <el-col :span="10" class="textCol">
                                         <div class="rightText">
-                                            {{ $t('signType.corpStep1_1') }}<span>{{ $t('signType.individualBt') }}</span>{{ $t('signType.corpStep1_2') }}
+                                            {{ $t('signType.corpStep1_1')
+                                            }}<span>{{ $t('signType.individualBt') }}</span>{{
+                                            $t('signType.corpStep1_2') }}
                                         </div>
                                     </el-col>
                                 </el-row>
@@ -466,14 +471,14 @@
             }
         },
         methods: {
-            ...mapActions([ 'setLoginTypeAct', 'setRepoInfoAct']),
-            toCorpLogin(){
-                this.$store.commit('setLoginType','corporationManager');
+            ...mapActions(['setLoginTypeAct', 'setRepoInfoAct']),
+            toCorpLogin() {
+                this.$store.commit('setLoginType', 'corporationManager');
                 this.$router.push('/corporationManagerLogin')
             },
-            setLangLocale(){
-                if(parseInt(localStorage.getItem('lang'))){
-                    this.value =parseInt(localStorage.getItem('lang'))
+            setLangLocale() {
+                if (parseInt(localStorage.getItem('lang'))) {
+                    this.value = parseInt(localStorage.getItem('lang'))
                 }
                 switch (this.value) {
                     case 0:
@@ -490,10 +495,11 @@
                 if (params === 'auth_failed') {
                     let cookie = document.cookie;
                     let cookieArr = cookie.split(';');
-                    for (let i =0;i<cookieArr.length;i++){
+                    for (let i = 0; i < cookieArr.length; i++) {
                         let cookieKeyValue = cookieArr[i].split('=');
-                        if (cookieKeyValue[0].trim()==="error_code") {
-                            switch(cookieKeyValue[1]){
+                        console.log(cookieKeyValue);
+                        if (cookieKeyValue[0].trim() === "error_code") {
+                            switch (cookieKeyValue[1].trim()) {
                                 case 'auth_failed':
                                     this.$store.commit('errorCodeSet', {
                                         dialogVisible: true,
@@ -507,6 +513,7 @@
                                     });
                                     break;
                                 case 'system_error':
+                                    console.log('case system_error');
                                     this.$store.commit('errorCodeSet', {
                                         dialogVisible: true,
                                         dialogMessage: this.$t('tips.not_commit_email'),
@@ -530,7 +537,7 @@
                     }
                     let base64Params = until.strToBase64(params);
                     this.$router.replace(`${this.$store.state.signRouter}/${base64Params}`);
-                }else{
+                } else {
                     let repoInfoParams = '';
                     if (params.indexOf('/') !== -1) {
                         repoInfoParams = params.substring(0, params.indexOf('/'));
@@ -593,7 +600,7 @@
                                     case 'cla.missing_token':
                                         this.$store.commit('setSignReLogin', {
                                             dialogVisible: true,
-                                            dialogMessage:this.$t('tips.missing_token'),
+                                            dialogMessage: this.$t('tips.missing_token'),
                                         });
                                         break;
                                     case 'cla.unknown_token':
@@ -651,14 +658,14 @@
         }
     }
 </script>
-<style  lang="less">
+<style lang="less">
     @import "../assets/font/css/Roboto-Bold.css";
     @import "../assets/font/css/Roboto-Black.css";
     @import "../assets/font/css/Roboto-Light.css";
     @import "../assets/font/css/Roboto-Regular.css";
 
     #transparentDiv {
-         .el-dialog {
+        .el-dialog {
             border-radius: 1rem;
         }
 
