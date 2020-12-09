@@ -11,7 +11,7 @@
             </div>
             <div>
                 <div class="margin-top-1rem">
-                    Individual CLA Url
+                    Individual CLA url
                 </div>
                 <div class="margin-top-1rem">
                     You need to paste here a url to the original data from the gitee repository, which is the cla
@@ -26,7 +26,7 @@
                         </el-col>
                     </el-row>
                     <el-row class="margin-top-1rem">
-                        Individual CLA Language
+                        Individual CLA language
                     </el-row>
                     <el-row class="margin-top-1rem">
                         <el-col>
@@ -54,7 +54,7 @@
                     information. If not, please ignore it
                 </div>
                 <div class="margin-top-1rem">
-                    Corporation CLA Url
+                    Corporation CLA url
                 </div>
                 <div class="margin-top-1rem">
                     You need to paste here a url to the original data from the gitee repository, which is the cla
@@ -69,7 +69,7 @@
                         </el-col>
                     </el-row>
                     <div class="margin-top-1rem">
-                        Corporation CLA Language
+                        Corporation CLA language
                     </div>
                     <el-row class="margin-top-1rem">
                         <el-col>
@@ -90,7 +90,7 @@
                         </el-col>
                     </el-row>
                     <div class="margin-top-1rem">
-                        Upload Signature File
+                        Upload signature file
                     </div>
                     <div class="margin-top-1rem">
                         You need to upload a PDF file that the community administrator has signed. If you don't have the
@@ -158,24 +158,13 @@
                 set(value) {
                     this.$store.commit('setCorpLanguage', value)
                 }
-            }
-            ,
-            // corp_pdf_name() {
-            //     console.log( 'corpFD',this.$store.state.corpFD);
-            //     if (this.$store.state.corpFD) {
-            //         console.log('files',this.$store.state.corpFD.get('files'));
-            //         return this.$store.state.corpFD.get('files').name;
-            //     }
-            //     return this.$store.state.corpFD
-            // },
+            },
             corpReLoginMsg() {
                 return this.$store.state.dialogMessage
-            }
-            ,
+            },
             corpReTryDialogVisible() {
                 return this.$store.state.reTryDialogVisible
-            }
-            ,
+            },
         },
         data() {
             return {
@@ -185,8 +174,22 @@
         }
         ,
         methods: {
-            downloadFile(){
-                
+            init() {
+                this.$store.commit('setIndividualLanguage', '');
+                this.$store.commit('setCorpLanguage', '');
+                this.$store.commit('setClaLinkIndividual', '');
+                this.$store.commit('setClaLinkCorp', '');
+                this.$store.commit('setCorpFDName', '');
+                this.$store.commit('setCorpFD', '');
+                sessionStorage.removeItem('individualLanguage');
+                sessionStorage.removeItem('corpLanguage');
+                sessionStorage.removeItem('claLinkIndividual');
+                sessionStorage.removeItem('claLinkCorp');
+                sessionStorage.removeItem('corpFDName');
+                sessionStorage.removeItem('corpFD');
+            },
+            downloadFile() {
+
             },
             changeIndividualLanguage(value) {
                 this.$store.commit('setIndividualLanguage', value)
@@ -212,7 +215,7 @@
                         return false
                     }
                 }
-                this.$store.commit('setCorpFDName', formData.get('files').name)
+                this.$store.commit('setCorpFDName', formData.get('files').name);
                 let reader = new FileReader();
                 reader.readAsDataURL(formData.get('files'));
                 reader.onload = () => {
@@ -220,13 +223,13 @@
                 };
             },
             toConfigOrg() {
-                this.$router.push('/config-org')
+                this.$router.replace('/config-org')
             },
             toConfigFields() {
                 if (this.cla_link_individual && this.individualClaLanguageValue) {
                     if (this.cla_link_corporation && this.corpClaLanguageValue && this.$store.state.corpFD
                         || !(this.cla_link_corporation || this.corpClaLanguageValue || this.$store.state.corpFD)) {
-                        this.$router.push('/config-fields')
+                        this.$router.replace('/config-fields')
                     } else if (this.cla_link_corporation) {
                         if (this.corpClaLanguageValue) {
                             this.$store.commit('errorCodeSet', {
@@ -258,6 +261,13 @@
                     });
                 }
             },
+        },
+        beforeRouteEnter(to, from, next) {
+            next(vm => {
+                if (from.path === '/') {
+                    vm.init();
+                }
+            })
         },
     }
 </script>

@@ -7,6 +7,19 @@
             <div class="margin-top-1rem">
                 <el-row :gutter="20">
                     <el-col :span="8">
+                        Organization
+                    </el-col>
+                    <el-col :span="8">
+                        Organization alias
+                    </el-col>
+                    <el-col :span="8">
+                        Repository
+                    </el-col>
+                </el-row>
+            </div>
+            <div class="margin-top-half-rem">
+                <el-row :gutter="20">
+                    <el-col :span="8">
                         <el-input disabled="" size="medium" v-model="org"></el-input>
                     </el-col>
                     <el-col :span="8">
@@ -16,12 +29,11 @@
                         <el-input disabled="" size="medium" v-model="repo"></el-input>
                     </el-col>
                 </el-row>
-
             </div>
         </div>
         <div class="itemBox">
             <div class="=info-title">
-                ② Paste a link of a CLA file
+                ② Url of CLA file
                 <el-tooltip class="item" effect="dark"
                             content="Paste a link to the original data of a CLA in the repository"
                             placement="right">
@@ -29,60 +41,54 @@
                 </el-tooltip>
             </div>
             <div class="margin-top-1rem">
-                Individual CLA Link
+                <el-row :gutter="20">
+                    <el-col :span="18">
+                        Individual CLA url
+                    </el-col>
+                    <el-col :span="6">
+                        Individual CLA language
+                    </el-col>
+                </el-row>
             </div>
-            <div class="margin-top-1rem">
+            <div class="margin-top-half-rem">
                 <el-row :gutter="20">
                     <el-col :span="18">
                         <el-input disabled="" size="medium" v-model="cla_link_individual">
                         </el-input>
                     </el-col>
                     <el-col :span="6">
-                        <el-select v-model="individualClaLanguageValue"
-                                   placeholder="select language"
-                                   style="width: 100%"
-                                   disabled=""
-                                   size="medium">
-                            <el-option
-                                    v-for="item in languageOptions"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
-                            </el-option>
-                        </el-select>
+                        <el-input disabled="" size="medium" v-model="individualClaLanguageValue">
+                        </el-input>
                     </el-col>
                 </el-row>
             </div>
             <div class="margin-top-1rem">
-                Corporation CLA Link
+                <el-row :gutter="20">
+                    <el-col :span="18">
+                        Corporation CLA url
+                    </el-col>
+                    <el-col :span="6">
+                        Corporation CLA language
+                    </el-col>
+                </el-row>
             </div>
-            <div class="margin-top-1rem">
+            <div class="margin-top-half-rem">
                 <el-row :gutter="20">
                     <el-col :span="18">
                         <el-input disabled="" size="medium" v-model="cla_link_corporation">
                         </el-input>
                     </el-col>
                     <el-col :span="6">
-                        <el-select v-model="corpClaLanguageValue"
-                                   placeholder="select language"
-                                   style="width: 100%"
-                                   size="medium"
-                                   disabled="">
-                            <el-option
-                                    v-for="item in languageOptions"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
-                            </el-option>
-                        </el-select>
+                        <el-input disabled="" size="medium" v-model="corpClaLanguageValue">
+                        </el-input>
                     </el-col>
                 </el-row>
-                <div class="margin-top-1rem">
-                    Signature File
-                </div>
-                <div class="margin-top-1rem">
-                    <el-input disabled="" v-model="corp_pdf_name"></el-input>
-                </div>
+            </div>
+            <div class="margin-top-1rem">
+                Signature File
+            </div>
+            <div class="margin-top-half-rem">
+                <el-input disabled="" v-model="corp_pdf_name"></el-input>
             </div>
         </div>
         <div class="itemBox">
@@ -101,7 +107,7 @@
         </div>
         <div class="itemBox">
             <div style="padding: .5rem">
-                <p style="font-size: 1.2rem">④ Edit CLA's Fields
+                <p style="font-size: 1.2rem">④ CLA's Fields
                     <el-tooltip class="item" effect="dark"
                                 content="The information you want contributors to fill in when they sign the cla.Title and type are required, otherwise the field will fail to be added"
                                 placement="right">
@@ -114,6 +120,20 @@
                     For Individual
                 </el-row>
                 <div>
+                    <el-row class="margin-top-1rem" type="flex" align="middle" :gutter="20">
+                        <el-col :span="5">
+                            Title
+                        </el-col>
+                        <el-col :span="5">
+                            Type
+                        </el-col>
+                        <el-col :span="5">
+                            Describe
+                        </el-col>
+                        <el-col :span="5" style="height: 100%">
+                            Require
+                        </el-col>
+                    </el-row>
                     <el-row style="padding: 0.5rem 0;" type="flex" align="middle" :gutter="20"
                             v-for="(item,index) in individualMetadata">
                         <el-col :span="5">
@@ -137,6 +157,20 @@
                     For Corporation
                 </el-row>
                 <div>
+                    <el-row class="margin-top-1rem" type="flex" align="middle" :gutter="20">
+                        <el-col :span="5">
+                            Title
+                        </el-col>
+                        <el-col :span="5">
+                            Type
+                        </el-col>
+                        <el-col :span="5">
+                            Describe
+                        </el-col>
+                        <el-col :span="5" style="height: 100%">
+                            Require
+                        </el-col>
+                    </el-row>
                     <el-row style="padding: 0.5rem 0;" type="flex" align="middle" :gutter="20"
                             v-for="(item,index) in corporationMetadata">
                         <el-col :span="5">
@@ -186,13 +220,13 @@
                 return this.$store.state.email;
             },
             org() {
-                return this.$store.state.org
+                return this.$store.state.chooseOrg
             },
             orgAlias() {
                 return this.$store.state.orgAlias
             },
             repo() {
-                return this.$store.state.repo
+                return this.$store.state.chooseRepo
             },
             cla_link_individual: {
                 get() {
@@ -228,7 +262,6 @@
         },
         data() {
             return {
-                languageOptions: [{value: 'English', label: 'English'}, {value: '中文', label: '中文'}],
                 platform: this.$store.state.platform,
                 isVerify: false,
                 previewShow: false,
@@ -275,7 +308,7 @@
                 }
                 return new File([u8arr], filename, {type: mime});
             },
-            fileToFormData(fs){
+            fileToFormData(fs) {
                 let formData = new FormData();
                 let max_size = 1024 * 1024;
                 for (let i = 0; i < fs.length; i++) {
@@ -295,10 +328,10 @@
                 return formData;
             },
             binding() {
-                let corp_pdf={};
-                let formData={};
+                let corp_pdf = {};
+                let formData = {};
                 if (this.$store.state.corpFD) {
-                     corp_pdf = this.dataURLtoFile(this.$store.state.corpFD, this.$store.state.corpFDName);
+                    corp_pdf = this.dataURLtoFile(this.$store.state.corpFD, this.$store.state.corpFDName);
                     console.log('pdf==', corp_pdf);
                     formData = this.fileToFormData(corp_pdf)
                 }
@@ -376,6 +409,9 @@
 
 <style lang="less">
     #configCla {
+        .margin-top-half-rem{
+            margin-top: .5rem;
+        }
         .el-dialog__body {
             text-align: center;
             word-break: keep-all;

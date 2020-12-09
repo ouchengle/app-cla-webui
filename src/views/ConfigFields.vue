@@ -154,24 +154,14 @@
                 if (this.$store.state.individualCustomMetadataArr) {
                     return this.$store.state.individualCustomMetadataArr
                 } else {
-                    return [{
-                        title: '',
-                        type: '',
-                        description: '',
-                        required: false,
-                    }];
+                    return this.initIndividualCustomMetadata;
                 }
             },
             corporationCustomMetadataArr() {
                 if (this.$store.state.corporationCustomMetadataArr) {
                     return this.$store.state.corporationCustomMetadataArr
                 } else {
-                    return [{
-                        title: '',
-                        type: '',
-                        description: '',
-                        required: false,
-                    }];
+                    return this.initCorpCustomMetadata;
                 }
             },
         },
@@ -228,20 +218,49 @@
                         description: 'corporation email',
                         required: true,
                     },],
+                initIndividualCustomMetadata: [{
+                    title: '',
+                    type: '',
+                    description: '',
+                    required: false,
+                }],
+                initCorpCustomMetadata: [{
+                    title: '',
+                    type: '',
+                    description: '',
+                    required: false,
+                }],
             }
         },
+        beforeRouteEnter(to, from, next) {
+            next(vm => {
+                if (from.path === '/') {
+                    vm.init();
+                }
+            })
+        },
         methods: {
+            init() {
+                this.$store.commit('setIndividualMetadata', this.individualMetadataArr);
+                this.$store.commit('setCorpMetadata', this.corporationMetadataArr);
+                this.$store.commit('setIndividualCustomMetadataArr', this.initIndividualCustomMetadata);
+                this.$store.commit('setCorporationCustomMetadataArr', this.initCorpCustomMetadata);
+                sessionStorage.removeItem('individualMetadata');
+                sessionStorage.removeItem('corporationMetadata');
+                sessionStorage.removeItem('individualCustomMetadataArr');
+                sessionStorage.removeItem('corporationCustomMetadataArr');
+            },
             toConfigClaLink() {
                 this.$router.push('/config-cla-link')
             },
             toConfigEmail() {
                 let metadataObj = this.checkMetadata();
                 if (metadataObj) {
-                    this.$store.commit('setIndividualMetadata', metadataObj.individualArr)
-                    this.$store.commit('setCorpMetadata', metadataObj.corpArr)
-                    this.$store.commit('setIndividualCustomMetadataArr', this.individualMetadata)
-                    this.$store.commit('setCorporationCustomMetadataArr', this.corpMetadata)
-                    this.$router.push('/config-email')
+                    this.$store.commit('setIndividualMetadata', metadataObj.individualArr);
+                    this.$store.commit('setCorpMetadata', metadataObj.corpArr);
+                    this.$store.commit('setIndividualCustomMetadataArr', this.individualMetadata);
+                    this.$store.commit('setCorporationCustomMetadataArr', this.corpMetadata);
+                    this.$router.push('/config-email');
                 } else {
                     this.$message.closeAll();
                     this.$message.error(this.$t('tips.title_type_repeat'))
