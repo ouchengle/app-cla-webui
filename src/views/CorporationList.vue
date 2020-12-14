@@ -376,6 +376,7 @@
                 // $('#container').show();
                 // $('#pop').empty();
                 let pop = document.getElementById('pop');
+                console.log(pop);
                 pop.innerHTML = '';
                 PDFJS.getDocument(fileContent).promise.then(function getPdfHelloWorld(pdf) {
                     let pages = pdf.numPages;
