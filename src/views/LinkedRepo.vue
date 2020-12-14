@@ -592,6 +592,7 @@
                     url: `${url.downloadSignature}/${row.id}`,
                 }).then(res => {
                     if (res.data.data.pdf) {
+                        console.log(res.data.data.pdf);
                         let URL = this.dataURLtoBlob(res.data.data.pdf);
                         var reader = new FileReader();
                         reader.readAsDataURL(URL);
