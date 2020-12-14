@@ -591,10 +591,10 @@
         },
         created() {
             this.init();
-            this.showPdfFile(this.pdfBase64)
         },
         mounted() {
             this.setClientHeight();
+            this.showPdfFile(this.pdfBase64)
         },
         updated() {
             this.setClientHeight()
