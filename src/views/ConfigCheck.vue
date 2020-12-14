@@ -153,43 +153,46 @@
                     </el-row>
 
                 </div>
-                <el-row class="margin-top-1rem">
-                    For Corporation
-                </el-row>
-                <div>
-                    <el-row class="margin-top-1rem" type="flex" align="middle" :gutter="20">
-                        <el-col :span="5">
-                            Title
-                        </el-col>
-                        <el-col :span="5">
-                            Type
-                        </el-col>
-                        <el-col :span="5">
-                            Describe
-                        </el-col>
-                        <el-col :span="5" style="height: 100%">
-                            Require
-                        </el-col>
+                <div v-if="this.$store.state.claLinkCorp">
+                    <el-row class="margin-top-1rem">
+                        For Corporation
                     </el-row>
-                    <el-row style="padding: 0.5rem 0;" type="flex" align="middle" :gutter="20"
-                            v-for="(item,index) in corporationMetadata">
-                        <el-col :span="5">
-                            <el-input disabled="" v-model="item.title" size="medium" readonly="">
+                    <div>
+                        <el-row class="margin-top-1rem" type="flex" align="middle" :gutter="20">
+                            <el-col :span="5">
+                                Title
+                            </el-col>
+                            <el-col :span="5">
+                                Type
+                            </el-col>
+                            <el-col :span="5">
+                                Describe
+                            </el-col>
+                            <el-col :span="5" style="height: 100%">
+                                Require
+                            </el-col>
+                        </el-row>
+                        <el-row style="padding: 0.5rem 0;" type="flex" align="middle" :gutter="20"
+                                v-for="(item,index) in corporationMetadata">
+                            <el-col :span="5">
+                                <el-input disabled="" v-model="item.title" size="medium" readonly="">
 
-                            </el-input>
-                        </el-col>
-                        <el-col :span="5">
-                            <el-input disabled="" v-model="item.type" size="medium" readonly></el-input>
-                        </el-col>
-                        <el-col :span="5">
-                            <el-input disabled="" v-model="item.description" size="medium" readonly></el-input>
-                        </el-col>
-                        <el-col :span="5" style="height: 100%">
-                            <el-checkbox v-model="item.required" disabled="">required</el-checkbox>
-                        </el-col>
-                    </el-row>
+                                </el-input>
+                            </el-col>
+                            <el-col :span="5">
+                                <el-input disabled="" v-model="item.type" size="medium" readonly></el-input>
+                            </el-col>
+                            <el-col :span="5">
+                                <el-input disabled="" v-model="item.description" size="medium" readonly></el-input>
+                            </el-col>
+                            <el-col :span="5" style="height: 100%">
+                                <el-checkbox v-model="item.required" disabled="">required</el-checkbox>
+                            </el-col>
+                        </el-row>
 
+                    </div>
                 </div>
+
             </div>
 
         </div>
