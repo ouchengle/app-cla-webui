@@ -236,7 +236,7 @@
         },
         beforeRouteEnter(to,from,next){
           next(vm=>{
-              if (from.path === '/'||from.path === '/linkedRepo') {
+              if (from.path === '/') {
                   vm.init();
               }
           })

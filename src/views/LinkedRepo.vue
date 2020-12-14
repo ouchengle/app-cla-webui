@@ -287,6 +287,7 @@
         },
         created() {
             this.setDomain();
+            this.clearConfigSession();
             new Promise((resolve, reject) => {
                 this.getCookieData(resolve)
             }).then(res => {
@@ -299,6 +300,45 @@
         },
         methods: {
             ...mapActions(['setLoginUserAct', 'setTokenAct', 'setTableDataAct']),
+            clearConfigSession(){
+                this.$store.commit('setOrgOption', []);
+                this.$store.commit('setOrgValue', '');
+                this.$store.commit('setOrgChoose', '');
+                this.$store.commit('setRepositoryOptions', []);
+                this.$store.commit('setRepositoryChoose', '');
+                this.$store.commit('setRepositoryValue', '');
+                this.$store.commit('setOrgAlias', '');
+                this.$store.commit('setIndividualLanguage', '');
+                this.$store.commit('setCorpLanguage', '');
+                this.$store.commit('setClaLinkIndividual', '');
+                this.$store.commit('setClaLinkCorp', '');
+                this.$store.commit('setCorpFDName', '');
+                this.$store.commit('setCorpFD', '');
+                this.$store.commit('setIndividualMetadata', this.individualMetadataArr);
+                this.$store.commit('setCorpMetadata', this.corporationMetadataArr);
+                this.$store.commit('setIndividualCustomMetadataArr', this.initIndividualCustomMetadata);
+                this.$store.commit('setCorporationCustomMetadataArr', this.initCorpCustomMetadata);
+                this.$store.commit('setEmail', '');
+                this.$store.commit('setIsEmail', false);
+                sessionStorage.removeItem('orgOptions');
+                sessionStorage.removeItem('orgValue');
+                sessionStorage.removeItem('orgChoose');
+                sessionStorage.removeItem('orgAlias');
+                sessionStorage.removeItem('repositoryOptions');
+                sessionStorage.removeItem('repositoryChoose');
+                sessionStorage.removeItem('repositoryValue');
+                sessionStorage.removeItem('individualLanguage');
+                sessionStorage.removeItem('corpLanguage');
+                sessionStorage.removeItem('claLinkIndividual');
+                sessionStorage.removeItem('claLinkCorp');
+                sessionStorage.removeItem('corpFDName');
+                sessionStorage.removeItem('corpFD');
+                sessionStorage.removeItem('individualMetadata');
+                sessionStorage.removeItem('corporationMetadata');
+                sessionStorage.removeItem('individualCustomMetadataArr');
+                sessionStorage.removeItem('corporationCustomMetadataArr');
+                sessionStorage.removeItem('email');
+            },
             configCla() {
                 this.$router.push('/bind-cla')
             },
