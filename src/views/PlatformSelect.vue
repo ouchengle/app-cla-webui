@@ -78,7 +78,7 @@
             submit() {
             },
             getLoginUrl(platform) {
-                this.setPlatformAct(platform)
+                this.setPlatformAct(platform);
                 let interval = setInterval(() => {
                     if (this.$store.state.platform) {
                         http({
