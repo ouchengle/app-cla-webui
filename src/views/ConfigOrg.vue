@@ -101,14 +101,14 @@
             },
             orgValue() {
                 if (this.$store.state.orgValue === undefined || this.$store.state.orgValue === '' || this.$store.state.orgValue === 'undefined') {
-                    return this.$store.state.orgValue
+                    return undefined
                 } else {
                     return Number(this.$store.state.orgValue)
                 }
             },
             repositoryValue() {
                 if (this.$store.state.repositoryValue === undefined || this.$store.state.repositoryValue === '' || this.$store.state.repositoryValue === 'undefined') {
-                    return this.$store.state.repositoryValue
+                    return undefined
                 } else {
                     return Number(this.$store.state.repositoryValue)
                 }
@@ -222,6 +222,8 @@
                 this.$store.commit('setRepositoryChoose', '');
                 this.$store.commit('setRepositoryValue', '');
                 this.$store.commit('setOrgAlias', '');
+                this.$store.commit('setChooseOrg', '');
+                this.$store.commit('setChooseRepo', '');
                 sessionStorage.removeItem('orgOptions');
                 sessionStorage.removeItem('orgValue');
                 sessionStorage.removeItem('orgChoose');
@@ -229,6 +231,8 @@
                 sessionStorage.removeItem('repositoryOptions');
                 sessionStorage.removeItem('repositoryChoose');
                 sessionStorage.removeItem('repositoryValue');
+                sessionStorage.removeItem('chooseOrg');
+                sessionStorage.removeItem('chooseRepo');
             },
         },
         created() {
@@ -236,7 +240,7 @@
         },
         beforeRouteEnter(to,from,next){
           next(vm=>{
-              if (from.path === '/'||from.path === '/linkedRepo') {
+              if (from.path === '/') {
                   vm.init();
               }
           })

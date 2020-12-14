@@ -153,43 +153,46 @@
                     </el-row>
 
                 </div>
-                <el-row class="margin-top-1rem">
-                    For Corporation
-                </el-row>
-                <div>
-                    <el-row class="margin-top-1rem" type="flex" align="middle" :gutter="20">
-                        <el-col :span="5">
-                            Title
-                        </el-col>
-                        <el-col :span="5">
-                            Type
-                        </el-col>
-                        <el-col :span="5">
-                            Describe
-                        </el-col>
-                        <el-col :span="5" style="height: 100%">
-                            Require
-                        </el-col>
+                <div v-if="this.$store.state.claLinkCorp">
+                    <el-row class="margin-top-1rem">
+                        For Corporation
                     </el-row>
-                    <el-row style="padding: 0.5rem 0;" type="flex" align="middle" :gutter="20"
-                            v-for="(item,index) in corporationMetadata">
-                        <el-col :span="5">
-                            <el-input disabled="" v-model="item.title" size="medium" readonly="">
+                    <div>
+                        <el-row class="margin-top-1rem" type="flex" align="middle" :gutter="20">
+                            <el-col :span="5">
+                                Title
+                            </el-col>
+                            <el-col :span="5">
+                                Type
+                            </el-col>
+                            <el-col :span="5">
+                                Describe
+                            </el-col>
+                            <el-col :span="5" style="height: 100%">
+                                Require
+                            </el-col>
+                        </el-row>
+                        <el-row style="padding: 0.5rem 0;" type="flex" align="middle" :gutter="20"
+                                v-for="(item,index) in corporationMetadata">
+                            <el-col :span="5">
+                                <el-input disabled="" v-model="item.title" size="medium" readonly="">
 
-                            </el-input>
-                        </el-col>
-                        <el-col :span="5">
-                            <el-input disabled="" v-model="item.type" size="medium" readonly></el-input>
-                        </el-col>
-                        <el-col :span="5">
-                            <el-input disabled="" v-model="item.description" size="medium" readonly></el-input>
-                        </el-col>
-                        <el-col :span="5" style="height: 100%">
-                            <el-checkbox v-model="item.required" disabled="">required</el-checkbox>
-                        </el-col>
-                    </el-row>
+                                </el-input>
+                            </el-col>
+                            <el-col :span="5">
+                                <el-input disabled="" v-model="item.type" size="medium" readonly></el-input>
+                            </el-col>
+                            <el-col :span="5">
+                                <el-input disabled="" v-model="item.description" size="medium" readonly></el-input>
+                            </el-col>
+                            <el-col :span="5" style="height: 100%">
+                                <el-checkbox v-model="item.required" disabled="">required</el-checkbox>
+                            </el-col>
+                        </el-row>
 
+                    </div>
                 </div>
+
             </div>
 
         </div>
@@ -331,9 +334,10 @@
                 let corp_pdf = {};
                 let formData = {};
                 if (this.$store.state.corpFD) {
-                    corp_pdf = this.dataURLtoFile(this.$store.state.corpFD, this.$store.state.corpFDName);
-                    console.log('pdf==', corp_pdf);
-                    formData = this.fileToFormData(corp_pdf)
+                    // corp_pdf = this.dataURLtoFile(this.$store.state.corpFD, this.$store.state.corpFDName);
+                    // console.log('pdf==', corp_pdf);
+                    // formData = this.fileToFormData(corp_pdf);
+                    console.log('formData==', formData);
                 }
                 let obj = {};
                 let corpCla = {};
@@ -344,7 +348,8 @@
                 };
                 if (this.cla_link_corporation) {
                     corpCla = {
-                        org_signature: formData,
+                        org_signature: this.$store.state.corpFD,
+                        // signature_page: formData,
                         url: this.cla_link_corporation.trim(),
                         language: this.corpClaLanguageValue,
                         fields: this.editMetadata(this.corporationMetadata)
@@ -389,6 +394,7 @@
                         };
                     }
                 }
+                console.log(obj);
                 http({
                     url: url.linkRepository,
                     method: 'post',
@@ -396,7 +402,7 @@
                 }).then(res => {
                     this.$message.closeAll();
                     this.$message.success('success');
-                    this.$router.push('/home')
+                    // this.$router.push('/home')
                 }).catch(err => {
                     this.$message.closeAll();
                     this.$message.error(err.data.error_message)
@@ -409,9 +415,10 @@
 
 <style lang="less">
     #configCla {
-        .margin-top-half-rem{
+        .margin-top-half-rem {
             margin-top: .5rem;
         }
+
         .el-dialog__body {
             text-align: center;
             word-break: keep-all;

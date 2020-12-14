@@ -62,8 +62,17 @@ export default new Vuex.Store({
         individualLanguage: sessionStorage.getItem('individualLanguage') || undefined,
         corpLanguage: sessionStorage.getItem('corpLanguage') || undefined,
         corpFDName: sessionStorage.getItem('corpFDName') || undefined,
+        claData: JSON.parse(sessionStorage.getItem('claData')) || undefined,
     },
     mutations: {
+        setClaData(state, data) {
+            state.claData = data;
+            sessionStorage.setItem('claData', JSON.stringify(data));
+        },
+        setCorpItem(state, data) {
+            state.corpItem = data;
+            sessionStorage.setItem('corpItem', JSON.stringify(data));
+        },
         setCorpLanguage(state, data) {
             state.corpLanguage = data;
             sessionStorage.setItem('corpLanguage', data);

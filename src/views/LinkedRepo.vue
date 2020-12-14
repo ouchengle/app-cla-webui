@@ -44,60 +44,6 @@
                         </template>
                     </el-table-column>
                     <el-table-column
-                            prop="claName"
-                            label="CLA">
-                    </el-table-column>
-                    <el-table-column
-                            prop="apply_to"
-                            label="Apply">
-                    </el-table-column>
-                    <el-table-column
-                            prop="cla_language"
-                            label="Language">
-                    </el-table-column>
-                    <el-table-column
-                            label="Empty Signature">
-                        <template v-if="scope.row.apply_to==='corporation'" slot-scope="scope">
-                            <el-popover
-                                    width="80"
-                                    trigger="hover"
-                                    placement="right">
-                                <div class="pdfBT">
-                                    <!--<el-button style="margin-left: 10px" @click="previewOriginalSignature(scope.row)"-->
-                                    <!--type="" size="mini">preview-->
-                                    <!--</el-button>-->
-                                    <el-button @click="downloadEmptySignature(scope.row)" size="mini">
-                                        download
-                                    </el-button>
-                                </div>
-                                <svg-icon slot="reference" class="pointer" icon-class="pdf"/>
-                            </el-popover>
-                        </template>
-                    </el-table-column>
-                    <el-table-column
-                            label="Organization Signature">
-                        <template v-if="scope.row.apply_to==='corporation'" slot-scope="scope">
-                            <el-popover
-                                    width="80"
-                                    trigger="hover"
-                                    placement="right">
-
-                                <div class="pdfBT">
-                                    <el-button @click="uploadOrgSignature(scope.row)"
-                                               size="mini">upload
-                                    </el-button>
-                                    <el-button @click="downloadOrgSignature(scope.row)" size="mini">download
-                                    </el-button>
-                                    <!--<el-button @click="previewOrgSignature(scope.row)" type="" size="mini">preview-->
-                                    <!--</el-button>-->
-                                </div>
-
-                                <svg-icon slot="reference" class="pointer" icon-class="pdf"/>
-
-                            </el-popover>
-                        </template>
-                    </el-table-column>
-                    <el-table-column
                             label="Unlink"
                             width="100">
                         <template slot-scope="scope">
@@ -287,6 +233,7 @@
         },
         created() {
             this.setDomain();
+            this.clearConfigSession();
             new Promise((resolve, reject) => {
                 this.getCookieData(resolve)
             }).then(res => {
@@ -294,11 +241,50 @@
             })
 
         },
-        updated(){
+        updated() {
             this.setClientHeight();
         },
         methods: {
             ...mapActions(['setLoginUserAct', 'setTokenAct', 'setTableDataAct']),
+            clearConfigSession() {
+                this.$store.commit('setOrgOption', []);
+                this.$store.commit('setOrgValue', '');
+                this.$store.commit('setOrgChoose', '');
+                this.$store.commit('setRepositoryOptions', []);
+                this.$store.commit('setRepositoryChoose', '');
+                this.$store.commit('setRepositoryValue', '');
+                this.$store.commit('setOrgAlias', '');
+                this.$store.commit('setIndividualLanguage', '');
+                this.$store.commit('setCorpLanguage', '');
+                this.$store.commit('setClaLinkIndividual', '');
+                this.$store.commit('setClaLinkCorp', '');
+                this.$store.commit('setCorpFDName', '');
+                this.$store.commit('setCorpFD', '');
+                this.$store.commit('setIndividualMetadata', this.individualMetadataArr);
+                this.$store.commit('setCorpMetadata', this.corporationMetadataArr);
+                this.$store.commit('setIndividualCustomMetadataArr', this.initIndividualCustomMetadata);
+                this.$store.commit('setCorporationCustomMetadataArr', this.initCorpCustomMetadata);
+                this.$store.commit('setEmail', '');
+                this.$store.commit('setIsEmail', false);
+                sessionStorage.removeItem('orgOptions');
+                sessionStorage.removeItem('orgValue');
+                sessionStorage.removeItem('orgChoose');
+                sessionStorage.removeItem('orgAlias');
+                sessionStorage.removeItem('repositoryOptions');
+                sessionStorage.removeItem('repositoryChoose');
+                sessionStorage.removeItem('repositoryValue');
+                sessionStorage.removeItem('individualLanguage');
+                sessionStorage.removeItem('corpLanguage');
+                sessionStorage.removeItem('claLinkIndividual');
+                sessionStorage.removeItem('claLinkCorp');
+                sessionStorage.removeItem('corpFDName');
+                sessionStorage.removeItem('corpFD');
+                sessionStorage.removeItem('individualMetadata');
+                sessionStorage.removeItem('corporationMetadata');
+                sessionStorage.removeItem('individualCustomMetadataArr');
+                sessionStorage.removeItem('corporationCustomMetadataArr');
+                sessionStorage.removeItem('email');
+            },
             configCla() {
                 this.$router.push('/bind-cla')
             },
@@ -312,13 +298,31 @@
                 return '';
             },
             getBoundTableData() {
-                let data = []
+                let data = [];
+                let corpData = [];
+                let individualData = [];
+                let newData = [];
                 this.tableData.forEach((item, index) => {
-                    if (item.org_id === this.organization) {
-                        data.push(item)
+                    if (item.apply_to === 'corporation') {
+                        corpData.push(item);
+                    } else if (item.apply_to === 'individual') {
+                        individualData.push(item);
                     }
-                })
-                this.boundTableData = data
+                });
+                data.concat(corpData, individualData).forEach((item, index) => {
+                    if (item.org_id === this.organization) {
+                        newData.push(item);
+                    }
+                });
+                for (let i = 0; i < newData.length; i++) {
+                    for (let j = i + 1; j < newData.length; j++) {
+                        if (newData[i].org_id === newData[j].org_id && newData[i].repo_id === newData[j].repo_id) {
+                            newData.splice(j, 1);
+                            j--;
+                        }
+                    }
+                }
+                this.boundTableData = newData;
                 this.loading = false
             },
             clickOrg(row, column, cell, event) {
@@ -331,55 +335,65 @@
                 http({
                     url: url.getLinkedRepoList,
                 }).then(res => {
-                    let data = res.data.data
-                    let count = res.data.data.length
-                    data.forEach((item, index) => {
-                        new Promise((resolve, reject) => {
-                            let claName = this.getClaName(item.id)
-                            resolve(claName)
-                        }).then(res => {
-                            Object.assign(data[index], {claName: res})
-                            count--
-                        }, err => {
-                        })
-                    })
-                    let setDataInterval = setInterval(() => {
-                        if (count === 0) {
-                            this.tableData = data
-                            this.getOrgTableData(data)
-                            clearInterval(setDataInterval)
-                        }
-                    }, 20)
-
+                    if (res.data && res.data.data.length) {
+                        let data = res.data.data;
+                        let count = res.data.data.length;
+                        this.$store.commit('setClaData', data);
+                        data.forEach((item, index) => {
+                            new Promise((resolve, reject) => {
+                                let claName = this.getClaName(item.id);
+                                resolve(claName)
+                            }).then(res => {
+                                Object.assign(data[index], {claName: res});
+                                count--
+                            }, err => {
+                            })
+                        });
+                        let setDataInterval = setInterval(() => {
+                            if (count === 0) {
+                                this.tableData = data
+                                this.getOrgTableData(data)
+                                clearInterval(setDataInterval)
+                            }
+                        }, 20)
+                    } else {
+                        this.loading = false;
+                    }
                 }).catch(err => {
                 })
             },
             async getClaName(org_cla_id) {
-                let name = ''
-                await http({
-                    url: `${url.getClaInfo}/${org_cla_id}/cla`,
-                }).then(resp => {
-                    name = resp.data.data.name
-                }).catch(err => {
-                })
-                return name
+                if (org_cla_id) {
+                    let name = '';
+                    await http({
+                        url: `${url.getClaInfo}/${org_cla_id}/cla`,
+                    }).then(resp => {
+                        name = resp.data.data.name
+                    }).catch(err => {
+                    });
+                    return name
+                } else {
+                    this.loading = false;
+                }
+
 
             },
             getOrgTableData(data) {
                 let orgData = [];
                 data.forEach((item, index) => {
                     orgData.push({Organization: item.org_id})
-                })
+                });
+
                 for (let i = 0; i < orgData.length; i++) {
                     for (let j = i + 1; j < orgData.length; j++) {
                         if (orgData[i].Organization === orgData[j].Organization) {
-                            orgData.splice(j, 1)
+                            orgData.splice(j, 1);
                             j--
                         }
                     }
                 }
-                this.orgTableData = orgData
-                this.orgTableData.length > 0 ? this.organization = this.orgTableData[0].Organization : this.organization = []
+                this.orgTableData = orgData;
+                this.orgTableData.length > 0 ? this.organization = this.orgTableData[0].Organization : this.organization = [];
                 this.getBoundTableData()
             },
             copyAddress(row) {
@@ -432,75 +446,6 @@
             beforeRemove(file, fileList) {
                 return this.$confirm(`Are you sure you want to remove ${file.name}？`);
             },
-            previewOriginalSignature(row) {
-
-                // this.docInfo = {
-                //     type: "pdf",
-                //     // href:`/static/pdf/merge.pdf`
-                //     href:`/api${url.downloadSignature}/${this.item.id}`
-                // }
-                // this.previewOriginalDialogVisible = true
-            },
-            downloadEmptySignature(row) {
-                this.$store.commit('errorCodeSet', {
-                    dialogVisible: true,
-                    dialogMessage: this.$t('tips.no_file_can_download'),
-                })
-            },
-
-            /*======================OrgSignature======================================*/
-            uploadOrgSignature(row) {
-                this.uploadUrl = `/api${url.uploadSignature}/${row.id}`
-                this.uploadOrgDialogVisible = true
-            },
-            previewOrgSignature(row) {
-                // this.pdfSrc = `../../static/pdf/merge.pdf`
-                // this.pdfSrc = `/api${url.downloadSignature}/${row.id}`
-                // this.pdfSrc = pdf.createLoadingTask(`/api${url.downloadSignature}/${row.id}`)
-                // console.log(this.pdfSrc);
-                // this.pdfSrc = pdf.createLoadingTask({
-                //     url: `/api${url.downloadSignature}/${row.id}`,
-                //     httpHeaders: {
-                //         'Token': this.$store.state.access_token,
-                //         // 'x-ipp-device-uuid': 'SOME_UUID',
-                //         // 'x-ipp-client': 'SOME_ID',
-                //         // 'x-ipp-client-version': 'SOME_VERSION'
-                //     }
-                // })
-
-                // this.pdfSrc.promise.then(pdf => {
-                //     this.numPages = pdf.numPages
-                // }).catch(() => {})
-                // this.docInfo = {
-                //     type: "pdf",
-                //     // href:`/static/pdf/merge.pdf`,
-                //     href: `/api${url.downloadSignature}/${row.id}`
-                // }
-
-
-                // this.url = `../../static/pdf_source/web/viewer.html?file=${encodeURIComponent(`/api${url.downloadSignature}/${row.id}?token=${this.$store.state.access_token}`)}`
-                // this.url = `../../static/pdf_source/web/viewer.html?file=${encodeURIComponent(`/api${url.downloadSignature}/${row.id}`)}`
-                // this.url = `../../static/pdf_source/web/viewer.html?file=/api${url.downloadSignature}/${row.id}`
-                // this.url = `../../static/pdf_source/web/viewer.html?file=${url.downloadSignature}/${row.id}`
-                // this.url = `../../static/pdf_source/web/viewer.html?file=../../static/pdf/merge.pdf`
-                // this.previewOriginalDialogVisible = true
-                // window.open(`../../static/pdf_source/web/viewer.html?file=../../static/pdf_source/web/compressed.tracemonkey-pldi-09.pdf`)
-
-                this.$axios({
-                    url: `/api${url.downloadSignature}/${row.id}`,
-
-                }).then(res => {
-                    // this.showPdfFile(res.data.pdf)
-                    sessionStorage.setItem('pdf_base64', res.data.data.pdf)
-                    window.location.href = `../../static/pdf_source/web/viewer.html`
-                    // window.location.href = `../../static/pdf_source/web/viewer.html?file=${this.converData(res.data.pdf)}`
-                    // window.location.href = `../../static/pdf_source/web/viewer.html?file=${encodeURIComponent(res.data.pdf)}`
-                    // window.location.href = `../../static/pdf_source/web/viewer.html?file=${encodeURIComponent('../../static/pdf/merge.pdf')}`
-                    // window.location.href = `../../static/pdf_source/web/viewer.html?file=../../static/pdf/merge.pdf`
-
-                }).catch(err => {
-                })
-            },
             converData(data) {
                 data = data.replace(/[\n\r]/g, '');
                 var raw = window.atob(data);
@@ -547,42 +492,7 @@
 
                 })
             },
-            downloadOrgSignature(row) {
-                http({
-                    url: `${url.downloadSignature}/${row.id}`,
-                }).then(res => {
-                    if (res.data.data.pdf) {
-                        let URL = this.dataURLtoBlob(res.data.data.pdf);
-                        var reader = new FileReader();
-                        reader.readAsDataURL(URL);
-                        reader.onload = function (e) {
-                            if (window.navigator.msSaveOrOpenBlob) {
-                                var bstr = atob(e.target.result.split(",")[1]);
-                                var n = bstr.length;
-                                var u8arr = new Uint8Array(n);
-                                while (n--) {
-                                    u8arr[n] = bstr.charCodeAt(n);
-                                }
-                                var blob = new Blob([u8arr]);
-                                window.navigator.msSaveOrOpenBlob(blob, 'Signature.pdf');
-                            } else {
-                                const a = document.createElement('a');
-                                a.download = 'Signature.pdf';
-                                a.href = e.target.result;
-                                document.body.appendChild(a)
-                                a.click();
-                                document.body.removeChild(a)
-                            }
-                        }
-                    }else{
-                        this.$store.commit('errorCodeSet', {
-                            dialogVisible: true,
-                            dialogMessage: this.$t('tips.not_upload_file'),
-                        })
-                    }
-                }).catch(err => {
-                })
-            },
+
             dataURLtoBlob(dataurl) {
                 var bstr = atob(dataurl)
                 var n = bstr.length;
@@ -644,7 +554,7 @@
                         } else if (name === 'access_token') {
                             access_token = value;
                         }
-                        this.$cookie.remove(name,{path:'/'});
+                        this.$cookie.remove(name, {path: '/'});
                     });
                     let data = {access_token, refresh_token, platform_token, resolve};
                     this.setTokenAct(data);
@@ -659,9 +569,9 @@
                 this.unLinkDialogVisible = true
             },
             checkCorporationList(item) {
-                this.$store.commit('setCorpItem',{});
+                this.$store.commit('setCorpItem', {});
                 sessionStorage.removeItem('corpItem');
-                this.$store.commit('setCorpItem',item);
+                this.$store.commit('setCorpItem', item);
                 this.$router.push('/corporationList')
             },
             checkCla() {

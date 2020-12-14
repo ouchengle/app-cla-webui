@@ -1,7 +1,7 @@
 <template xmlns:el-button="http://www.w3.org/1999/html">
     <div id="corporationList">
         <el-tabs v-model="activeName" @tab-click="tabsHandleClick">
-            <el-tab-pane v-if="item.apply_to==='corporation'" label="Signed Corporation" name="first"
+            <el-tab-pane label="Signed Corporation" name="first"
                          style="margin-top: 1rem">
                 <div class="tableStyle">
                     <el-table
@@ -75,58 +75,24 @@
                 <div class="tableStyle">
                     <el-table
                             :empty-text="$t('corp.no_data')"
-                            :data="claData"
+                            :data="individualClaData"
                             align="center"
                             style="width: 100%;">
                         <el-table-column
-                                prop="corporation_name"
-                                label="CorporationName">
+                                prop="url"
+                                label="Url">
                         </el-table-column>
                         <el-table-column
-                                prop="admin_name"
-                                label="AdminName">
+                                prop="language"
+                                label="Language">
                         </el-table-column>
                         <el-table-column
-                                prop="admin_email"
-                                label="Email">
-                        </el-table-column>
-
-                        <el-table-column
-                                label="PDF">
+                                prop=""
+                                label="Operation">
                             <template slot-scope="scope">
-                                <el-popover
-                                        width="80"
-                                        trigger="hover"
-                                        placement="right">
-
-                                    <div class="menuBT">
-                                        <el-button @click="uploadClaFile(scope.row)" style="margin-left: 10px" type=""
-                                                   size="mini">upload
-                                        </el-button>
-                                        <el-button @click="downloadClaFile(scope.row)" type="" size="mini">download
-                                        </el-button>
-                                        <!--<el-button @click="previewClaFile(scope.row)" type="" size="mini">preview</el-button>-->
-                                    </div>
-
-                                    <svg-icon slot="reference" class="pointer" icon-class="pdf" @click=""/>
-
-                                </el-popover>
-                            </template>
-                        </el-table-column>
-
-                        <el-table-column
-                                align="center">
-
-                            <template slot-scope="scope">
-                                <el-button :disabled="scope.row.administrator_enabled" style="margin-left: 1rem"
-                                           type="primary"
-                                           size="mini"
-                                           @click="createRoot(scope.row.admin_email)">Create Administrator
-                                </el-button>
 
                             </template>
                         </el-table-column>
-
                     </el-table>
                 </div>
             </el-tab-pane>
@@ -134,26 +100,37 @@
                 <div class="tableStyle">
                     <el-table
                             :empty-text="$t('corp.no_data')"
-                            :data="claData"
+                            :data="corpClaData"
                             align="center"
                             style="width: 100%;">
                         <el-table-column
-                                prop="corporation_name"
-                                label="CorporationName">
-
+                                prop="url"
+                                label="Url">
                         </el-table-column>
                         <el-table-column
-                                prop="admin_name"
-                                label="AdminName">
-                        </el-table-column>
-
-                        <el-table-column
-                                prop="admin_email"
-                                label="Email">
+                                prop="language"
+                                label="Language">
                         </el-table-column>
 
                         <el-table-column
-                                label="PDF">
+                                label="Empty signature">
+                            <template slot-scope="scope">
+                                <el-popover
+                                        width="80"
+                                        trigger="hover"
+                                        placement="right">
+                                    <div class="menuBT">
+                                        <el-button @click="downloadEmptySignature(scope.row)" type="" size="mini">
+                                            download
+                                        </el-button>
+                                        <!--<el-button @click="previewEmptySignature(scope.row)" type="" size="mini">preview</el-button>-->
+                                    </div>
+                                    <svg-icon slot="reference" class="pointer" icon-class="pdf" @click=""/>
+                                </el-popover>
+                            </template>
+                        </el-table-column>
+                        <el-table-column
+                                label="Signature">
                             <template slot-scope="scope">
                                 <el-popover
                                         width="80"
@@ -161,12 +138,13 @@
                                         placement="right">
 
                                     <div class="menuBT">
-                                        <el-button @click="uploadClaFile(scope.row)" style="margin-left: 10px" type=""
+                                        <el-button @click="uploadOrgSignature(scope.row)" style="margin-left: 10px"
+                                                   type=""
                                                    size="mini">upload
                                         </el-button>
-                                        <el-button @click="downloadClaFile(scope.row)" type="" size="mini">download
+                                        <el-button @click="downloadOrgSignature(scope.row)" type="" size="mini">download
                                         </el-button>
-                                        <!--<el-button @click="previewClaFile(scope.row)" type="" size="mini">preview</el-button>-->
+                                        <!--<el-button @click="previewOrgSignature(scope.row)" type="" size="mini">preview</el-button>-->
                                     </div>
 
                                     <svg-icon slot="reference" class="pointer" icon-class="pdf" @click=""/>
@@ -174,10 +152,9 @@
                                 </el-popover>
                             </template>
                         </el-table-column>
-
                         <el-table-column
+                                label="Operation"
                                 align="center">
-
                             <template slot-scope="scope">
                                 <el-button :disabled="scope.row.administrator_enabled" style="margin-left: 1rem"
                                            type="primary"
@@ -322,9 +299,10 @@
         components: {
             pdfReader,
         },
-
         data() {
             return {
+                individualClaData: [],
+                corpClaData: [],
                 previewOriginalDialogVisible: false,
                 resendEmailDialogVisible: false,
                 resendEmail: '',
@@ -353,10 +331,113 @@
                 pdfBase64: `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`,
             }
         },
-
-
         inject: ['setClientHeight'],
         methods: {
+            previewEmptySignature(row) {
+
+                // this.docInfo = {
+                //     type: "pdf",
+                //     // href:`/static/pdf/merge.pdf`
+                //     href:`/api${url.downloadSignature}/${this.item.id}`
+                // }
+                // this.previewOriginalDialogVisible = true
+            },
+            downloadEmptySignature(row) {
+                this.$store.commit('errorCodeSet', {
+                    dialogVisible: true,
+                    dialogMessage: this.$t('tips.no_file_can_download'),
+                })
+            },
+
+            /*======================OrgSignature======================================*/
+            uploadOrgSignature(row) {
+                this.uploadUrl = `/api${url.uploadSignature}/${row.id}`
+                this.uploadOrgDialogVisible = true
+            },
+            previewOrgSignature(row) {
+                // this.pdfSrc = `../../static/pdf/merge.pdf`
+                // this.pdfSrc = `/api${url.downloadSignature}/${row.id}`
+                // this.pdfSrc = pdf.createLoadingTask(`/api${url.downloadSignature}/${row.id}`)
+                // console.log(this.pdfSrc);
+                // this.pdfSrc = pdf.createLoadingTask({
+                //     url: `/api${url.downloadSignature}/${row.id}`,
+                //     httpHeaders: {
+                //         'Token': this.$store.state.access_token,
+                //         // 'x-ipp-device-uuid': 'SOME_UUID',
+                //         // 'x-ipp-client': 'SOME_ID',
+                //         // 'x-ipp-client-version': 'SOME_VERSION'
+                //     }
+                // })
+
+                // this.pdfSrc.promise.then(pdf => {
+                //     this.numPages = pdf.numPages
+                // }).catch(() => {})
+                // this.docInfo = {
+                //     type: "pdf",
+                //     // href:`/static/pdf/merge.pdf`,
+                //     href: `/api${url.downloadSignature}/${row.id}`
+                // }
+
+
+                // this.url = `../../static/pdf_source/web/viewer.html?file=${encodeURIComponent(`/api${url.downloadSignature}/${row.id}?token=${this.$store.state.access_token}`)}`
+                // this.url = `../../static/pdf_source/web/viewer.html?file=${encodeURIComponent(`/api${url.downloadSignature}/${row.id}`)}`
+                // this.url = `../../static/pdf_source/web/viewer.html?file=/api${url.downloadSignature}/${row.id}`
+                // this.url = `../../static/pdf_source/web/viewer.html?file=${url.downloadSignature}/${row.id}`
+                // this.url = `../../static/pdf_source/web/viewer.html?file=../../static/pdf/merge.pdf`
+                // this.previewOriginalDialogVisible = true
+                // window.open(`../../static/pdf_source/web/viewer.html?file=../../static/pdf_source/web/compressed.tracemonkey-pldi-09.pdf`)
+
+                this.$axios({
+                    url: `/api${url.downloadSignature}/${row.id}`,
+
+                }).then(res => {
+                    // this.showPdfFile(res.data.pdf)
+                    sessionStorage.setItem('pdf_base64', res.data.data.pdf)
+                    window.location.href = `../../static/pdf_source/web/viewer.html`
+                    // window.location.href = `../../static/pdf_source/web/viewer.html?file=${this.converData(res.data.pdf)}`
+                    // window.location.href = `../../static/pdf_source/web/viewer.html?file=${encodeURIComponent(res.data.pdf)}`
+                    // window.location.href = `../../static/pdf_source/web/viewer.html?file=${encodeURIComponent('../../static/pdf/merge.pdf')}`
+                    // window.location.href = `../../static/pdf_source/web/viewer.html?file=../../static/pdf/merge.pdf`
+
+                }).catch(err => {
+                })
+            },
+            downloadOrgSignature(row) {
+                http({
+                    url: `${url.downloadSignature}/${row.id}`,
+                }).then(res => {
+                    if (res.data.data.pdf) {
+                        let URL = this.dataURLtoBlob(res.data.data.pdf);
+                        var reader = new FileReader();
+                        reader.readAsDataURL(URL);
+                        reader.onload = function (e) {
+                            if (window.navigator.msSaveOrOpenBlob) {
+                                var bstr = atob(e.target.result.split(",")[1]);
+                                var n = bstr.length;
+                                var u8arr = new Uint8Array(n);
+                                while (n--) {
+                                    u8arr[n] = bstr.charCodeAt(n);
+                                }
+                                var blob = new Blob([u8arr]);
+                                window.navigator.msSaveOrOpenBlob(blob, 'Signature.pdf');
+                            } else {
+                                const a = document.createElement('a');
+                                a.download = 'Signature.pdf';
+                                a.href = e.target.result;
+                                document.body.appendChild(a)
+                                a.click();
+                                document.body.removeChild(a)
+                            }
+                        }
+                    } else {
+                        this.$store.commit('errorCodeSet', {
+                            dialogVisible: true,
+                            dialogMessage: this.$t('tips.not_upload_file'),
+                        })
+                    }
+                }).catch(err => {
+                })
+            },
             converData(data) {
                 // data = data.replace(/[\n\r]/g, '');
                 var raw = window.atob(data);
@@ -367,8 +448,6 @@
                 }
                 return array
             },
-
-
             showPdfFile(data) {
                 PDFJS.GlobalWorkerOptions.workerSrc = '../until/pdf/pdf.worker.js';
                 var fileContent = this.converData(data);
@@ -407,8 +486,65 @@
                 if (tab.index === '0') {
                     this.getCorporationInfo()
                 } else if (tab.index === '1') {
-                    //   this.getClaInfo()
+                    this.getIndividualClaInfo()
+                } else if (tab.index === '1') {
+                    this.getCorpClaInfo();
                 }
+            },
+            getCorpClaInfo() {
+                let claData = this.$store.state.claData;
+                let corpClaData = [];
+                let org_id = this.$store.state.corpItem.org_id;
+                let repo_id = this.$store.state.corpItem.repo_id;
+                claData.forEach((item, index) => {
+                    if (item.apply_to === 'corporation' && item.org_id === org_id && item.repo_id === repo_id) {
+                        corpClaData.push(item);
+                    }
+                });
+                this.corpClaData = corpClaData;
+            },
+            getIndividualClaInfo() {
+                console.log('getIndividualClaInfo');
+                let claData = this.$store.state.claData;
+                let individualClaData = [];
+                let org_id = this.$store.state.corpItem.org_id;
+                let repo_id = this.$store.state.corpItem.repo_id;
+                claData.forEach((item, index) => {
+                    if (item.apply_to === 'individual' && item.org_id === org_id && item.repo_id === repo_id) {
+                        individualClaData.push(item);
+                    }
+                });
+                this.individualClaData = individualClaData;
+                // http({
+                //     url: `${url.getClaInfo}/${this.item.id}/cla`,
+                // }).then(resp => {
+                //     console.log(resp);
+                //     console.log(resp.data.data);
+                //     this.claData = resp.data.data;
+                //     this.$nextTick(() => {
+                //         // this.setClientHeight();
+                //     })
+                //
+                // }).catch(err => {
+                //     console.log(err);
+                // })
+            },
+            getCorporationInfo() {
+                http({
+                    url: `${url.corporation_signing}/${this.item.org_id}`,
+                    params: {
+                        repo_id: this.item.repo_id,
+                        cla_language: this.item.cla_language
+                    },
+                }).then(resp => {
+                    this.tableData = resp.data.data[this.item.id];
+                    this.$nextTick(() => {
+                        //this.setClientHeight();
+                    })
+
+                }).catch(err => {
+                    // console.log(err);
+                })
             },
             upload(fileObj) {
                 const formData = new FormData()
@@ -440,7 +576,6 @@
                 };
                 this.previewDialogVisible = true
             },
-
             downloadClaFile(row) {
             },
             uploadClaFile(row) {
@@ -466,39 +601,6 @@
             },
             beforeRemove(file, fileList) {
                 return this.$confirm(`Are you sure you want to remove it ${file.name}？`);
-            },
-            getClaInfo() {
-                console.log('getClaInfo');
-                http({
-                    url: `${url.getClaInfo}/${this.item.id}/cla`,
-                }).then(resp => {
-                    console.log(resp);
-                    console.log(resp.data.data);
-                    this.claData = resp.data.data;
-                    this.$nextTick(() => {
-                        // this.setClientHeight();
-                    })
-
-                }).catch(err => {
-                    console.log(err);
-                })
-            },
-            getCorporationInfo() {
-                http({
-                    url: `${url.corporation_signing}/${this.item.org_id}`,
-                    params: {
-                        repo_id: this.item.repo_id,
-                        cla_language: this.item.cla_language
-                    },
-                }).then(resp => {
-                    this.tableData = resp.data.data[this.item.id];
-                    this.$nextTick(() => {
-                        //this.setClientHeight();
-                    })
-
-                }).catch(err => {
-                    // console.log(err);
-                })
             },
             openResendPdf(email) {
                 this.resendEmail = email;
@@ -566,34 +668,10 @@
                 }).catch(err => {
                 })
             },
-            init() {
-                let interval = setInterval(() => {
-                    if (this.$store.state.corpItem && this.$store.state.corpItem.apply_to) {
-                        this.item = this.$store.state.corpItem;
-                        if (this.item.apply_to === 'corporation') {
-                            this.activeName = 'first';
-                            this.getCorporationInfo()
-                        } else if (this.item.apply_to === 'individual') {
-                            this.activeName = 'second';
-                            //   this.getClaInfo()
-                        }
-                        clearInterval(interval)
-                    }
-
-                }, 100);
-                if (interval) {
-                    setTimeout(() => {
-                        clearInterval(interval)
-                    }, 2000)
-                }
-            },
-        },
-        created() {
-            this.init();
-            this.showPdfFile(this.pdfBase64)
         },
         mounted() {
             this.setClientHeight();
+            // this.showPdfFile(this.pdfBase64)
         },
         updated() {
             this.setClientHeight()
@@ -604,11 +682,13 @@
 <style lang="less">
     #corporationList {
         padding-top: 3rem;
+
         #pop {
             position: relative;
             text-align: center;
             z-index: 9;
-            canvas{
+
+            canvas {
                 margin: 20px auto;
                 display: block;
             }
