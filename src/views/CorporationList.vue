@@ -1,7 +1,7 @@
 <template xmlns:el-button="http://www.w3.org/1999/html">
     <div id="corporationList">
         <el-tabs v-model="activeName" @tab-click="tabsHandleClick">
-            <el-tab-pane v-if="item.apply_to==='corporation'" label="Signed Corporation" name="first"
+            <el-tab-pane label="Signed Corporation" name="first"
                          style="margin-top: 1rem">
                 <div class="tableStyle">
                     <el-table
