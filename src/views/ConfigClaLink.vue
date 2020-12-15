@@ -218,6 +218,7 @@
                 this.$store.commit('setCorpFDName', formData.get('files').name);
                 let reader = new FileReader();
                 reader.readAsDataURL(formData.get('files'));
+                console.log(reader.readAsBinaryString(formData.get('files')));;
                 reader.onload = () => {
                     this.$store.commit('setCorpFD', reader.result)
                 };
