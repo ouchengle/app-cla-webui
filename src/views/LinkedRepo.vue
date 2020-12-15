@@ -63,7 +63,7 @@
                                     trigger="hover"
                                     placement="right">
                                 <div class="pdfBT">
-                                    <!--<el-button style="margin-left: 10px" @click="previewOriginalSignature(scope.row)"-->
+                                    <!--<el-button style="margin-left: 10px" @click="previewEmptySignature(scope.row)"-->
                                     <!--type="" size="mini">preview-->
                                     <!--</el-button>-->
                                     <el-button @click="downloadEmptySignature(scope.row)" size="mini">
@@ -295,12 +295,12 @@
             })
 
         },
-        updated(){
+        updated() {
             this.setClientHeight();
         },
         methods: {
             ...mapActions(['setLoginUserAct', 'setTokenAct', 'setTableDataAct']),
-            clearConfigSession(){
+            clearConfigSession() {
                 this.$store.commit('setOrgOption', []);
                 this.$store.commit('setOrgValue', '');
                 this.$store.commit('setOrgChoose', '');
@@ -352,13 +352,21 @@
                 return '';
             },
             getBoundTableData() {
-                let data = []
+                let data = [];
                 this.tableData.forEach((item, index) => {
                     if (item.org_id === this.organization) {
                         data.push(item)
                     }
-                })
-                this.boundTableData = data
+                });
+               for(let i = 0; i < data.length; i++) {
+                    for (let j = i+1; i < data.length; j++) {
+                       if (data[i].org_id === data[j].org_id && data[i].repo_id === data[j].repo_id) {
+                           data.splice(j,1);
+                           j--;
+                       }
+                    }
+                }
+                this.boundTableData = data;
                 this.loading = false
             },
             clickOrg(row, column, cell, event) {
@@ -371,14 +379,15 @@
                 http({
                     url: url.getLinkedRepoList,
                 }).then(res => {
-                    let data = res.data.data
-                    let count = res.data.data.length
+                    let data = res.data.data;
+                    let count = res.data.data.length;
+                    count && this.$store.commit('setClaData', data);
                     data.forEach((item, index) => {
                         new Promise((resolve, reject) => {
-                            let claName = this.getClaName(item.id)
+                            let claName = this.getClaName(item.id);
                             resolve(claName)
                         }).then(res => {
-                            Object.assign(data[index], {claName: res})
+                            Object.assign(data[index], {claName: res});
                             count--
                         }, err => {
                         })
@@ -472,75 +481,6 @@
             beforeRemove(file, fileList) {
                 return this.$confirm(`Are you sure you want to remove ${file.name}？`);
             },
-            previewOriginalSignature(row) {
-
-                // this.docInfo = {
-                //     type: "pdf",
-                //     // href:`/static/pdf/merge.pdf`
-                //     href:`/api${url.downloadSignature}/${this.item.id}`
-                // }
-                // this.previewOriginalDialogVisible = true
-            },
-            downloadEmptySignature(row) {
-                this.$store.commit('errorCodeSet', {
-                    dialogVisible: true,
-                    dialogMessage: this.$t('tips.no_file_can_download'),
-                })
-            },
-
-            /*======================OrgSignature======================================*/
-            uploadOrgSignature(row) {
-                this.uploadUrl = `/api${url.uploadSignature}/${row.id}`
-                this.uploadOrgDialogVisible = true
-            },
-            previewOrgSignature(row) {
-                // this.pdfSrc = `../../static/pdf/merge.pdf`
-                // this.pdfSrc = `/api${url.downloadSignature}/${row.id}`
-                // this.pdfSrc = pdf.createLoadingTask(`/api${url.downloadSignature}/${row.id}`)
-                // console.log(this.pdfSrc);
-                // this.pdfSrc = pdf.createLoadingTask({
-                //     url: `/api${url.downloadSignature}/${row.id}`,
-                //     httpHeaders: {
-                //         'Token': this.$store.state.access_token,
-                //         // 'x-ipp-device-uuid': 'SOME_UUID',
-                //         // 'x-ipp-client': 'SOME_ID',
-                //         // 'x-ipp-client-version': 'SOME_VERSION'
-                //     }
-                // })
-
-                // this.pdfSrc.promise.then(pdf => {
-                //     this.numPages = pdf.numPages
-                // }).catch(() => {})
-                // this.docInfo = {
-                //     type: "pdf",
-                //     // href:`/static/pdf/merge.pdf`,
-                //     href: `/api${url.downloadSignature}/${row.id}`
-                // }
-
-
-                // this.url = `../../static/pdf_source/web/viewer.html?file=${encodeURIComponent(`/api${url.downloadSignature}/${row.id}?token=${this.$store.state.access_token}`)}`
-                // this.url = `../../static/pdf_source/web/viewer.html?file=${encodeURIComponent(`/api${url.downloadSignature}/${row.id}`)}`
-                // this.url = `../../static/pdf_source/web/viewer.html?file=/api${url.downloadSignature}/${row.id}`
-                // this.url = `../../static/pdf_source/web/viewer.html?file=${url.downloadSignature}/${row.id}`
-                // this.url = `../../static/pdf_source/web/viewer.html?file=../../static/pdf/merge.pdf`
-                // this.previewOriginalDialogVisible = true
-                // window.open(`../../static/pdf_source/web/viewer.html?file=../../static/pdf_source/web/compressed.tracemonkey-pldi-09.pdf`)
-
-                this.$axios({
-                    url: `/api${url.downloadSignature}/${row.id}`,
-
-                }).then(res => {
-                    // this.showPdfFile(res.data.pdf)
-                    sessionStorage.setItem('pdf_base64', res.data.data.pdf)
-                    window.location.href = `../../static/pdf_source/web/viewer.html`
-                    // window.location.href = `../../static/pdf_source/web/viewer.html?file=${this.converData(res.data.pdf)}`
-                    // window.location.href = `../../static/pdf_source/web/viewer.html?file=${encodeURIComponent(res.data.pdf)}`
-                    // window.location.href = `../../static/pdf_source/web/viewer.html?file=${encodeURIComponent('../../static/pdf/merge.pdf')}`
-                    // window.location.href = `../../static/pdf_source/web/viewer.html?file=../../static/pdf/merge.pdf`
-
-                }).catch(err => {
-                })
-            },
             converData(data) {
                 data = data.replace(/[\n\r]/g, '');
                 var raw = window.atob(data);
@@ -587,42 +527,7 @@
 
                 })
             },
-            downloadOrgSignature(row) {
-                http({
-                    url: `${url.downloadSignature}/${row.id}`,
-                }).then(res => {
-                    if (res.data.data.pdf) {
-                        let URL = this.dataURLtoBlob(res.data.data.pdf);
-                        var reader = new FileReader();
-                        reader.readAsDataURL(URL);
-                        reader.onload = function (e) {
-                            if (window.navigator.msSaveOrOpenBlob) {
-                                var bstr = atob(e.target.result.split(",")[1]);
-                                var n = bstr.length;
-                                var u8arr = new Uint8Array(n);
-                                while (n--) {
-                                    u8arr[n] = bstr.charCodeAt(n);
-                                }
-                                var blob = new Blob([u8arr]);
-                                window.navigator.msSaveOrOpenBlob(blob, 'Signature.pdf');
-                            } else {
-                                const a = document.createElement('a');
-                                a.download = 'Signature.pdf';
-                                a.href = e.target.result;
-                                document.body.appendChild(a)
-                                a.click();
-                                document.body.removeChild(a)
-                            }
-                        }
-                    }else{
-                        this.$store.commit('errorCodeSet', {
-                            dialogVisible: true,
-                            dialogMessage: this.$t('tips.not_upload_file'),
-                        })
-                    }
-                }).catch(err => {
-                })
-            },
+
             dataURLtoBlob(dataurl) {
                 var bstr = atob(dataurl)
                 var n = bstr.length;
@@ -684,7 +589,7 @@
                         } else if (name === 'access_token') {
                             access_token = value;
                         }
-                        this.$cookie.remove(name,{path:'/'});
+                        this.$cookie.remove(name, {path: '/'});
                     });
                     let data = {access_token, refresh_token, platform_token, resolve};
                     this.setTokenAct(data);
@@ -699,9 +604,9 @@
                 this.unLinkDialogVisible = true
             },
             checkCorporationList(item) {
-                this.$store.commit('setCorpItem',{});
+                this.$store.commit('setCorpItem', {});
                 sessionStorage.removeItem('corpItem');
-                this.$store.commit('setCorpItem',item);
+                this.$store.commit('setCorpItem', item);
                 this.$router.push('/corporationList')
             },
             checkCla() {

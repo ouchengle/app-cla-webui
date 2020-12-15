@@ -79,54 +79,24 @@
                             align="center"
                             style="width: 100%;">
                         <el-table-column
-                                prop="corporation_name"
-                                label="CorporationName">
+                                prop="url"
+                                label="Url">
                         </el-table-column>
                         <el-table-column
-                                prop="admin_name"
-                                label="AdminName">
+                                prop="language"
+                                label="Language">
                         </el-table-column>
                         <el-table-column
-                                prop="admin_email"
-                                label="Email">
-                        </el-table-column>
-
-                        <el-table-column
-                                label="PDF">
-                            <template slot-scope="scope">
-                                <el-popover
-                                        width="80"
-                                        trigger="hover"
-                                        placement="right">
-
-                                    <div class="menuBT">
-                                        <el-button @click="uploadClaFile(scope.row)" style="margin-left: 10px" type=""
-                                                   size="mini">upload
-                                        </el-button>
-                                        <el-button @click="downloadClaFile(scope.row)" type="" size="mini">download
-                                        </el-button>
-                                        <!--<el-button @click="previewClaFile(scope.row)" type="" size="mini">preview</el-button>-->
-                                    </div>
-
-                                    <svg-icon slot="reference" class="pointer" icon-class="pdf" @click=""/>
-
-                                </el-popover>
-                            </template>
-                        </el-table-column>
-
-                        <el-table-column
-                                align="center">
-
+                                prop=""
+                                label="Operation">
                             <template slot-scope="scope">
                                 <el-button :disabled="scope.row.administrator_enabled" style="margin-left: 1rem"
                                            type="primary"
                                            size="mini"
                                            @click="createRoot(scope.row.admin_email)">Create Administrator
                                 </el-button>
-
                             </template>
                         </el-table-column>
-
                     </el-table>
                 </div>
             </el-tab-pane>
@@ -138,22 +108,32 @@
                             align="center"
                             style="width: 100%;">
                         <el-table-column
-                                prop="corporation_name"
-                                label="CorporationName">
-
+                                prop="url"
+                                label="Url">
                         </el-table-column>
                         <el-table-column
-                                prop="admin_name"
-                                label="AdminName">
-                        </el-table-column>
-
-                        <el-table-column
-                                prop="admin_email"
-                                label="Email">
+                                prop="language"
+                                label="Language">
                         </el-table-column>
 
                         <el-table-column
-                                label="PDF">
+                                label="Empty signature">
+                            <template slot-scope="scope">
+                                <el-popover
+                                        width="80"
+                                        trigger="hover"
+                                        placement="right">
+                                    <div class="menuBT">
+                                        <el-button @click="downloadEmptySignature(scope.row)" type="" size="mini">download
+                                        </el-button>
+                                        <!--<el-button @click="previewEmptySignature(scope.row)" type="" size="mini">preview</el-button>-->
+                                    </div>
+                                    <svg-icon slot="reference" class="pointer" icon-class="pdf" @click=""/>
+                                </el-popover>
+                            </template>
+                        </el-table-column>
+                        <el-table-column
+                                label="Signature">
                             <template slot-scope="scope">
                                 <el-popover
                                         width="80"
@@ -161,12 +141,12 @@
                                         placement="right">
 
                                     <div class="menuBT">
-                                        <el-button @click="uploadClaFile(scope.row)" style="margin-left: 10px" type=""
+                                        <el-button @click="uploadOrgSignature(scope.row)" style="margin-left: 10px" type=""
                                                    size="mini">upload
                                         </el-button>
-                                        <el-button @click="downloadClaFile(scope.row)" type="" size="mini">download
+                                        <el-button @click="downloadOrgSignature(scope.row)" type="" size="mini">download
                                         </el-button>
-                                        <!--<el-button @click="previewClaFile(scope.row)" type="" size="mini">preview</el-button>-->
+                                        <!--<el-button @click="previewOrgSignature(scope.row)" type="" size="mini">preview</el-button>-->
                                     </div>
 
                                     <svg-icon slot="reference" class="pointer" icon-class="pdf" @click=""/>
@@ -174,10 +154,9 @@
                                 </el-popover>
                             </template>
                         </el-table-column>
-
                         <el-table-column
+                                label="Operation"
                                 align="center">
-
                             <template slot-scope="scope">
                                 <el-button :disabled="scope.row.administrator_enabled" style="margin-left: 1rem"
                                            type="primary"
@@ -357,6 +336,111 @@
 
         inject: ['setClientHeight'],
         methods: {
+            previewEmptySignature(row) {
+
+                // this.docInfo = {
+                //     type: "pdf",
+                //     // href:`/static/pdf/merge.pdf`
+                //     href:`/api${url.downloadSignature}/${this.item.id}`
+                // }
+                // this.previewOriginalDialogVisible = true
+            },
+            downloadEmptySignature(row) {
+                this.$store.commit('errorCodeSet', {
+                    dialogVisible: true,
+                    dialogMessage: this.$t('tips.no_file_can_download'),
+                })
+            },
+
+            /*======================OrgSignature======================================*/
+            uploadOrgSignature(row) {
+                this.uploadUrl = `/api${url.uploadSignature}/${row.id}`
+                this.uploadOrgDialogVisible = true
+            },
+            previewOrgSignature(row) {
+                // this.pdfSrc = `../../static/pdf/merge.pdf`
+                // this.pdfSrc = `/api${url.downloadSignature}/${row.id}`
+                // this.pdfSrc = pdf.createLoadingTask(`/api${url.downloadSignature}/${row.id}`)
+                // console.log(this.pdfSrc);
+                // this.pdfSrc = pdf.createLoadingTask({
+                //     url: `/api${url.downloadSignature}/${row.id}`,
+                //     httpHeaders: {
+                //         'Token': this.$store.state.access_token,
+                //         // 'x-ipp-device-uuid': 'SOME_UUID',
+                //         // 'x-ipp-client': 'SOME_ID',
+                //         // 'x-ipp-client-version': 'SOME_VERSION'
+                //     }
+                // })
+
+                // this.pdfSrc.promise.then(pdf => {
+                //     this.numPages = pdf.numPages
+                // }).catch(() => {})
+                // this.docInfo = {
+                //     type: "pdf",
+                //     // href:`/static/pdf/merge.pdf`,
+                //     href: `/api${url.downloadSignature}/${row.id}`
+                // }
+
+
+                // this.url = `../../static/pdf_source/web/viewer.html?file=${encodeURIComponent(`/api${url.downloadSignature}/${row.id}?token=${this.$store.state.access_token}`)}`
+                // this.url = `../../static/pdf_source/web/viewer.html?file=${encodeURIComponent(`/api${url.downloadSignature}/${row.id}`)}`
+                // this.url = `../../static/pdf_source/web/viewer.html?file=/api${url.downloadSignature}/${row.id}`
+                // this.url = `../../static/pdf_source/web/viewer.html?file=${url.downloadSignature}/${row.id}`
+                // this.url = `../../static/pdf_source/web/viewer.html?file=../../static/pdf/merge.pdf`
+                // this.previewOriginalDialogVisible = true
+                // window.open(`../../static/pdf_source/web/viewer.html?file=../../static/pdf_source/web/compressed.tracemonkey-pldi-09.pdf`)
+
+                this.$axios({
+                    url: `/api${url.downloadSignature}/${row.id}`,
+
+                }).then(res => {
+                    // this.showPdfFile(res.data.pdf)
+                    sessionStorage.setItem('pdf_base64', res.data.data.pdf)
+                    window.location.href = `../../static/pdf_source/web/viewer.html`
+                    // window.location.href = `../../static/pdf_source/web/viewer.html?file=${this.converData(res.data.pdf)}`
+                    // window.location.href = `../../static/pdf_source/web/viewer.html?file=${encodeURIComponent(res.data.pdf)}`
+                    // window.location.href = `../../static/pdf_source/web/viewer.html?file=${encodeURIComponent('../../static/pdf/merge.pdf')}`
+                    // window.location.href = `../../static/pdf_source/web/viewer.html?file=../../static/pdf/merge.pdf`
+
+                }).catch(err => {
+                })
+            },
+            downloadOrgSignature(row) {
+                http({
+                    url: `${url.downloadSignature}/${row.id}`,
+                }).then(res => {
+                    if (res.data.data.pdf) {
+                        let URL = this.dataURLtoBlob(res.data.data.pdf);
+                        var reader = new FileReader();
+                        reader.readAsDataURL(URL);
+                        reader.onload = function (e) {
+                            if (window.navigator.msSaveOrOpenBlob) {
+                                var bstr = atob(e.target.result.split(",")[1]);
+                                var n = bstr.length;
+                                var u8arr = new Uint8Array(n);
+                                while (n--) {
+                                    u8arr[n] = bstr.charCodeAt(n);
+                                }
+                                var blob = new Blob([u8arr]);
+                                window.navigator.msSaveOrOpenBlob(blob, 'Signature.pdf');
+                            } else {
+                                const a = document.createElement('a');
+                                a.download = 'Signature.pdf';
+                                a.href = e.target.result;
+                                document.body.appendChild(a)
+                                a.click();
+                                document.body.removeChild(a)
+                            }
+                        }
+                    }else{
+                        this.$store.commit('errorCodeSet', {
+                            dialogVisible: true,
+                            dialogMessage: this.$t('tips.not_upload_file'),
+                        })
+                    }
+                }).catch(err => {
+                })
+            },
             converData(data) {
                 // data = data.replace(/[\n\r]/g, '');
                 var raw = window.atob(data);
@@ -590,10 +674,10 @@
         },
         created() {
             this.init();
-            // this.showPdfFile(this.pdfBase64)
         },
         mounted() {
             this.setClientHeight();
+            this.showPdfFile(this.pdfBase64)
         },
         updated() {
             this.setClientHeight()
