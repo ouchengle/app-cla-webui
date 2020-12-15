@@ -348,8 +348,8 @@
                 };
                 if (this.cla_link_corporation) {
                     corpCla = {
-                        // signature_page: this.$store.state.corpFD,
-                        signature_page: formData,
+                        signature_page: this.$store.state.corpFD,
+                        // signature_page: formData,
                         url: this.cla_link_corporation.trim(),
                         language: this.corpClaLanguageValue,
                         fields: this.editMetadata(this.corporationMetadata)
