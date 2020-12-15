@@ -309,7 +309,7 @@
                         individualData.push(item);
                     }
                 });
-                data.concat(corpData,individualData).forEach((item, index) => {
+                data.concat(corpData, individualData).forEach((item, index) => {
                     if (item.org_id === this.organization) {
                         newData.push(item);
                     }
@@ -335,27 +335,29 @@
                 http({
                     url: url.getLinkedRepoList,
                 }).then(res => {
-                    let data = res.data.data;
-                    let count = res.data.data.length;
-                    count && this.$store.commit('setClaData', data);
-                    data.forEach((item, index) => {
-                        new Promise((resolve, reject) => {
-                            let claName = this.getClaName(item.id);
-                            resolve(claName)
-                        }).then(res => {
-                            Object.assign(data[index], {claName: res});
-                            count--
-                        }, err => {
-                        })
-                    })
-                    let setDataInterval = setInterval(() => {
-                        if (count === 0) {
-                            this.tableData = data
-                            this.getOrgTableData(data)
-                            clearInterval(setDataInterval)
-                        }
-                    }, 20)
-
+                    if (res.data && res.data.data.length) {
+                        let data = res.data.data;
+                        this.$store.commit('setClaData', data);
+                        data.forEach((item, index) => {
+                            new Promise((resolve, reject) => {
+                                let claName = this.getClaName(item.id);
+                                resolve(claName)
+                            }).then(res => {
+                                Object.assign(data[index], {claName: res});
+                                count--
+                            }, err => {
+                            })
+                        });
+                        let setDataInterval = setInterval(() => {
+                            if (count === 0) {
+                                this.tableData = data
+                                this.getOrgTableData(data)
+                                clearInterval(setDataInterval)
+                            }
+                        }, 20)
+                    } else {
+                        this.loading = false;
+                    }
                 }).catch(err => {
                 })
             },
@@ -366,7 +368,7 @@
                 }).then(resp => {
                     name = resp.data.data.name
                 }).catch(err => {
-                })
+                });
                 return name
 
             },
