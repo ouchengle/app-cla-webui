@@ -348,7 +348,8 @@
                 };
                 if (this.cla_link_corporation) {
                     corpCla = {
-                        signature_page: this.$store.state.corpFD,
+                        // signature_page: this.$store.state.corpFD,
+                        signature_page: formData,
                         url: this.cla_link_corporation.trim(),
                         language: this.corpClaLanguageValue,
                         fields: this.editMetadata(this.corporationMetadata)
@@ -414,9 +415,10 @@
 
 <style lang="less">
     #configCla {
-        .margin-top-half-rem{
+        .margin-top-half-rem {
             margin-top: .5rem;
         }
+
         .el-dialog__body {
             text-align: center;
             word-break: keep-all;
