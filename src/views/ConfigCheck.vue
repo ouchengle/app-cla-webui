@@ -336,7 +336,8 @@
                 if (this.$store.state.corpFD) {
                     corp_pdf = this.dataURLtoFile(this.$store.state.corpFD, this.$store.state.corpFDName);
                     console.log('pdf==', corp_pdf);
-                    formData = this.fileToFormData(corp_pdf)
+                    formData = this.fileToFormData(corp_pdf);
+                    console.log('formData==', formData);
                 }
                 let obj = {};
                 let corpCla = {};
@@ -347,7 +348,7 @@
                 };
                 if (this.cla_link_corporation) {
                     corpCla = {
-                        org_signature: formData,
+                        signature_page: this.$store.state.corpFD,
                         url: this.cla_link_corporation.trim(),
                         language: this.corpClaLanguageValue,
                         fields: this.editMetadata(this.corporationMetadata)
@@ -392,6 +393,7 @@
                         };
                     }
                 }
+                console.log(obj);
                 http({
                     url: url.linkRepository,
                     method: 'post',

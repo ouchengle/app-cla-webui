@@ -90,11 +90,7 @@
                                 prop=""
                                 label="Operation">
                             <template slot-scope="scope">
-                                <el-button :disabled="scope.row.administrator_enabled" style="margin-left: 1rem"
-                                           type="primary"
-                                           size="mini"
-                                           @click="createRoot(scope.row.admin_email)">Create Administrator
-                                </el-button>
+
                             </template>
                         </el-table-column>
                     </el-table>
