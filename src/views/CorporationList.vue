@@ -519,19 +519,19 @@
                     }
                 });
                 this.individualClaData = individualClaData;
-                http({
-                    url: `${url.getClaInfo}/${this.item.id}/cla`,
-                }).then(resp => {
-                    console.log(resp);
-                    console.log(resp.data.data);
-                    this.claData = resp.data.data;
-                    this.$nextTick(() => {
-                        // this.setClientHeight();
-                    })
-
-                }).catch(err => {
-                    console.log(err);
-                })
+                // http({
+                //     url: `${url.getClaInfo}/${this.item.id}/cla`,
+                // }).then(resp => {
+                //     console.log(resp);
+                //     console.log(resp.data.data);
+                //     this.claData = resp.data.data;
+                //     this.$nextTick(() => {
+                //         // this.setClientHeight();
+                //     })
+                //
+                // }).catch(err => {
+                //     console.log(err);
+                // })
             },
             getCorporationInfo() {
                 http({

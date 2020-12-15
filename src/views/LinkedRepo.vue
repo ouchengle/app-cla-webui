@@ -299,20 +299,30 @@
             },
             getBoundTableData() {
                 let data = [];
+                let corpData = [];
+                let individualData = [];
+                let newData = [];
                 this.tableData.forEach((item, index) => {
-                    if (item.org_id === this.organization) {
-                        data.push(item)
+                    if (item.apply_to === 'corporation') {
+                        corpData.push(item);
+                    } else if (item.apply_to === 'individual') {
+                        individualData.push(item);
                     }
                 });
-               for(let i = 0; i < data.length; i++) {
-                    for (let j = i+1; j < data.length; j++) {
-                       if (data[i].org_id === data[j].org_id && data[i].repo_id === data[j].repo_id) {
-                           data.splice(j,1);
-                           j--;
-                       }
+                data.concat(corpData,individualData).forEach((item, index) => {
+                    if (item.org_id === this.organization) {
+                        newData.push(item);
+                    }
+                });
+                for (let i = 0; i < newData.length; i++) {
+                    for (let j = i + 1; j < newData.length; j++) {
+                        if (newData[i].org_id === newData[j].org_id && newData[i].repo_id === newData[j].repo_id) {
+                            newData.splice(j, 1);
+                            j--;
+                        }
                     }
                 }
-                this.boundTableData = data;
+                this.boundTableData = newData;
                 this.loading = false
             },
             clickOrg(row, column, cell, event) {
@@ -364,17 +374,18 @@
                 let orgData = [];
                 data.forEach((item, index) => {
                     orgData.push({Organization: item.org_id})
-                })
+                });
+
                 for (let i = 0; i < orgData.length; i++) {
                     for (let j = i + 1; j < orgData.length; j++) {
                         if (orgData[i].Organization === orgData[j].Organization) {
-                            orgData.splice(j, 1)
+                            orgData.splice(j, 1);
                             j--
                         }
                     }
                 }
-                this.orgTableData = orgData
-                this.orgTableData.length > 0 ? this.organization = this.orgTableData[0].Organization : this.organization = []
+                this.orgTableData = orgData;
+                this.orgTableData.length > 0 ? this.organization = this.orgTableData[0].Organization : this.organization = [];
                 this.getBoundTableData()
             },
             copyAddress(row) {
