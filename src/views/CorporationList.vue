@@ -75,7 +75,7 @@
                 <div class="tableStyle">
                     <el-table
                             :empty-text="$t('corp.no_data')"
-                            :data="claData"
+                            :data="individualClaData"
                             align="center"
                             style="width: 100%;">
                         <el-table-column
@@ -104,7 +104,7 @@
                 <div class="tableStyle">
                     <el-table
                             :empty-text="$t('corp.no_data')"
-                            :data="claData"
+                            :data="corpClaData"
                             align="center"
                             style="width: 100%;">
                         <el-table-column
@@ -124,7 +124,8 @@
                                         trigger="hover"
                                         placement="right">
                                     <div class="menuBT">
-                                        <el-button @click="downloadEmptySignature(scope.row)" type="" size="mini">download
+                                        <el-button @click="downloadEmptySignature(scope.row)" type="" size="mini">
+                                            download
                                         </el-button>
                                         <!--<el-button @click="previewEmptySignature(scope.row)" type="" size="mini">preview</el-button>-->
                                     </div>
@@ -141,7 +142,8 @@
                                         placement="right">
 
                                     <div class="menuBT">
-                                        <el-button @click="uploadOrgSignature(scope.row)" style="margin-left: 10px" type=""
+                                        <el-button @click="uploadOrgSignature(scope.row)" style="margin-left: 10px"
+                                                   type=""
                                                    size="mini">upload
                                         </el-button>
                                         <el-button @click="downloadOrgSignature(scope.row)" type="" size="mini">download
@@ -301,9 +303,10 @@
         components: {
             pdfReader,
         },
-
         data() {
             return {
+                individualClaData: [],
+                corpClaData: [],
                 previewOriginalDialogVisible: false,
                 resendEmailDialogVisible: false,
                 resendEmail: '',
@@ -332,8 +335,6 @@
                 pdfBase64: `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`,
             }
         },
-
-
         inject: ['setClientHeight'],
         methods: {
             previewEmptySignature(row) {
@@ -432,7 +433,7 @@
                                 document.body.removeChild(a)
                             }
                         }
-                    }else{
+                    } else {
                         this.$store.commit('errorCodeSet', {
                             dialogVisible: true,
                             dialogMessage: this.$t('tips.not_upload_file'),
@@ -451,8 +452,6 @@
                 }
                 return array
             },
-
-
             showPdfFile(data) {
                 PDFJS.GlobalWorkerOptions.workerSrc = '../until/pdf/pdf.worker.js';
                 var fileContent = this.converData(data);
@@ -491,8 +490,65 @@
                 if (tab.index === '0') {
                     this.getCorporationInfo()
                 } else if (tab.index === '1') {
-                    //   this.getClaInfo()
+                    this.getIndividualClaInfo()
+                } else if (tab.index === '1') {
+                    this.getCorpClaInfo();
                 }
+            },
+            getCorpClaInfo() {
+                let claData = this.$store.state.claData;
+                let corpClaData = [];
+                let org_id = this.$store.state.corpItem.org_id;
+                let repo_id = this.$store.state.corpItem.repo_id;
+                claData.forEach((item, index) => {
+                    if (item.apply_to === 'corporation' && item.org_id === org_id && item.repo_id === repo_id) {
+                        corpClaData.push(item);
+                    }
+                });
+                this.corpClaData = corpClaData;
+            },
+            getIndividualClaInfo() {
+                console.log('getIndividualClaInfo');
+                let claData = this.$store.state.claData;
+                let individualClaData = [];
+                let org_id = this.$store.state.corpItem.org_id;
+                let repo_id = this.$store.state.corpItem.repo_id;
+                claData.forEach((item, index) => {
+                    if (item.apply_to === 'individual' && item.org_id === org_id && item.repo_id === repo_id) {
+                        individualClaData.push(item);
+                    }
+                });
+                this.individualClaData = individualClaData;
+                http({
+                    url: `${url.getClaInfo}/${this.item.id}/cla`,
+                }).then(resp => {
+                    console.log(resp);
+                    console.log(resp.data.data);
+                    this.claData = resp.data.data;
+                    this.$nextTick(() => {
+                        // this.setClientHeight();
+                    })
+
+                }).catch(err => {
+                    console.log(err);
+                })
+            },
+            getCorporationInfo() {
+                http({
+                    url: `${url.corporation_signing}/${this.item.org_id}`,
+                    params: {
+                        repo_id: this.item.repo_id,
+                        cla_language: this.item.cla_language
+                    },
+                }).then(resp => {
+                    this.tableData = resp.data.data[this.item.id];
+                    this.$nextTick(() => {
+                        //this.setClientHeight();
+                    })
+
+                }).catch(err => {
+                    // console.log(err);
+                })
             },
             upload(fileObj) {
                 const formData = new FormData()
@@ -524,7 +580,6 @@
                 };
                 this.previewDialogVisible = true
             },
-
             downloadClaFile(row) {
             },
             uploadClaFile(row) {
@@ -550,39 +605,6 @@
             },
             beforeRemove(file, fileList) {
                 return this.$confirm(`Are you sure you want to remove it ${file.name}？`);
-            },
-            getClaInfo() {
-                console.log('getClaInfo');
-                http({
-                    url: `${url.getClaInfo}/${this.item.id}/cla`,
-                }).then(resp => {
-                    console.log(resp);
-                    console.log(resp.data.data);
-                    this.claData = resp.data.data;
-                    this.$nextTick(() => {
-                        // this.setClientHeight();
-                    })
-
-                }).catch(err => {
-                    console.log(err);
-                })
-            },
-            getCorporationInfo() {
-                http({
-                    url: `${url.corporation_signing}/${this.item.org_id}`,
-                    params: {
-                        repo_id: this.item.repo_id,
-                        cla_language: this.item.cla_language
-                    },
-                }).then(resp => {
-                    this.tableData = resp.data.data[this.item.id];
-                    this.$nextTick(() => {
-                        //this.setClientHeight();
-                    })
-
-                }).catch(err => {
-                    // console.log(err);
-                })
             },
             openResendPdf(email) {
                 this.resendEmail = email;
@@ -650,34 +672,10 @@
                 }).catch(err => {
                 })
             },
-            init() {
-                let interval = setInterval(() => {
-                    if (this.$store.state.corpItem && this.$store.state.corpItem.apply_to) {
-                        this.item = this.$store.state.corpItem;
-                        if (this.item.apply_to === 'corporation') {
-                            this.activeName = 'first';
-                            this.getCorporationInfo()
-                        } else if (this.item.apply_to === 'individual') {
-                            this.activeName = 'second';
-                            //   this.getClaInfo()
-                        }
-                        clearInterval(interval)
-                    }
-
-                }, 100);
-                if (interval) {
-                    setTimeout(() => {
-                        clearInterval(interval)
-                    }, 2000)
-                }
-            },
-        },
-        created() {
-            this.init();
         },
         mounted() {
             this.setClientHeight();
-            this.showPdfFile(this.pdfBase64)
+            // this.showPdfFile(this.pdfBase64)
         },
         updated() {
             this.setClientHeight()
@@ -688,11 +686,13 @@
 <style lang="less">
     #corporationList {
         padding-top: 3rem;
+
         #pop {
             position: relative;
             text-align: center;
             z-index: 9;
-            canvas{
+
+            canvas {
                 margin: 20px auto;
                 display: block;
             }

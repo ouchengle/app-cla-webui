@@ -44,60 +44,6 @@
                         </template>
                     </el-table-column>
                     <el-table-column
-                            prop="claName"
-                            label="CLA">
-                    </el-table-column>
-                    <el-table-column
-                            prop="apply_to"
-                            label="Apply">
-                    </el-table-column>
-                    <el-table-column
-                            prop="cla_language"
-                            label="Language">
-                    </el-table-column>
-                    <el-table-column
-                            label="Empty Signature">
-                        <template v-if="scope.row.apply_to==='corporation'" slot-scope="scope">
-                            <el-popover
-                                    width="80"
-                                    trigger="hover"
-                                    placement="right">
-                                <div class="pdfBT">
-                                    <!--<el-button style="margin-left: 10px" @click="previewEmptySignature(scope.row)"-->
-                                    <!--type="" size="mini">preview-->
-                                    <!--</el-button>-->
-                                    <el-button @click="downloadEmptySignature(scope.row)" size="mini">
-                                        download
-                                    </el-button>
-                                </div>
-                                <svg-icon slot="reference" class="pointer" icon-class="pdf"/>
-                            </el-popover>
-                        </template>
-                    </el-table-column>
-                    <el-table-column
-                            label="Organization Signature">
-                        <template v-if="scope.row.apply_to==='corporation'" slot-scope="scope">
-                            <el-popover
-                                    width="80"
-                                    trigger="hover"
-                                    placement="right">
-
-                                <div class="pdfBT">
-                                    <el-button @click="uploadOrgSignature(scope.row)"
-                                               size="mini">upload
-                                    </el-button>
-                                    <el-button @click="downloadOrgSignature(scope.row)" size="mini">download
-                                    </el-button>
-                                    <!--<el-button @click="previewOrgSignature(scope.row)" type="" size="mini">preview-->
-                                    <!--</el-button>-->
-                                </div>
-
-                                <svg-icon slot="reference" class="pointer" icon-class="pdf"/>
-
-                            </el-popover>
-                        </template>
-                    </el-table-column>
-                    <el-table-column
                             label="Unlink"
                             width="100">
                         <template slot-scope="scope">
