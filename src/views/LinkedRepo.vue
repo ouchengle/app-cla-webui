@@ -359,7 +359,7 @@
                     }
                 });
                for(let i = 0; i < data.length; i++) {
-                    for (let j = i+1; i < data.length; j++) {
+                    for (let j = i+1; j < data.length; j++) {
                        if (data[i].org_id === data[j].org_id && data[i].repo_id === data[j].repo_id) {
                            data.splice(j,1);
                            j--;
