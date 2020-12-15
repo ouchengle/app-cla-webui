@@ -334,10 +334,10 @@
                 let corp_pdf = {};
                 let formData = {};
                 if (this.$store.state.corpFD) {
-                    corp_pdf = this.dataURLtoFile(this.$store.state.corpFD, this.$store.state.corpFDName);
-                    console.log('pdf==', corp_pdf);
-                    formData = this.fileToFormData(corp_pdf);
-                    console.log('formData==', formData);
+                    // corp_pdf = this.dataURLtoFile(this.$store.state.corpFD, this.$store.state.corpFDName);
+                    // console.log('pdf==', corp_pdf);
+                    // formData = this.fileToFormData(corp_pdf);
+                    // console.log('formData==', formData);
                 }
                 let obj = {};
                 let corpCla = {};
