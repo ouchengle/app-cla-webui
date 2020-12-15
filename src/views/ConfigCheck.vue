@@ -402,7 +402,7 @@
                 }).then(res => {
                     this.$message.closeAll();
                     this.$message.success('success');
-                    this.$router.push('/home')
+                    // this.$router.push('/home')
                 }).catch(err => {
                     this.$message.closeAll();
                     this.$message.error(err.data.error_message)
