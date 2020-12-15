@@ -337,6 +337,7 @@
                 }).then(res => {
                     if (res.data && res.data.data.length) {
                         let data = res.data.data;
+                        let count = res.data.data.length;
                         this.$store.commit('setClaData', data);
                         data.forEach((item, index) => {
                             new Promise((resolve, reject) => {
