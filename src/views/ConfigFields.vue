@@ -141,7 +141,7 @@
         </div>
         <div class="stepBtBox">
             <el-button size="medium" type="primary" class="stepBt" @click="toConfigClaLink">Previous Step</el-button>
-            <el-button size="medium" type="primary" class="stepBt" @click="toConfigEmail">Next Step</el-button>
+            <el-button size="medium" type="primary" class="stepBt" @click="toNextPage">Next Step</el-button>
         </div>
     </el-row>
 </template>
@@ -251,16 +251,16 @@
                 sessionStorage.removeItem('corporationCustomMetadataArr');
             },
             toConfigClaLink() {
-                this.$router.push('/config-cla-link')
+                this.$router.replace('/config-cla-link')
             },
-            toConfigEmail() {
+            toNextPage() {
                 let metadataObj = this.checkMetadata();
                 if (metadataObj) {
                     this.$store.commit('setIndividualMetadata', metadataObj.individualArr);
                     this.$store.commit('setCorpMetadata', metadataObj.corpArr);
                     this.$store.commit('setIndividualCustomMetadataArr', this.individualMetadata);
                     this.$store.commit('setCorporationCustomMetadataArr', this.corpMetadata);
-                    this.$router.push('/config-email');
+                    this.$router.replace('/config-check');
                 } else {
                     this.$message.closeAll();
                     this.$message.error(this.$t('tips.title_type_repeat'))

@@ -2,7 +2,7 @@
     <el-row id="configTwo">
         <div class="itemBox">
             <div class="stepTitle">
-                ② Paste a url of a CLA file
+                ③ Paste a url of a CLA file
                 <el-tooltip class="item" effect="light"
                             content="Paste a url to the original data of a CLA in the repository"
                             placement="right">
@@ -111,8 +111,8 @@
             </div>
         </div>
         <div class="stepBtBox">
-            <el-button size="medium" type="primary" class="stepBt" @click="toConfigOrg">Previous Step</el-button>
-            <el-button size="medium" type="primary" class="stepBt" @click="toConfigFields">Next Step</el-button>
+            <el-button size="medium" type="primary" class="stepBt" @click="toPreviousPage">Previous Step</el-button>
+            <el-button size="medium" type="primary" class="stepBt" @click="toNextPage">Next Step</el-button>
         </div>
         <reTryDialog :message="corpReLoginMsg" :dialogVisible="corpReTryDialogVisible"></reTryDialog>
     </el-row>
@@ -217,17 +217,17 @@
                 }
                 this.$store.commit('setCorpFDName', formData.get('files').name);
                 let reader = new FileReader();
-                // reader.readAsDataURL(formData.get('files'));
-                reader.readAsBinaryString(formData.get('files'));
+                reader.readAsDataURL(formData.get('files'));
+                // reader.readAsBinaryString(formData.get('files'));
                 reader.onload = () => {
                     console.log(reader.result);
                     this.$store.commit('setCorpFD', reader.result)
                 };
             },
-            toConfigOrg() {
-                this.$router.replace('/config-org')
+            toPreviousPage() {
+                this.$router.replace('/config-email')
             },
-            toConfigFields() {
+            toNextPage() {
                 if (this.cla_link_individual && this.individualClaLanguageValue) {
                     if (this.cla_link_corporation && this.corpClaLanguageValue && this.$store.state.corpFD
                         || !(this.cla_link_corporation || this.corpClaLanguageValue || this.$store.state.corpFD)) {

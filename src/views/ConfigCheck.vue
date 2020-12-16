@@ -33,7 +33,21 @@
         </div>
         <div class="itemBox">
             <div class="=info-title">
-                ② Url of CLA file
+                ② Email
+            </div>
+            <div class="margin-top-1rem">
+                <el-input
+                        disabled=""
+                        size="medium"
+                        class="emailInput"
+                        placeholder="authorized email"
+                        v-model="email">
+                </el-input>
+            </div>
+        </div>
+        <div class="itemBox">
+            <div class="=info-title">
+                ③ Url of CLA file
                 <el-tooltip class="item" effect="dark"
                             content="Paste a link to the original data of a CLA in the repository"
                             placement="right">
@@ -89,20 +103,6 @@
             </div>
             <div class="margin-top-half-rem">
                 <el-input disabled="" v-model="corp_pdf_name"></el-input>
-            </div>
-        </div>
-        <div class="itemBox">
-            <div class="=info-title">
-                ③ Email
-            </div>
-            <div class="margin-top-1rem">
-                <el-input
-                        disabled=""
-                        size="medium"
-                        class="emailInput"
-                        placeholder="authorized email"
-                        v-model="email">
-                </el-input>
             </div>
         </div>
         <div class="itemBox">
@@ -265,6 +265,7 @@
         },
         data() {
             return {
+                corpFDName:'signature_page',
                 platform: this.$store.state.platform,
                 isVerify: false,
                 previewShow: false,
@@ -311,33 +312,12 @@
                 }
                 return new File([u8arr], filename, {type: mime});
             },
-            fileToFormData(fs) {
-                let formData = new FormData();
-                let max_size = 1024 * 1024;
-                for (let i = 0; i < fs.length; i++) {
-                    let d = fs[i];
-                    if (d.size <= max_size) {
-                        if (/.(PDF|pdf)$/.test(d.name)) {
-                            formData.append("files", fs[i]);
-                        } else {
-                            alert('上传文件必须是PDF！');
-                            return false
-                        }
-                    } else {
-                        alert('上传文件过大！');
-                        return false
-                    }
-                }
-                return formData;
-            },
             binding() {
                 let corp_pdf = {};
-                let formData = {};
+                let formData = new FormData();
                 if (this.$store.state.corpFD) {
-                    // corp_pdf = this.dataURLtoFile(this.$store.state.corpFD, this.$store.state.corpFDName);
-                    // console.log('pdf==', corp_pdf);
-                    // formData = this.fileToFormData(corp_pdf);
-                    console.log('formData==', formData);
+                    corp_pdf = this.dataURLtoFile(this.$store.state.corpFD, this.corpFDName);
+                    formData.append('org_signature_file',corp_pdf);
                 }
                 let obj = {};
                 let corpCla = {};
@@ -348,8 +328,6 @@
                 };
                 if (this.cla_link_corporation) {
                     corpCla = {
-                        org_signature: this.$store.state.corpFD,
-                        // signature_page: formData,
                         url: this.cla_link_corporation.trim(),
                         language: this.corpClaLanguageValue,
                         fields: this.editMetadata(this.corporationMetadata)
@@ -394,15 +372,15 @@
                         };
                     }
                 }
-                console.log(obj);
+                formData.append('data',JSON.stringify(obj));
                 http({
                     url: url.linkRepository,
                     method: 'post',
-                    data: obj,
+                    data: formData,
                 }).then(res => {
                     this.$message.closeAll();
                     this.$message.success('success');
-                    // this.$router.push('/home')
+                    this.$router.push('/home')
                 }).catch(err => {
                     this.$message.closeAll();
                     this.$message.error(err.data.error_message)

@@ -156,11 +156,6 @@
                                 label="Operation"
                                 align="center">
                             <template slot-scope="scope">
-                                <el-button :disabled="scope.row.administrator_enabled" style="margin-left: 1rem"
-                                           type="primary"
-                                           size="mini"
-                                           @click="createRoot(scope.row.admin_email)">Create Administrator
-                                </el-button>
 
                             </template>
                         </el-table-column>
@@ -487,63 +482,45 @@
                     this.getCorporationInfo()
                 } else if (tab.index === '1') {
                     this.getIndividualClaInfo()
-                } else if (tab.index === '1') {
+                } else if (tab.index === '2') {
                     this.getCorpClaInfo();
                 }
             },
             getCorpClaInfo() {
-                let claData = this.$store.state.claData;
-                let corpClaData = [];
-                let org_id = this.$store.state.corpItem.org_id;
-                let repo_id = this.$store.state.corpItem.repo_id;
-                claData.forEach((item, index) => {
-                    if (item.apply_to === 'corporation' && item.org_id === org_id && item.repo_id === repo_id) {
-                        corpClaData.push(item);
+                let link_id = this.$store.state.corpItem.link_id;
+                http({
+                    url:`${url.getCla}/${link_id}`
+                }).then(res=>{
+                    if (res&&res.data.data.corp_clas){
+                        this.corpClaData = res.data.data.corp_clas;
+                    } else{
+
                     }
+                }).catch(err=>{
+
                 });
-                this.corpClaData = corpClaData;
             },
             getIndividualClaInfo() {
-                console.log('getIndividualClaInfo');
-                let claData = this.$store.state.claData;
-                let individualClaData = [];
-                let org_id = this.$store.state.corpItem.org_id;
-                let repo_id = this.$store.state.corpItem.repo_id;
-                claData.forEach((item, index) => {
-                    if (item.apply_to === 'individual' && item.org_id === org_id && item.repo_id === repo_id) {
-                        individualClaData.push(item);
+                let link_id = this.$store.state.corpItem.link_id;
+                http({
+                    url:`${url.getCla}/${link_id}`
+                }).then(res=>{
+                    if (res&&res.data.data){
+                        this.individualClaData = res.data.data.individual_clas;
+                    } else{
+
                     }
+                }).catch(err=>{
+
                 });
-                this.individualClaData = individualClaData;
-                // http({
-                //     url: `${url.getClaInfo}/${this.item.id}/cla`,
-                // }).then(resp => {
-                //     console.log(resp);
-                //     console.log(resp.data.data);
-                //     this.claData = resp.data.data;
-                //     this.$nextTick(() => {
-                //         // this.setClientHeight();
-                //     })
-                //
-                // }).catch(err => {
-                //     console.log(err);
-                // })
             },
             getCorporationInfo() {
                 http({
-                    url: `${url.corporation_signing}/${this.item.org_id}`,
-                    params: {
-                        repo_id: this.item.repo_id,
-                        cla_language: this.item.cla_language
-                    },
+                    url: `${url.corporation_signing}/${this.$store.state.corpItem.link_id}`,
                 }).then(resp => {
-                    this.tableData = resp.data.data[this.item.id];
-                    this.$nextTick(() => {
-                        //this.setClientHeight();
-                    })
-
+                    this.tableData = resp.data.data;
                 }).catch(err => {
-                    // console.log(err);
+                    console.log(err);
                 })
             },
             upload(fileObj) {
@@ -668,6 +645,9 @@
                 }).catch(err => {
                 })
             },
+        },
+        created(){
+            this.getCorporationInfo();
         },
         mounted() {
             this.setClientHeight();

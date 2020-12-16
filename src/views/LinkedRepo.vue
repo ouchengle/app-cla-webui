@@ -44,6 +44,10 @@
                         </template>
                     </el-table-column>
                     <el-table-column
+                            prop="org_email"
+                            label="Email">
+                    </el-table-column>
+                    <el-table-column
                             label="Unlink"
                             width="100">
                         <template slot-scope="scope">
@@ -298,47 +302,28 @@
                 return '';
             },
             getBoundTableData() {
-                let data = [];
-                let corpData = [];
-                let individualData = [];
                 let newData = [];
                 this.tableData.forEach((item, index) => {
-                    if (item.apply_to === 'corporation') {
-                        corpData.push(item);
-                    } else if (item.apply_to === 'individual') {
-                        individualData.push(item);
-                    }
-                });
-                data.concat(corpData, individualData).forEach((item, index) => {
                     if (item.org_id === this.organization) {
                         newData.push(item);
                     }
                 });
-                for (let i = 0; i < newData.length; i++) {
-                    for (let j = i + 1; j < newData.length; j++) {
-                        if (newData[i].org_id === newData[j].org_id && newData[i].repo_id === newData[j].repo_id) {
-                            newData.splice(j, 1);
-                            j--;
-                        }
-                    }
-                }
                 this.boundTableData = newData;
                 this.loading = false
             },
             clickOrg(row, column, cell, event) {
-
                 this.organization = row.Organization
                 this.getBoundTableData()
-
             },
             getLinkedRepoList() {
                 http({
                     url: url.getLinkedRepoList,
                 }).then(res => {
-                    if (res.data && res.data.data.length) {
+                    console.log(res);
+                    if (res.data.data && res.data.data.length) {
+                        console.log('323:',res.data.data.length);
                         let data = res.data.data;
                         let count = res.data.data.length;
-                        this.$store.commit('setClaData', data);
                         data.forEach((item, index) => {
                             new Promise((resolve, reject) => {
                                 let claName = this.getClaName(item.id);
@@ -351,12 +336,13 @@
                         });
                         let setDataInterval = setInterval(() => {
                             if (count === 0) {
-                                this.tableData = data
-                                this.getOrgTableData(data)
+                                this.tableData = data;
+                                this.getOrgTableData(data);
                                 clearInterval(setDataInterval)
                             }
                         }, 20)
                     } else {
+                        this.tableData = res.data.data;
                         this.loading = false;
                     }
                 }).catch(err => {
@@ -492,7 +478,6 @@
 
                 })
             },
-
             dataURLtoBlob(dataurl) {
                 var bstr = atob(dataurl)
                 var n = bstr.length;
@@ -501,43 +486,6 @@
                     u8arr[n] = bstr.charCodeAt(n);
                 }
                 return new Blob([u8arr], {type: 'pdf'});
-            },
-            getTableData() {
-                let interval = setInterval(() => {
-                    if (this.$store.state.tableData) {
-                        let tableData = this.$store.state.tableData
-                        for (let i = 0; i < tableData.length; i++) {
-                            for (let j = i + 1; j < tableData.length; j++) {
-                                if (tableData[i].repository === tableData[j].repository) {
-                                    if (!tableData[i].children) {
-                                        Object.assign(tableData[i], {children: []})
-                                    }
-                                    tableData[i].children.push(tableData[j])
-                                    tableData.splice(j, 1)
-                                    j--;
-                                }
-                            }
-                        }
-                        tableData.forEach(item => {
-                            if (item.children) {
-                                item.children.forEach((it, index) => {
-                                    for (let i = index + 1; i < item.children.length; i++)
-                                        if (it.apply_to === item.children[i].apply_to) {
-                                            if (!it.children) {
-                                                Object.assign(it, {children: []})
-                                            }
-                                            it.children.push(item.children[i])
-                                            item.children.splice(i, 1)
-                                            i--
-                                        }
-                                })
-                            }
-                        })
-                        this.setTableDataAct(tableData)
-                        clearInterval(interval)
-                    }
-                }, 100)
-
             },
             getCookieData(resolve) {
                 if (document.cookie) {
@@ -563,9 +511,8 @@
                     resolve('complete');
                 }
             },
-
             unlinkHandleClick(scope) {
-                this.unlinkId = scope.row.id;
+                this.unlinkId = scope.row.link_id;
                 this.unLinkDialogVisible = true
             },
             checkCorporationList(item) {
@@ -573,9 +520,6 @@
                 sessionStorage.removeItem('corpItem');
                 this.$store.commit('setCorpItem', item);
                 this.$router.push('/corporationList')
-            },
-            checkCla() {
-                this.$router.push('/signCla')
             },
             newWindow(repo) {
                 window.open(`https://gitee.com/${repo}`)
@@ -592,17 +536,11 @@
                     }
 
                 }).then(res => {
-                    this.$message.success('success')
-                    this.unLinkDialogVisible = false
-                    let data = {
-                        access_token: this.$store.state.access_token,
-                        refresh_token: this.$store.state.refresh_token,
-                        userName: this.$store.state.user.userName,
-                        platform: this.$store.state.platform
-                    }
+                    this.$message.success('success');
+                    this.unLinkDialogVisible = false;
                     this.getLinkedRepoList()
                 }).catch(err => {
-                    this.$message.closeAll()
+                    this.$message.closeAll();
                     this.$message.error(err.response.data)
                 })
             },
@@ -614,16 +552,6 @@
                     domain = window.location.href.split('/home')[0]
                 }
                 this.$store.commit('setDomain', domain)
-            },
-            clearPageSession() {
-                console.log(clearPageSession);
-                this.$store.commit('setOrgOption', undefined)
-                this.$store.commit('setRepositoryOptions', undefined)
-                this.$store.commit('setClaOptions', undefined)
-                this.$store.commit('setOrgValue', undefined)
-                this.$store.commit('setClaValue', undefined)
-                this.$store.commit('setRepositoryValue', undefined)
-                this.$store.commit('setTableData', undefined)
             },
         },
 

@@ -2,7 +2,7 @@
     <el-row id="configThree">
         <div class="itemBox">
             <div class="stepTitle">
-                ③ Email
+                ② Email
             </div>
             <div class="margin-top-1rem">
                 Authorize an email to send signed documents to the signer
@@ -19,8 +19,8 @@
             </div>
         </div>
         <div class="stepBtBox">
-            <el-button size="medium" type="primary" class="stepBt" @click="toConfigFields">Previous Step</el-button>
-            <el-button size="medium" type="primary" class="stepBt" @click="toConfigCheck">Next Step</el-button>
+            <el-button size="medium" type="primary" class="stepBt" @click="toPreviousPage">Previous Step</el-button>
+            <el-button size="medium" type="primary" class="stepBt" @click="toNextPage">Next Step</el-button>
         </div>
         <el-dialog
                 top="5vh"
@@ -89,12 +89,12 @@
             }
         },
         methods: {
-            toConfigFields() {
-                this.$router.push('/config-fields')
+            toPreviousPage() {
+                this.$router.replace('/config-org')
             },
-            toConfigCheck() {
+            toNextPage() {
                 if (this.email) {
-                    this.$router.push('/config-check')
+                    this.$router.replace('/config-cla-link')
                 } else {
                     this.$message.closeAll();
                     this.$message.error(this.$t('tips.authorized_email'));

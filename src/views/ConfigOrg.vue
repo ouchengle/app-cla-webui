@@ -131,7 +131,7 @@
         methods: {
             toConfigClaLink() {
                 if (this.org && this.org_alias) {
-                    this.$router.replace('/config-cla-link')
+                    this.$router.replace('/config-email')
                 } else {
                     this.$store.commit('errorCodeSet', {
                         dialogVisible: true,
