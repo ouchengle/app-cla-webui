@@ -220,7 +220,6 @@
                 reader.readAsDataURL(formData.get('files'));
                 // reader.readAsBinaryString(formData.get('files'));
                 reader.onload = () => {
-                    console.log(reader.result);
                     this.$store.commit('setCorpFD', reader.result)
                 };
             },

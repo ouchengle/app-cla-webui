@@ -90,7 +90,15 @@
                                 prop=""
                                 label="Operation">
                             <template slot-scope="scope">
-
+                                <el-dropdown placement="bottom-start" trigger="click">
+                                    <span class="el-dropdown-link">
+                                        <svg-icon icon-class="operation"></svg-icon>
+                                    </span>
+                                    <el-dropdown-menu slot="dropdown">
+                                        <el-dropdown-item>Modify field</el-dropdown-item>
+                                        <el-dropdown-item>Add cla for other language</el-dropdown-item>
+                                    </el-dropdown-menu>
+                                </el-dropdown>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -138,7 +146,7 @@
                                         placement="right">
 
                                     <div class="menuBT">
-                                        <el-button @click="uploadOrgSignature(scope.row)" style="margin-left: 10px"
+                                        <el-button @click="uploadOrgSignature(scope.row)"
                                                    type=""
                                                    size="mini">upload
                                         </el-button>
@@ -156,7 +164,15 @@
                                 label="Operation"
                                 align="center">
                             <template slot-scope="scope">
-
+                                <el-dropdown placement="bottom-start" trigger="click">
+                                    <span class="el-dropdown-link">
+                                        <svg-icon icon-class="operation"></svg-icon>
+                                    </span>
+                                    <el-dropdown-menu slot="dropdown">
+                                        <el-dropdown-item>Modify field</el-dropdown-item>
+                                        <el-dropdown-item>Add cla for other language</el-dropdown-item>
+                                    </el-dropdown-menu>
+                                </el-dropdown>
                             </template>
                         </el-table-column>
 
@@ -489,28 +505,28 @@
             getCorpClaInfo() {
                 let link_id = this.$store.state.corpItem.link_id;
                 http({
-                    url:`${url.getCla}/${link_id}`
-                }).then(res=>{
-                    if (res&&res.data.data.corp_clas){
+                    url: `${url.getCla}/${link_id}`
+                }).then(res => {
+                    if (res && res.data.data.corp_clas) {
                         this.corpClaData = res.data.data.corp_clas;
-                    } else{
+                    } else {
 
                     }
-                }).catch(err=>{
+                }).catch(err => {
 
                 });
             },
             getIndividualClaInfo() {
                 let link_id = this.$store.state.corpItem.link_id;
                 http({
-                    url:`${url.getCla}/${link_id}`
-                }).then(res=>{
-                    if (res&&res.data.data){
+                    url: `${url.getCla}/${link_id}`
+                }).then(res => {
+                    if (res && res.data.data) {
                         this.individualClaData = res.data.data.individual_clas;
-                    } else{
+                    } else {
 
                     }
-                }).catch(err=>{
+                }).catch(err => {
 
                 });
             },
@@ -646,7 +662,7 @@
                 })
             },
         },
-        created(){
+        created() {
             this.getCorporationInfo();
         },
         mounted() {

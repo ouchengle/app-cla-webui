@@ -169,11 +169,12 @@
             },
             changeRepository(value) {
                 this.$store.commit('setRepositoryValue', value);
-                this.$store.commit('setChooseRepo', this.repositoryOptions[value].label);
                 if (value !== '') {
-                    this.$store.commit('setRepositoryChoose', true)
+                    this.$store.commit('setRepositoryChoose', true);
+                    this.$store.commit('setChooseRepo', this.repositoryOptions[value].label);
                 } else {
-                    this.$store.commit('setRepositoryChoose', false)
+                    this.$store.commit('setRepositoryChoose', false);
+                    this.$store.commit('setChooseRepo', '');
                 }
             },
             getRepositoriesOfOrg(org, org_id) {

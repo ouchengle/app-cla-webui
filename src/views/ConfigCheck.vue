@@ -313,6 +313,7 @@
                 return new File([u8arr], filename, {type: mime});
             },
             binding() {
+                console.log(this.repo);
                 let corp_pdf = {};
                 let formData = new FormData();
                 if (this.$store.state.corpFD) {

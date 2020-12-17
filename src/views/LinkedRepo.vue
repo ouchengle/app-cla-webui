@@ -91,14 +91,12 @@
                 <div style="text-align: center">
                     <svg-icon style="width: 30rem;height: 20rem;margin:0 auto" icon-class="error"></svg-icon>
                 </div>
-
                 <div style="padding: 0 6rem;text-align: left;font-size: 1.3rem">
                     <p style="text-align: center">Unlinking will...</p>
                     <ul>
                         <li>Remove the CLA assistant webhook in your repository/organization
                         </li>
                         <li>Remove the link to your list of contributors</li>
-
                     </ul>
                 </div>
 
@@ -270,6 +268,8 @@
                 this.$store.commit('setCorporationCustomMetadataArr', this.initCorpCustomMetadata);
                 this.$store.commit('setEmail', '');
                 this.$store.commit('setIsEmail', false);
+                this.$store.commit('setChooseRepo', '');
+                this.$store.commit('setChooseOrg', '');
                 sessionStorage.removeItem('orgOptions');
                 sessionStorage.removeItem('orgValue');
                 sessionStorage.removeItem('orgChoose');
@@ -288,6 +288,8 @@
                 sessionStorage.removeItem('individualCustomMetadataArr');
                 sessionStorage.removeItem('corporationCustomMetadataArr');
                 sessionStorage.removeItem('email');
+                sessionStorage.removeItem('chooseOrg');
+                sessionStorage.removeItem('chooseRepo');
             },
             configCla() {
                 this.$router.push('/bind-cla')
@@ -319,9 +321,7 @@
                 http({
                     url: url.getLinkedRepoList,
                 }).then(res => {
-                    console.log(res);
                     if (res.data.data && res.data.data.length) {
-                        console.log('323:',res.data.data.length);
                         let data = res.data.data;
                         let count = res.data.data.length;
                         data.forEach((item, index) => {

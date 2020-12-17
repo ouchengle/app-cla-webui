@@ -291,7 +291,6 @@
                 for (let i = 0; i < corpArr.length; i++) {
                     for (let j = i + 1; j < corpArr.length; j++) {
                         if (corpArr[i].title === corpArr[j].title || corpArr[i].type === corpArr[j].type) {
-                            console.log('i--title==', corpArr[i].title, 'j---title===', corpArr[j].title);
                             return false;
                         }
                     }
