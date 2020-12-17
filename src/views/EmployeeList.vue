@@ -240,6 +240,12 @@
                                     dialogMessage: this.$t('tips.system_error'),
                                 });
                                 break;
+                            default :
+                                this.$store.commit('errorCodeSet', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.unknown_error'),
+                                });
+                                break;
                         }
                     } else {
                         this.$store.commit('errorCodeSet', {
@@ -260,7 +266,7 @@
             changeActive(cla_org_id, email, enabled) {
                 let data = {
                     enabled: enabled
-                }
+                };
                 http({
                     url: `${url.enableEmployee}/${email}`,
                     method: 'put',
@@ -292,6 +298,12 @@
                                 this.$store.commit('errorCodeSet', {
                                     dialogVisible: true,
                                     dialogMessage: this.$t('tips.system_error')
+                                });
+                                break;
+                            default :
+                                this.$store.commit('errorCodeSet', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.unknown_error'),
                                 });
                                 break;
                         }

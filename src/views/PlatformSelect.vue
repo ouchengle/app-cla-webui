@@ -116,6 +116,12 @@
                                             dialogMessage: this.$t('tips.system_error')
                                         });
                                         break;
+                                    default :
+                                        this.$store.commit('errorCodeSet', {
+                                            dialogVisible: true,
+                                            dialogMessage: this.$t('tips.unknown_error'),
+                                        });
+                                        break;
                                 }
                             } else {
                                 this.$store.commit('errorCodeSet', {

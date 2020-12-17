@@ -161,8 +161,7 @@
                             </template>
                         </el-table-column>
                         <el-table-column
-                                label="Operation"
-                                align="center">
+                                label="Operation">
                             <template slot-scope="scope">
                                 <el-dropdown placement="bottom-start" trigger="click">
                                     <span class="el-dropdown-link">

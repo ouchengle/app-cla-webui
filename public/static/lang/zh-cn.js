@@ -63,6 +63,7 @@ module.exports = {
         not_same_corp:'电子邮件不属于该公司',
         not_ready_to_sign:'组织尚未就绪',
         system_error:'系统错误，请重试',
+        unknown_error:'未知错误，请联系社区管理员或提交YAML',
         title_type_repeat:'填充了相同的标题或类型',
         individual_sign:'感谢你的签署',
         corp_sign:'已向您发送电子邮件，请按照邮件中的步骤完成签署',

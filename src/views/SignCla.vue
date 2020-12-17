@@ -364,6 +364,12 @@
                                         dialogMessage: this.$t('tips.system_error'),
                                     });
                                     break;
+                                default :
+                                    this.$store.commit('errorCodeSet', {
+                                        dialogVisible: true,
+                                        dialogMessage: this.$t('tips.unknown_error'),
+                                    });
+                                    break;
                             }
                         } else {
                             this.$store.commit('errorCodeSet', {
@@ -393,44 +399,9 @@
                     }
                 }
                 if (this.loginType !== 'corporation') {
-                    // this.getEmail(this.platform_token, this.refresh_token)
                     this.getUserInfo()
                 }
             },
-            getEmail(access_token, refresh_token) {
-                this.$axios({
-                    url: url.getEmail,
-                    params: {access_token: access_token}
-                }).then(res => {
-                    if (res.data.length > 0) {
-                        for (let item of res.data) {
-                            if (item.scope[0] && item.scope[0] === 'primary') {
-                                this.myForm.email = item.email;
-                                break
-                            }
-                        }
-                    }
-
-                    if (this.myForm.email === '') {
-                        this.$store.commit('setSignReLogin', {
-                            dialogVisible: true,
-                            dialogMessage: this.$t('tips.not_commit_email', {platform: this.platform}),
-                        })
-                    }
-                    for (let item of this.fields) {
-                        if (item.type === 'email') {
-                            Object.assign(this.ruleForm, {[item.id]: this.myForm.email})
-                            break;
-                        }
-                    }
-                }).catch(err => {
-                    this.$store.commit('setSignReLogin', {
-                        dialogVisible: true,
-                        dialogMessage: this.$t('tips.not_authorize_email')
-                    })
-                })
-            },
-
             getCookieData(resolve) {
                 if (document.cookie) {
                     let cookieArr = document.cookie.split(';');
@@ -476,21 +447,21 @@
             },
             setData(res, resolve) {
                 let data = res.data.data;
-                this.signPageData = data
-                if (Object.keys(data).length) {
-                    this.languageOptions = []
-                    for (let key in data) {
-                        if (data[key].language === 'English') {
-                            this.value = key;
-                            this.cla_org_id = key
-                            this.setClaText(key)
+                this.signPageData = data;
+                if (data.length) {
+                    this.languageOptions = [];
+                    data.forEach((item, index) => {
+                        if (item.language === 'English') {
+                            this.value = item.link_id;
+                            this.cla_org_id = item.link_id;
+                            this.setClaText(item.link_id);
                             resolve('complete')
                         } else {
-                            this.$message.closeAll()
+                            this.$message.closeAll();
                             this.$message.error(this.$t('tips.lang_error'))
                         }
                         this.languageOptions.push({value: key, label: data[key].language})
-                    }
+                    });
                 }
             },
             getSignPage(resolve) {
@@ -503,13 +474,14 @@
                     applyTo = 'corporation';
                 }
                 if (this.$store.state.repoInfo.repo_id) {
-                    _url=`${url.getSignPage}/${this.$store.state.repoInfo.platform}/${this.$store.state.repoInfo.org_id}:${this.$store.state.repoInfo.repo_id}/${applyTo}`
-                }else{
-                    _url=`${url.getSignPage}/${this.$store.state.repoInfo.platform}/${this.$store.state.repoInfo.org_id}/${applyTo}`
+                    _url = `${url.getSignPage}/${this.$store.state.repoInfo.platform}/${this.$store.state.repoInfo.org_id}:${this.$store.state.repoInfo.repo_id}/${applyTo}`
+                } else {
+                    _url = `${url.getSignPage}/${this.$store.state.repoInfo.platform}/${this.$store.state.repoInfo.org_id}/${applyTo}`
                 }
                 http({
                     url: _url,
                 }).then(res => {
+                    console.log(res);
                     this.setData(res, resolve)
                 }).catch(err => {
                     if (err.data.hasOwnProperty('data')) {
@@ -599,6 +571,12 @@
                                 this.$store.commit('errorCodeSet', {
                                     dialogVisible: true,
                                     dialogMessage: this.$t('tips.system_error'),
+                                });
+                                break;
+                            default :
+                                this.$store.commit('errorCodeSet', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.unknown_error'),
                                 });
                                 break;
                         }
@@ -743,7 +721,7 @@
                 this.rules = rules
             },
             signCla() {
-                let info = {}
+                let info = {};
                 let myUrl = '';
                 let obj = {};
                 for (let key in this.ruleForm) {
@@ -876,6 +854,12 @@
                                 this.$store.commit('errorCodeSet', {
                                     dialogVisible: true,
                                     dialogMessage: this.$t('tips.system_error'),
+                                });
+                                break;
+                            default :
+                                this.$store.commit('errorCodeSet', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.unknown_error'),
                                 });
                                 break;
                         }
