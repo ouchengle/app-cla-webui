@@ -101,6 +101,7 @@ module.exports = {
         upload_signature_file:'请上传代表社区的签名的PDF文件',
         not_upload_file:'暂未上传文件，请上传后再试',
         no_file_can_download:'暂无可用文件',
+        no_lang:'暂不支持{language}',
     },
     header:{
         home:'首页',

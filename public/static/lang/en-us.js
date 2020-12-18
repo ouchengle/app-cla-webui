@@ -101,6 +101,7 @@ module.exports = {
         upload_signature_file: 'Please upload a PDF file with the signature of the community',
         not_upload_file: 'No file has been uploaded. Please upload and try again',
         no_file_can_download: 'No files available',
+        no_lang:'{language} is not supported at the moment',
     },
     header: {
         home: 'Home',

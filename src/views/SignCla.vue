@@ -113,16 +113,13 @@
                 } else {
                     return org.charAt(0).toUpperCase()
                 }
-
             },
             reLoginDialogVisible() {
                 return this.$store.state.dialogVisible
-            }
-            ,
+            },
             reLoginMsg() {
                 return this.$store.state.dialogMessage
             },
-
             reTryDialogVisible() {
                 return this.$store.state.reTryDialogVisible
             },
@@ -140,14 +137,26 @@
                     this.sendBtText = value
                 }
             },
+            sign_user() {
+                return this.$store.state.sign_user;
+            },
+            sign_email() {
+                return this.$store.state.sign_email;
+            },
         },
         watch: {
             '$i18n.locale'() {
-                if (this.sendBtTextFromLang === 'send code' || this.sendBtTextFromLang === '发送验证码') {
-                    this.sendBtTextFromLang = this.$t('signPage.sendCode')
-                } else {
-                    this.sendBtTextFromLang = this.$t('signPage.reSendCode', {second: this.second})
-                }
+                this.cla_lang = '';
+                new Promise(resolve => {
+                    this.getSignPage(resolve);
+                }).then(res => {
+                    this.getNowDate();
+                    if (this.sendBtTextFromLang === 'send code' || this.sendBtTextFromLang === '发送验证码') {
+                        this.sendBtTextFromLang = this.$t('signPage.sendCode')
+                    } else {
+                        this.sendBtTextFromLang = this.$t('signPage.reSendCode', {second: this.second})
+                    }
+                });
             },
         },
         components: {
@@ -157,10 +166,11 @@
             ReTryDialog,
             SignSuccessDialog,
             SignReLoginDialog,
-        }
-        ,
+        },
         data() {
             return {
+                lang: '',
+                cla_hash: '',
                 second: '',
                 sendBtText: this.$t('signPage.sendCode'),
                 signRouter: this.$store.state.signRouter,
@@ -169,7 +179,7 @@
                 tipsMessage: this.$t('tips.individual_sign'),
                 tipsDialogVisible: false,
                 signPageData: '',
-                cla_org_id: '',
+                link_id: '',
                 claOrgIdArr: [],
                 fields: [],
                 claIdArr: [],
@@ -197,8 +207,7 @@
                 checkCLAClass: {
                     height: '',
                 },
-                sign_user: '',
-                sign_email: '',
+                cla_lang: '',
             }
         },
         methods: {
@@ -301,7 +310,7 @@
                 }
                 if (reg.test(email)) {
                     myHttp({
-                        url: `${url.sendVerifyCode}/${this.cla_org_id}/${this.myForm.email}`,
+                        url: `${url.sendVerifyCode}/${this.link_id}/${this.myForm.email}`,
                         method: 'post',
                     }).then(res => {
                         this.$message.closeAll();
@@ -317,7 +326,7 @@
                             }
                         }, 1000)
                     }).catch(err => {
-                        if (err.data.hasOwnProperty('data')) {
+                        if (err.data && err.data.hasOwnProperty('data')) {
                             switch (err.data.data.error_code) {
 
                                 case 'cla.invalid_parameter':
@@ -419,9 +428,9 @@
                         } else if (name === 'access_token') {
                             access_token = value;
                         } else if (name === 'sign_user') {
-                            this.sign_user = value;
+                            this.$store.commit('setSignUser', value);
                         } else if (name === 'sign_email') {
-                            this.sign_email = value;
+                            this.$store.commit('setSignEmail', value);
                         } else if (name === 'error_code') {
                             error_code = value;
                         }
@@ -443,48 +452,65 @@
                 } else {
                     resolve('complete');
                 }
-
             },
             setData(res, resolve) {
-                let data = res.data.data;
-                this.signPageData = data;
-                if (data.length) {
+                if (res && res.data.data) {
+                    let data = res.data.data;
+                    this.signPageData = data.clas;
                     this.languageOptions = [];
-                    data.forEach((item, index) => {
-                        if (item.language === 'English') {
-                            this.value = item.link_id;
-                            this.cla_org_id = item.link_id;
-                            this.setClaText(item.link_id);
+                    this.link_id = data.link_id;
+                    if (localStorage.getItem('lang') === '0') {
+                        this.lang = 'English'
+                    } else if (localStorage.getItem('lang') === '1') {
+                        this.lang = '中文'
+                    }
+                    this.signPageData.forEach((item, index) => {
+                        if (item.language === this.lang) {
+                            if (this.lang === 'English') {
+                                this.cla_lang = 'English';
+                            } else if (this.lang === '中文') {
+                                this.cla_lang = 'Chinese'
+                            }
+                            this.value = index;
+                            this.cla_hash = item.cla_hash;
+                            this.setClaText(index);
                             resolve('complete')
-                        } else {
-                            this.$message.closeAll();
-                            this.$message.error(this.$t('tips.lang_error'))
                         }
-                        this.languageOptions.push({value: key, label: data[key].language})
+                        this.languageOptions.push({value: index, label: item.language})
                     });
+                    if (!this.cla_lang) {
+                        document.getElementById('claBox').innerHTML = '';
+                        this.ruleForm = {};
+                        this.rules = {};
+                        this.fields = [];
+                        this.$message.closeAll();
+                        this.$message.error(this.$t('tips.no_lang', {language: this.lang}))
+                    }
                 }
             },
             getSignPage(resolve) {
                 let applyTo = '';
                 let _url = '';
+                let _http = '';
                 if
                 (this.$store.state.loginType === 'individual' || this.$store.state.loginType === 'employee') {
                     applyTo = 'individual';
+                    _http = http;
                 } else if (this.$store.state.loginType === 'corporation') {
                     applyTo = 'corporation';
+                    _http = axios;
                 }
                 if (this.$store.state.repoInfo.repo_id) {
                     _url = `${url.getSignPage}/${this.$store.state.repoInfo.platform}/${this.$store.state.repoInfo.org_id}:${this.$store.state.repoInfo.repo_id}/${applyTo}`
                 } else {
                     _url = `${url.getSignPage}/${this.$store.state.repoInfo.platform}/${this.$store.state.repoInfo.org_id}/${applyTo}`
                 }
-                http({
+                _http({
                     url: _url,
                 }).then(res => {
-                    console.log(res);
                     this.setData(res, resolve)
                 }).catch(err => {
-                    if (err.data.hasOwnProperty('data')) {
+                    if (err.data && err.data.hasOwnProperty('data')) {
                         switch (err.data.data.error_code) {
                             case 'cla.no_cla_binding':
                                 let message = '';
@@ -622,11 +648,11 @@
                         }
                     }
                 }
-                this.fields = this.signPageData[key].fields
+                this.fields = this.signPageData[key].fields;
                 this.fields.forEach(item => {
-                    Object.assign(form, {[item.id]: ''})
+                    Object.assign(form, {[item.id]: ''});
                     if (item.type === 'name') {
-                        Object.assign(this.myForm, {name: ''})
+                        Object.assign(this.myForm, {name: ''});
                         item.required && Object.assign(rules, {
                             [item.id]: [
                                 {
@@ -637,7 +663,7 @@
                             ],
                         })
                     } else if (item.type === 'corporationName') {
-                        Object.assign(this.myForm, {corporationName: ''})
+                        Object.assign(this.myForm, {corporationName: ''});
                         item.required && Object.assign(rules, {
                             [item.id]: [
                                 {
@@ -648,7 +674,7 @@
                             ],
                         })
                     } else if (item.type === 'title') {
-                        Object.assign(this.myForm, {title: ''})
+                        Object.assign(this.myForm, {title: ''});
                         item.required && Object.assign(rules, {
                             [item.id]: [
                                 {
@@ -659,7 +685,7 @@
                             ],
                         })
                     } else if (item.type === 'authorized') {
-                        Object.assign(this.myForm, {authorized: ''})
+                        Object.assign(this.myForm, {authorized: ''});
                         item.required && Object.assign(rules, {
                             [item.id]: [
                                 {
@@ -670,7 +696,7 @@
                             ],
                         })
                     } else if (item.type === 'date') {
-                        Object.assign(this.myForm, {date: ''})
+                        Object.assign(this.myForm, {date: ''});
                         item.required && Object.assign(rules, {
                             [item.id]: [
                                 {
@@ -680,7 +706,7 @@
                                 }],
                         })
                     } else if (item.type === 'email') {
-                        Object.assign(this.myForm, {email: ''})
+                        Object.assign(this.myForm, {email: ''});
                         item.required && Object.assign(rules, {
                             [item.id]: [{
                                 required: item.required,
@@ -689,7 +715,7 @@
                             }],
                         })
                     } else if (item.type === 'telephone') {
-                        Object.assign(this.myForm, {telephone: ''})
+                        Object.assign(this.myForm, {telephone: ''});
                         item.required && Object.assign(rules, {
                             [item.id]: [{
                                 required: item.required,
@@ -698,7 +724,7 @@
                             }],
                         })
                     } else if (item.type === 'address') {
-                        Object.assign(this.myForm, {address: ''})
+                        Object.assign(this.myForm, {address: ''});
                         item.required && Object.assign(rules, {
                             [item.id]: [{
                                 required: item.required,
@@ -716,7 +742,7 @@
                         validator: this.verifyCodeCheck,
                         trigger: ['blur', 'change']
                     },]
-                })
+                });
                 this.ruleForm = form;
                 this.rules = rules
             },
@@ -730,14 +756,14 @@
                     }
                 }
                 if (this.$store.state.loginType === 'individual') {
-                    myUrl = `${url.individual_signing}/${this.cla_org_id}`;
+                    myUrl = `${url.individual_signing}/${this.link_id}/${this.cla_lang}/${this.cla_hash}`;
                     obj = {
                         name: this.myForm.name,
                         email: this.myForm.email,
                         info: info,
                     }
                 } else if (this.$store.state.loginType === 'corporation') {
-                    myUrl = `${url.corporation_signing}/${this.cla_org_id}`;
+                    myUrl = `${url.corporation_signing}/${this.link_id}/${this.cla_lang}/${this.cla_hash}`;
                     obj = {
                         corporation_name: this.myForm.corporationName,
                         admin_name: this.myForm.authorized,
@@ -747,7 +773,7 @@
                         verification_code: this.ruleForm.code
                     }
                 } else if (this.$store.state.loginType === 'employee') {
-                    myUrl = `${url.employee_signing}/${this.cla_org_id}`;
+                    myUrl = `${url.employee_signing}/${this.link_id}/${this.cla_lang}/${this.cla_hash}`;
                     obj = {
                         name: this.myForm.name,
                         email: this.myForm.email,
@@ -775,7 +801,7 @@
                     });
 
                 }).catch(err => {
-                    if (err.data.hasOwnProperty('data')) {
+                    if (err.data && err.data.hasOwnProperty('data')) {
                         switch (err.data.data.error_code) {
                             case 'cla.has_signed':
                                 this.$store.commit('setSignReLogin', {
@@ -813,7 +839,7 @@
                                     dialogMessage: this.$t('tips.uncompleted_signing'),
                                 });
                                 break;
-                            case 'cla.no_corp_manager':
+                            case 'cla.no_corp_employee_manager':
                                 this.$store.commit('setSignReLogin', {
                                     dialogVisible: true,
                                     dialogMessage: this.$t('tips.no_corp_manager'),
@@ -884,46 +910,6 @@
                         return false;
                     }
                 });
-            },
-            getRepositoriesOfOrg(org, org_id) {
-                let obj = {access_token: this.$store.state.sign_access_token, org: org, page: 1, per_page: 10};
-                this.$axios({
-                    url: `https://gitee.com/api/v5/orgs/${org}/repos`,
-                    params: obj,
-                }).then(res => {
-                    this.repositoryOptions = [];
-                    res.data.forEach((item, index) => {
-                        this.repositoryOptions.push({
-                            value: index,
-                            org: org,
-                            org_id: org_id,
-                            repoName: item.name,
-                            label: `${org}/${item.name}`,
-                            id: item.id
-                        });
-                    })
-                }).catch(err => {
-                    this.$message.closeAll()
-                    this.$message.error(err.response.data)
-                })
-            },
-            clearForm() {
-                if (this.$store.state.loginType === 'employee' || this.$store.state.loginType === 'individual') {
-                    for (let key in this.ruleForm) {
-                        if (key !== '1' && key !== '2') {
-                            this.ruleForm[key] = ''
-                        }
-                    }
-                } else {
-                    for (let key in this.ruleForm) {
-                        if (key !== '3') {
-                            this.ruleForm[key] = ''
-                        }
-                    }
-                }
-            },
-            resetForm(formName) {
-                this.$refs[formName].resetFields();
             },
             setClientHeight() {
                 this.$nextTick(() => {

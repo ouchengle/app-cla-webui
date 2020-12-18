@@ -81,6 +81,9 @@
                         <el-table-column
                                 prop="url"
                                 label="Url">
+                            <template slot-scope="scope">
+                                <span class="hoverUnderline" @click="checkUrl(scope.row.url)">{{scope.row.url}}</span>
+                            </template>
                         </el-table-column>
                         <el-table-column
                                 prop="language"
@@ -90,7 +93,7 @@
                                 prop=""
                                 label="Operation">
                             <template slot-scope="scope">
-                                <el-dropdown placement="bottom-start" trigger="click">
+                                <el-dropdown placement="bottom-start" trigger="hover">
                                     <span class="el-dropdown-link">
                                         <svg-icon icon-class="operation"></svg-icon>
                                     </span>
@@ -114,28 +117,13 @@
                         <el-table-column
                                 prop="url"
                                 label="Url">
+                            <template slot-scope="scope">
+                                <span class="hoverUnderline" @click="checkUrl(scope.row.url)">{{scope.row.url}}</span>
+                            </template>
                         </el-table-column>
                         <el-table-column
                                 prop="language"
                                 label="Language">
-                        </el-table-column>
-
-                        <el-table-column
-                                label="Empty signature">
-                            <template slot-scope="scope">
-                                <el-popover
-                                        width="80"
-                                        trigger="hover"
-                                        placement="right">
-                                    <div class="menuBT">
-                                        <el-button @click="downloadEmptySignature(scope.row)" type="" size="mini">
-                                            download
-                                        </el-button>
-                                        <!--<el-button @click="previewEmptySignature(scope.row)" type="" size="mini">preview</el-button>-->
-                                    </div>
-                                    <svg-icon slot="reference" class="pointer" icon-class="pdf" @click=""/>
-                                </el-popover>
-                            </template>
                         </el-table-column>
                         <el-table-column
                                 label="Signature">
@@ -150,8 +138,7 @@
                                                    type=""
                                                    size="mini">upload
                                         </el-button>
-                                        <el-button @click="downloadOrgSignature(scope.row)" type="" size="mini">download
-                                        </el-button>
+                                        <!--<el-button @click="downloadOrgSignature(scope.row)" type="" size="mini">download</el-button>-->
                                         <!--<el-button @click="previewOrgSignature(scope.row)" type="" size="mini">preview</el-button>-->
                                     </div>
 
@@ -163,7 +150,7 @@
                         <el-table-column
                                 label="Operation">
                             <template slot-scope="scope">
-                                <el-dropdown placement="bottom-start" trigger="click">
+                                <el-dropdown placement="bottom-start" trigger="hover">
                                     <span class="el-dropdown-link">
                                         <svg-icon icon-class="operation"></svg-icon>
                                     </span>
@@ -343,6 +330,9 @@
         },
         inject: ['setClientHeight'],
         methods: {
+            checkUrl(url){
+                window.open(url)
+            },
             previewEmptySignature(row) {
 
                 // this.docInfo = {
@@ -361,7 +351,7 @@
 
             /*======================OrgSignature======================================*/
             uploadOrgSignature(row) {
-                this.uploadUrl = `/api${url.uploadSignature}/${row.id}`
+                this.uploadUrl = `/api${url.uploadSignature}/${this.$store.state.corpItem.link_id}`;
                 this.uploadOrgDialogVisible = true
             },
             previewOrgSignature(row) {
@@ -429,12 +419,12 @@
                                     u8arr[n] = bstr.charCodeAt(n);
                                 }
                                 var blob = new Blob([u8arr]);
-                                window.navigator.msSaveOrOpenBlob(blob, 'Signature.pdf');
+                                window.navigator.msSaveOrOpenBlob(blob, `${row.language}_signature.pdf`);
                             } else {
                                 const a = document.createElement('a');
-                                a.download = 'Signature.pdf';
+                                a.download = `${row.language}_signature.pdf`;
                                 a.href = e.target.result;
-                                document.body.appendChild(a)
+                                document.body.appendChild(a);
                                 a.click();
                                 document.body.removeChild(a)
                             }
@@ -487,7 +477,7 @@
                         let renderContext = {
                             canvasContext: context,
                             viewport: viewport
-                        }
+                        };
                         page.render(renderContext)
                     })
                 })
@@ -564,23 +554,66 @@
             previewClaFile(row) {
                 this.docInfo = {
                     type: "pdf",
-                    href: `/api${url.downloadSignature}/${this.item.id}`
+                    href: `/api${url.downloadSignature}/${this.$store.state.corpItem.link_id}`
                 };
                 this.previewDialogVisible = true
             },
+            dataURLtoBlob(dataurl) {
+                var bstr = atob(dataurl)
+                var n = bstr.length;
+                var u8arr = new Uint8Array(n);
+                while (n--) {
+                    u8arr[n] = bstr.charCodeAt(n);
+                }
+                return new Blob([u8arr], {type: 'pdf'});
+            },
             downloadClaFile(row) {
+                http({
+                    url: `${url.corporationPdf}/${this.$store.state.corpItem.link_id}/${row.admin_email}`,
+                }).then(res => {
+                    if (res.data.data.pdf) {
+                        let URL = this.dataURLtoBlob(res.data.data.pdf);
+                        var reader = new FileReader();
+                        reader.readAsDataURL(URL);
+                        reader.onload = function (e) {
+                            if (window.navigator.msSaveOrOpenBlob) {
+                                var bstr = atob(e.target.result.split(",")[1]);
+                                var n = bstr.length;
+                                var u8arr = new Uint8Array(n);
+                                while (n--) {
+                                    u8arr[n] = bstr.charCodeAt(n);
+                                }
+                                var blob = new Blob([u8arr]);
+                                window.navigator.msSaveOrOpenBlob(blob, `${row.corporation_name}_signature.pdf`);
+                            } else {
+                                const a = document.createElement('a');
+                                a.href = e.target.result;
+                                a.download = `${row.corporation_name}_signature.pdf`;
+                                document.body.appendChild(a);
+                                a.click();
+                                document.body.removeChild(a)
+                            }
+                        }
+                    } else {
+                        this.$store.commit('errorCodeSet', {
+                            dialogVisible: true,
+                            dialogMessage: this.$t('tips.not_upload_file'),
+                        })
+                    }
+                }).catch(err => {
+                })
             },
             uploadClaFile(row) {
-                this.uploadUrl = `/api${url.uploadCorporationPdf}/${this.item.id}/${row.admin_email}`
+                this.uploadUrl = `/api${url.corporationPdf}/${this.$store.state.corpItem.link_id}/${row.admin_email}`;
                 this.uploadDialogVisible = true
             },
             submitUpload() {
                 this.$refs.uploadPdf.submit();
             },
             handleSuccess(file, fileList) {
-                this.fileList = []
-                this.$message.closeAll()
-                this.$message.success('success')
+                this.fileList = [];
+                this.$message.closeAll();
+                this.$message.success('success');
                 this.uploadDialogVisible = false
 
             },
@@ -602,26 +635,22 @@
             resendPDF() {
                 let email = this.resendEmail;
                 let resend_url = '';
-                if (this.item.repo_id) {
-                    resend_url = `${url.resend_pdf}/${this.item.org_id}:${this.item.repo_id}/${email}`
-                } else {
-                    resend_url = `${url.resend_pdf}/${this.item.org_id}/${email}`
-                }
+                resend_url = `${url.resend_pdf}/${this.$store.state.corpItem.link_id}/${email}`
                 http({
                     url: resend_url,
                     method: 'post',
                 }).then(res => {
                     this.resendEmailDialogVisible = false;
-                    this.$message.closeAll()
+                    this.$message.closeAll();
                     this.$message.success('success');
                 }).catch(err => {
-                    this.$message.closeAll()
+                    this.$message.closeAll();
                     this.$message.error('failed');
                 })
             },
             createRoot(email) {
                 this.$axios({
-                    url: `/api${url.corporationManager}/${this.item.id}/${email}`,
+                    url: `/api${url.corporationManager}/${this.$store.state.corpItem.link_id}/${email}`,
                     method: 'put',
                     headers: {
                         'Token': this.$store.state.access_token,

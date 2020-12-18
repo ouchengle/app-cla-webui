@@ -63,8 +63,18 @@ export default new Vuex.Store({
         corpLanguage: sessionStorage.getItem('corpLanguage') || undefined,
         corpFDName: sessionStorage.getItem('corpFDName') || undefined,
         claData: JSON.parse(sessionStorage.getItem('claData')) || undefined,
+        sign_email: sessionStorage.getItem('sign_email') || undefined,
+        sign_user: sessionStorage.getItem('sign_user') || undefined,
     },
     mutations: {
+        setSignEmail(state, data) {
+            state.sign_email = data;
+            sessionStorage.setItem('sign_email', data);
+        },
+        setSignUser(state, data) {
+            state.sign_user = data;
+            sessionStorage.setItem('sign_user', data);
+        },
         setClaData(state, data) {
             state.claData = data;
             sessionStorage.setItem('claData', JSON.stringify(data));

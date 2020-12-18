@@ -38,5 +38,5 @@ export const sendVerifyCode = '/v1/verification-code';                          
 export const uploadSignature = '/v1/org-signature';                                 //上传pdf签名页        方式post  参数：/cla_org_id
 export const downloadSignature = '/v1/org-signature';                               //下载pdf签名页        方式get  参数：/cla_org_id
 export const getPrivacy = '/v1/getPrivacy';                                         //获取隐私声明          方式get
-export const uploadCorporationPdf = '/v1/corporation-pdf';                          //上传pdf签名页        方式patch  参数：/cla_org_id/email
+export const corporationPdf = '/v1/corporation-pdf';                          //上传pdf签名页        方式patch  参数：/cla_org_id/email
 export const resend_pdf = '/v1/corporation-signing';                                //重发企业签名pdf      方式post  参数：/cla_org_id:repo_id/email

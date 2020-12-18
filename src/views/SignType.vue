@@ -654,8 +654,15 @@
             setDomain() {
                 this.$store.commit('setDomain', window.location.href.split('/sign')[0])
             },
+            clearSignPageSession(){
+                this.$store.commit('setSignEmail','');
+                this.$store.commit('setSignUser','');
+                sessionStorage.removeItem('sign_email');
+                sessionStorage.removeItem('sign_user');
+            },
         },
         created() {
+            this.clearSignPageSession();
             this.setDomain();
             this.getRepoInfo();
         },

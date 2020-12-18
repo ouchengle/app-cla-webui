@@ -11,7 +11,7 @@
 
             </el-tab-pane>
         </el-tabs>
-        <el-row :gutter="20" v-loading.lock="loading"
+        <el-row :gutter="20" v-loading.lock="loading" class="table-back"
                 element-loading-text="Loading"
                 element-loading-background="rgba(255, 255, 255, 1)">
             <el-col :span="3" class="orgTableStyle tableStyle">
@@ -61,10 +61,23 @@
                             width="200"
                             label="Operation">
                         <template slot-scope="scope">
-                            <el-button size="mini" @click="toSignPage(scope.row)">Sign</el-button>
-                            <el-button size="mini" @click="copyAddress(scope.row)">copy address</el-button>
-
+                            <el-dropdown placement="bottom-start" trigger="hover" @command="menuCommand">
+                                    <span class="el-dropdown-link">
+                                        <svg-icon icon-class="operation"></svg-icon>
+                                    </span>
+                                <el-dropdown-menu slot="dropdown">
+                                    <el-dropdown-item :command="{command:'a',row:scope.row}">Sign</el-dropdown-item>
+                                    <el-dropdown-item :command="{command:'b',row:scope.row}">Copy address
+                                    </el-dropdown-item>
+                                    <el-dropdown-item :command="{command:'c',row:scope.row}">Detail</el-dropdown-item>
+                                </el-dropdown-menu>
+                            </el-dropdown>
                         </template>
+                        <!--<template slot-scope="scope">-->
+                        <!--<el-button size="mini" @click="toSignPage(scope.row)">Sign</el-button>-->
+                        <!--<el-button size="mini" @click="copyAddress(scope.row)">copy address</el-button>-->
+
+                        <!--</template>-->
                     </el-table-column>
                 </el-table>
             </el-col>
@@ -248,6 +261,19 @@
         },
         methods: {
             ...mapActions(['setLoginUserAct', 'setTokenAct', 'setTableDataAct']),
+            menuCommand(command) {
+                switch (command.command) {
+                    case 'a':
+                        this.toSignPage(command.row);
+                        break;
+                    case 'b':
+                        this.copyAddress(command.row);
+                        break;
+                    case 'c':
+                        this.checkCorporationList(command.row);
+                        break;
+                }
+            },
             clearConfigSession() {
                 this.$store.commit('setOrgOption', []);
                 this.$store.commit('setOrgValue', '');
@@ -581,9 +607,12 @@
             background: #8CC5FF;
         }
 
+        .table-back {
+            background-color: white;
+            margin-bottom: 2rem;
+        }
 
         .tableStyle {
-            margin-bottom: 2rem;
             padding: 3rem 0;
             background-color: white;
         }
