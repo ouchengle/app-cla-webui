@@ -120,6 +120,8 @@
 </template>
 <script>
     import reTryDialog from '../components/ReTryDialog'
+    import * as url from '../until/api'
+    import http from '../until/http'
 
     export default {
         name: "ConfigClaLink",
@@ -189,7 +191,59 @@
                 sessionStorage.removeItem('corpFD');
             },
             downloadFile() {
+                let language = '';
+                switch (this.$store.state.corpLanguage) {
+                    case 'English':
+                        language = 'English';
+                        break;
+                    case '中文':
+                        language = 'Chinese';
+                        break;
+                }
+                http({
+                    url: `${url.getBlankSignature}/${language}`
+                }).then(res => {
+                    console.log(res);
+                    if (res.data && res.data.data.pdf) {
+                        this.base64Tofile(res.data.data.pdf)
+                    }
+                }).catch(err => {
 
+                })
+            },
+            base64Tofile(base64){
+                let URL = this.dataURLtoBlob(base64);
+                var reader = new FileReader();
+                reader.readAsDataURL(URL);
+                reader.onload = function (e) {
+                    console.log('e.target.result====', e.target.result);
+                    if (window.navigator.msSaveOrOpenBlob) {
+                        var bstr = atob(e.target.result.split(",")[1]);
+                        var n = bstr.length;
+                        var u8arr = new Uint8Array(n);
+                        while (n--) {
+                            u8arr[n] = bstr.charCodeAt(n);
+                        }
+                        var blob = new Blob([u8arr]);
+                        window.navigator.msSaveOrOpenBlob(blob, `${row.corporation_name}_signature.pdf`);
+                    } else {
+                        const a = document.createElement('a');
+                        a.href = e.target.result;
+                        a.download = `${row.corporation_name}_signature.pdf`;
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a)
+                    }
+                }
+            },
+            dataURLtoBlob(dataurl) {
+                let bstr = atob(dataurl)
+                let n = bstr.length;
+                let u8arr = new Uint8Array(n);
+                while (n--) {
+                    u8arr[n] = bstr.charCodeAt(n);
+                }
+                return new Blob([u8arr], {type: 'pdf'});
             },
             changeIndividualLanguage(value) {
                 this.$store.commit('setIndividualLanguage', value)
