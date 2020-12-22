@@ -121,7 +121,9 @@
 <script>
     import reTryDialog from '../components/ReTryDialog'
     import * as url from '../until/api'
+    import * as until from '../until/until'
     import http from '../until/http'
+    import download from 'downloadjs'
 
     export default {
         name: "ConfigClaLink",
@@ -191,59 +193,32 @@
                 sessionStorage.removeItem('corpFD');
             },
             downloadFile() {
-                let language = '';
-                switch (this.$store.state.corpLanguage) {
-                    case 'English':
-                        language = 'English';
-                        break;
-                    case '中文':
-                        language = 'Chinese';
-                        break;
-                }
-                http({
-                    url: `${url.getBlankSignature}/${language}`
-                }).then(res => {
-                    console.log(res);
-                    if (res.data && res.data.data.pdf) {
-                        this.base64Tofile(res.data.data.pdf)
+                if (this.corpClaLanguageValue) {
+                    let language = '';
+                    switch (this.$store.state.corpLanguage) {
+                        case 'English':
+                            language = 'English';
+                            break;
+                        case '中文':
+                            language = 'Chinese';
+                            break;
                     }
-                }).catch(err => {
-
-                })
-            },
-            base64Tofile(base64){
-                let URL = this.dataURLtoBlob(base64);
-                var reader = new FileReader();
-                reader.readAsDataURL(URL);
-                reader.onload = function (e) {
-                    console.log('e.target.result====', e.target.result);
-                    if (window.navigator.msSaveOrOpenBlob) {
-                        var bstr = atob(e.target.result.split(",")[1]);
-                        var n = bstr.length;
-                        var u8arr = new Uint8Array(n);
-                        while (n--) {
-                            u8arr[n] = bstr.charCodeAt(n);
+                    http({
+                        url: `${url.getBlankSignature}/${language}`,
+                        responseType:"blob",
+                    }).then(res => {
+                        if (res.data) {
+                            let time = until.getNowDateToTime();
+                            download((new Blob([res.data])), `${language}_blank_signature${time}.pdf`, 'application/pdf');
                         }
-                        var blob = new Blob([u8arr]);
-                        window.navigator.msSaveOrOpenBlob(blob, `${row.corporation_name}_signature.pdf`);
-                    } else {
-                        const a = document.createElement('a');
-                        a.href = e.target.result;
-                        a.download = `${row.corporation_name}_signature.pdf`;
-                        document.body.appendChild(a);
-                        a.click();
-                        document.body.removeChild(a)
-                    }
+                    }).catch(err => {
+
+                    })
+                }else {
+                    this.$message.closeAll();
+                    this.$message.error('Please select the language of the signature page to be downloaded first');
                 }
-            },
-            dataURLtoBlob(dataurl) {
-                let bstr = atob(dataurl)
-                let n = bstr.length;
-                let u8arr = new Uint8Array(n);
-                while (n--) {
-                    u8arr[n] = bstr.charCodeAt(n);
-                }
-                return new Blob([u8arr], {type: 'pdf'});
+
             },
             changeIndividualLanguage(value) {
                 this.$store.commit('setIndividualLanguage', value)
