@@ -1,12 +1,11 @@
 <template>
     <div id="rootManager" :style="section">
         <Header></Header>
-        <el-row>
-            <el-col :offset="5" :span="14">
+        <div>
+            <div id="rootManager_section">
                 <router-view></router-view>
-            </el-col>
-        </el-row>
-
+            </div>
+        </div>
         <Footer></Footer>
         <el-dialog
                 style="background-color: #3C3C3C"
@@ -87,6 +86,12 @@
 </script>
 
 <style scoped lang="less">
+    @media screen and (min-width: 1200px){
+        #rootManager_section{
+            width: 1200px;
+            margin: auto;
+        }
+    }
     #rootManager {
         display: flex;
         box-sizing: border-box;
@@ -94,6 +99,7 @@
         & > div:nth-of-type(2) {
             flex-grow: 1;
             background-color: #F0F2F5;
+            padding: 0 1rem;
         }
 
     }

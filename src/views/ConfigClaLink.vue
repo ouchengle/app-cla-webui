@@ -99,11 +99,10 @@
                     </div>
                     <div class="margin-top-1rem">
                         <div>
-                            <el-button class="showBox" size="mini">
-                                <input class="inputFile" id="corp_pdf" @change="changeFile" type="file" name="file"
-                                       title="">
+                            <button class="showBox">
+                                <input class="inputFile" id="corp_pdf" @change="changeFile" type="file" name="file">
                                 choose file
-                            </el-button>
+                            </button>
                             <span class="signatureName">{{this.$store.state.corpFDName}}</span>
                         </div>
                     </div>
@@ -111,8 +110,8 @@
             </div>
         </div>
         <div class="stepBtBox">
-            <el-button size="medium" type="primary" class="stepBt" @click="toPreviousPage">Previous Step</el-button>
-            <el-button size="medium" type="primary" class="stepBt" @click="toNextPage">Next Step</el-button>
+            <button class="step_button" @click="toPreviousPage">Previous Step</button>
+            <button class="step_button" @click="toNextPage">Next Step</button>
         </div>
         <reTryDialog :message="corpReLoginMsg" :dialogVisible="corpReTryDialogVisible"></reTryDialog>
     </el-row>
@@ -124,6 +123,7 @@
     import * as until from '../until/until'
     import http from '../until/http'
     import download from 'downloadjs'
+
     export default {
         name: "ConfigClaLink",
         components: {
@@ -195,7 +195,7 @@
                 if (this.corpClaLanguageValue) {
                     http({
                         url: `${url.getBlankSignature}/${this.$store.state.corpLanguage}`,
-                        responseType:"blob",
+                        responseType: "blob",
                     }).then(res => {
                         if (res.data) {
                             let time = until.getNowDateToTime();
@@ -203,7 +203,7 @@
                         }
                     }).catch(err => {
                     })
-                }else {
+                } else {
                     this.$message.closeAll();
                     this.$message.error('Please select the language of the signature page to be downloaded first');
                 }
@@ -217,7 +217,8 @@
             changeFile() {
                 let formData = new FormData();
                 let fs = document.getElementById('corp_pdf').files;
-                let max_size = 1024 * 1024;
+                let max_kb = 200;
+                let max_size = 1024 * max_kb;
                 for (let i = 0; i < fs.length; i++) {
                     let d = fs[i];
                     if (d.size <= max_size) {
@@ -228,7 +229,7 @@
                             return false
                         }
                     } else {
-                        alert('上传文件过大！');
+                        alert(`上传文件大于${max_kb}KB！`);
                         return false
                     }
                 }
@@ -290,6 +291,23 @@
 </script>
 <style lang="less">
     #configTwo {
+        .file_button {
+            font-family: Roboto-Regular, sans-serif;
+            width: 5rem;
+            height: 3rem;
+            border-radius: 1.5rem;
+            border: none;
+            color: white;
+            font-size: 0.8rem;
+            cursor: pointer;
+            background: linear-gradient(to right, #97DB30, #319E55);
+            margin: 1.2rem 0;
+        }
+
+        .file_button:focus {
+            outline: none;
+        }
+
         .signatureName {
             font-size: .8rem;
         }
@@ -297,7 +315,7 @@
         .downloadText {
             text-decoration: underline;
             cursor: pointer;
-            color: #409EFF;
+            color: #319E55;
         }
 
         .inputFile {
@@ -316,6 +334,15 @@
             left: 0;
             z-index: 1;
             margin-right: 1rem;
+            font-family: Roboto-Regular, sans-serif;
+            width: 5rem;
+            height: 2rem;
+            border-radius: 1rem;
+            border: none;
+            color: white;
+            font-size: 0.8rem;
+            cursor: pointer;
+            background: linear-gradient(to right, #97DB30, #319E55);
         }
 
         .stepTitle {

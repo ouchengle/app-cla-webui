@@ -69,8 +69,8 @@
                                     <el-checkbox v-model="item.required">required</el-checkbox>
                                 </el-col>
                                 <el-col :span="4">
-                                    <el-button @click="addRow(index)" size="medium">+</el-button>
-                                    <el-button @click="myDeleteRow(index)" size="medium">-</el-button>
+                                    <button class="add_button" @click="addRow(index)">+</button>
+                                    <button class="deleteBt" @click="myDeleteRow(index)">-</button>
                                 </el-col>
                             </el-row>
                         </div>
@@ -131,8 +131,8 @@
                                 <el-checkbox v-model="item.required">required</el-checkbox>
                             </el-col>
                             <el-col :span="4">
-                                <el-button @click="addCorpRow(index)" size="medium">+</el-button>
-                                <el-button @click="myCorpDeleteRow(index)" size="medium">-</el-button>
+                                <button class="add_button" @click="addCorpRow(index)">+</button>
+                                <button class="deleteBt" @click="myCorpDeleteRow(index)">-</button>
                             </el-col>
                         </el-row>
                     </div>
@@ -140,8 +140,8 @@
             </div>
         </div>
         <div class="stepBtBox">
-            <el-button size="medium" type="primary" class="stepBt" @click="toConfigClaLink">Previous Step</el-button>
-            <el-button size="medium" type="primary" class="stepBt" @click="toNextPage">Next Step</el-button>
+            <button class="step_button" @click="toConfigClaLink">Previous Step</button>
+            <button class="step_button" @click="toNextPage">Next Step</button>
         </div>
     </el-row>
 </template>
@@ -393,6 +393,89 @@
 
 <style lang="less">
     #configFields {
+        .el-checkbox__input.is-disabled .el-checkbox__inner, .el-checkbox__input.is-disabled .el-checkbox__inner::after {
+            cursor: default;
+        }
+
+        .el-checkbox__input.is-disabled + span.el-checkbox__label {
+            cursor: default;
+            color: #C0C4CC;
+        }
+
+        .el-checkbox__label {
+            display: inline-grid;
+            white-space: pre-line;
+            font-size: 1.2rem;
+        }
+
+        .el-checkbox__input.is-checked + .el-checkbox__label {
+            display: inline-grid;
+            white-space: pre-line;
+            color: #606266;
+            font-size: 1.2rem;
+        }
+
+        .el-checkbox__input.is-checked .el-checkbox__inner, .el-checkbox__input.is-indeterminate .el-checkbox__inner {
+            background-color: #3EA650;
+            border-color: #3EA650;
+        }
+
+        .el-checkbox__input.is-focus .el-checkbox__inner {
+            border-color: #3EA650;
+        }
+
+        .el-checkbox__inner {
+            border: 1px solid #3EA650;
+            width: 20px;
+            height: 20px;
+        }
+
+        .el-checkbox__inner:hover {
+            border: 1px solid #3EA650;
+        }
+
+        .el-checkbox__inner:focus {
+            border: 1px solid #3EA650;
+        }
+
+        .el-checkbox__inner:after {
+            height: 10px;
+            left: 7px;
+            top: 2px
+        }
+
+        .deleteBt {
+            width: 3rem;
+            height: 3rem;
+            border-radius: 1.5rem;
+            border: none;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            background: linear-gradient(to right, #FF9D58, #E22424);
+            margin-right: 1rem;
+        }
+
+        .deleteBt:focus {
+            outline: none;
+        }
+
+        .add_button {
+            width: 3rem;
+            height: 3rem;
+            border-radius: 1.5rem;
+            border: none;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            background: linear-gradient(to right, #97DB30, #319E55);
+            margin-right: 1rem;
+        }
+
+        .add_button:focus {
+            outline: none;
+        }
+
         .itemBox {
             border-radius: 1.25rem;
             box-shadow: 0 0 20px 10px #F3F3F3;

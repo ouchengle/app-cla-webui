@@ -19,8 +19,8 @@
             </div>
         </div>
         <div class="stepBtBox">
-            <el-button size="medium" type="primary" class="stepBt" @click="toPreviousPage">Previous Step</el-button>
-            <el-button size="medium" type="primary" class="stepBt" @click="toNextPage">Next Step</el-button>
+            <button class="step_button" @click="toPreviousPage">Previous Step</button>
+            <button class="step_button" @click="toNextPage">Next Step</button>
         </div>
         <el-dialog
                 top="5vh"
@@ -59,8 +59,8 @@
                     </ul>
                 </div>
                 <span slot="footer" class="dialog-footer">
-                    <el-button @click="emailDialogVisible = false">Cancel</el-button>
-                    <el-button type="primary" @click="authorizeEmail()">Yes,Let's do this!</el-button>
+                    <button class="cancelBt" @click="emailDialogVisible = false">Cancel</button>
+                    <button class="email_button" @click="authorizeEmail()">Yes,Let's do this!</button>
                 </span>
             </div>
         </el-dialog>
@@ -175,6 +175,17 @@
 
 <style lang="less">
     #configThree {
+        .email_button {
+            font-family: Roboto-Regular, sans-serif;
+            height: 2rem;
+            border-radius: 1rem;
+            border: none;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            background: linear-gradient(to right, #97DB30, #319E55);
+            margin: 1.2rem 0;
+        }
         .stepTitle {
             font-size: 1.2rem;
             padding: .5rem;

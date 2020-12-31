@@ -194,8 +194,8 @@
 
         </div>
         <div class="stepBtBox">
-            <el-button @click="toConfigEmail" size="medium" type="primary" class="stepBt">Previous Step</el-button>
-            <el-button @click="binding" size="medium" type="primary" class="stepBt">Submit</el-button>
+            <button @click="toConfigEmail" class="step_button">Previous Step</button>
+            <button @click="binding" class="step_button">Submit</button>
         </div>
     </div>
 </template>
@@ -441,7 +441,6 @@
 
     .el-dropdown-link {
         cursor: pointer;
-        color: #409EFF;
     }
 
     .el-icon-arrow-down {

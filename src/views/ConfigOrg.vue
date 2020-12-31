@@ -57,7 +57,7 @@
             </el-row>
         </div>
         <div class="orgStepBtBox">
-            <el-button size="medium" type="primary" class="stepBt" @click="toConfigClaLink">Next Step</el-button>
+            <button  class="step_button" @click="toConfigClaLink">Next Step</button>
         </div>
         <reTryDialog :message="corpReLoginMsg" :dialogVisible="corpReTryDialogVisible"></reTryDialog>
     </el-row>
