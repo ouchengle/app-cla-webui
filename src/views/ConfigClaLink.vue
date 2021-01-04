@@ -221,24 +221,30 @@
                 let max_size = 1024 * max_kb;
                 for (let i = 0; i < fs.length; i++) {
                     let d = fs[i];
-                    if (d.size <= max_size) {
-                        if (/.(PDF|pdf)$/.test(d.name)) {
+                    if (/.(PDF|pdf)$/.test(d.name)) {
+                        if (d.size <= max_size) {
                             formData.append("files", fs[i]);
+                            this.$store.commit('setCorpFDName', formData.get('files').name);
+                            let reader = new FileReader();
+                            reader.readAsDataURL(formData.get('files'));
+                            reader.onload = () => {
+                                this.$store.commit('setCorpFD', reader.result)
+                            };
                         } else {
-                            alert('上传文件必须是PDF！');
+                            this.$store.commit('errorCodeSet', {
+                                dialogVisible: true,
+                                dialogMessage: this.$t('tips.file_too_large'),
+                            });
                             return false
                         }
                     } else {
-                        alert(`上传文件大于${max_kb}KB！`);
+                        this.$store.commit('errorCodeSet', {
+                            dialogVisible: true,
+                            dialogMessage: this.$t('tips.not_pdf'),
+                        });
                         return false
                     }
                 }
-                this.$store.commit('setCorpFDName', formData.get('files').name);
-                let reader = new FileReader();
-                reader.readAsDataURL(formData.get('files'));
-                reader.onload = () => {
-                    this.$store.commit('setCorpFD', reader.result)
-                };
             },
             toPreviousPage() {
                 this.$router.replace('/config-email')

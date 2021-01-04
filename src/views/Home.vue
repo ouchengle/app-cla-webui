@@ -67,15 +67,24 @@
             margin: auto;
         }
     }
+
+    .el-button:active {
+        color: #319E55;
+        border-color: #319E55;
+    }
+
     .el-button:focus, .el-button:hover {
         color: #319E55;
     }
+
     .el-dropdown-menu__item:focus, .el-dropdown-menu__item:not(.is-disabled):hover {
         color: #319E55;
     }
-    .el-input.is-disabled .el-input__inner{
+
+    .el-input.is-disabled .el-input__inner {
         cursor: default;
     }
+
     .step_button {
         font-family: Roboto-Regular, sans-serif;
         width: 12rem;
@@ -92,7 +101,8 @@
     .step_button:focus {
         outline: none;
     }
-     .cancelBt {
+
+    .cancelBt {
         width: 5rem;
         height: 2rem;
         border-radius: 1rem;
@@ -104,9 +114,10 @@
         margin-right: 1rem;
     }
 
-     .cancelBt:focus {
+    .cancelBt:focus {
         outline: none;
     }
+
     .el-input__inner {
         background-color: #F3F3F3;
         border-radius: 1.25rem;
@@ -117,12 +128,15 @@
     .el-input__inner:focus {
         border-color: #319E55
     }
-    .el-select .el-input.is-focus .el-input__inner{
+
+    .el-select .el-input.is-focus .el-input__inner {
         border-color: #319E55;
     }
-    .el-select .el-input__inner:focus{
+
+    .el-select .el-input__inner:focus {
         border-color: #319E55;
     }
+
     .tableClass {
         border: 1px solid black;
         border-radius: 1.5rem;

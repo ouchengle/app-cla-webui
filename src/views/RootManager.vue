@@ -7,45 +7,23 @@
             </div>
         </div>
         <Footer></Footer>
-        <el-dialog
-                style="background-color: #3C3C3C"
-                title="pdf-reader"
-                top="5vh"
-                :visible.sync="previewDialogVisible"
-                width="50%">
-            <div>
-                <pdfReader
-                        v-if="docInfo.type === 'pdf'"
-                        :doctype="docInfo.type"
-                        :dochref="docInfo.href">
-
-                </pdfReader>
-
-            </div>
-
-        </el-dialog>
     </div>
-
 </template>
-
 <script>
     import Header from '@components/NewHeader'
     import Footer from '@components/NewFooter'
     import * as until from '../until/until'
-    import pdfReader from "@components/PdfReader";
 
     window.onresize = () => {
         if (until.getClientHeight() > document.getElementById('rootManager').offsetHeight) {
             document.getElementById("rootManager").style.height = until.getClientHeight() + 'px'
         }
-    }
+    };
     export default {
         name: "rootManager",
         components: {
             Header,
             Footer,
-            pdfReader
-
         },
         computed: {
             user() {
@@ -54,24 +32,15 @@
         },
         data() {
             return {
-                docInfo: {
-                    type: "pdf",
-                    href: "/static/pdf/merge.pdf"
-                },
-                previewDialogVisible: false,
-
                 section: {
                     height: '',
                 },
                 active: 'first',
-
             }
         },
-
         mounted() {
             this.setClientHeight();
         },
-
         methods: {
             setClientHeight() {
                 this.$nextTick(() => {
@@ -80,22 +49,22 @@
                         this.section.height = document.getElementById('rootManager').offsetHeight
                 })
             },
-
         },
     }
 </script>
-
 <style scoped lang="less">
-    @media screen and (min-width: 1200px){
-        #rootManager_section{
+    @media screen and (min-width: 1200px) {
+        #rootManager_section {
             width: 1200px;
             margin: auto;
         }
     }
+
     #rootManager {
         display: flex;
         box-sizing: border-box;
         flex-direction: column;
+
         & > div:nth-of-type(2) {
             flex-grow: 1;
             background-color: #F0F2F5;

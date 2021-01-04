@@ -1,7 +1,7 @@
 <template>
     <div id="corporationList">
         <el-tabs v-model="activeName" @tab-click="tabsHandleClick">
-            <el-tab-pane label="Signed Corporation" name="first" class="margin-top-1rem">
+            <el-tab-pane :label="$t('org.signed_corporation')" name="first" class="margin-top-1rem">
                 <div class="tableStyle">
                     <el-table
                             :empty-text="$t('corp.no_data')"
@@ -11,16 +11,16 @@
                             style="width: 100%;">
                         <el-table-column
                                 prop="corporation_name"
-                                label="Corporation Name">
+                                :label="$t('org.corporation_name')">
                         </el-table-column>
                         <el-table-column
                                 prop="admin_name"
-                                label="Administrator Name">
+                                :label="$t('org.administrator_name')">
                         </el-table-column>
 
                         <el-table-column
                                 prop="admin_email"
-                                label="Email">
+                                :label="$t('org.to_email')">
                         </el-table-column>
 
                         <el-table-column>
@@ -36,16 +36,16 @@
                                         placement="right">
 
                                     <div class="menuBT">
-                                        <el-button @click="uploadClaFile(scope.row)" size="mini">upload
+                                        <el-button @click="uploadClaFile(scope.row)" size="mini">
+                                            {{$t('org.upload')}}
                                         </el-button>
                                         <el-button v-if="scope.row.pdf_uploaded" @click="downloadClaFile(scope.row)"
-                                                   size="mini">download
+                                                   size="mini">{{$t('org.download')}}
                                         </el-button>
                                         <el-button v-if="scope.row.pdf_uploaded" @click="previewClaFile(scope.row)"
-                                                   type="" size="mini">preview
+                                                   type="" size="mini">{{$t('org.preview')}}
                                         </el-button>
                                     </div>
-
                                     <svg-icon slot="reference" class="pointer" icon-class="pdf" @click=""/>
 
                                 </el-popover>
@@ -54,18 +54,20 @@
 
                         <el-table-column
                                 width="300"
-                                label="Operation">
+                                :label="$t('org.operation')">
                             <template slot-scope="scope">
                                 <el-dropdown placement="bottom-start" trigger="hover" @command="menuCommand">
                                     <span class="el-dropdown-link">
                                         <svg-icon icon-class="operation"></svg-icon>
                                     </span>
                                     <el-dropdown-menu slot="dropdown">
-                                        <el-dropdown-item :disabled="scope.row.admin_added" :command="{command:'a',row:scope.row}">
-                                            Create Administrator
+                                        <el-dropdown-item :disabled="scope.row.admin_added"
+                                                          :command="{command:'a',row:scope.row}">
+                                            {{$t('org.create_administrator')}}
                                         </el-dropdown-item>
-                                        <el-dropdown-item :disabled="scope.row.pdf_uploaded" :command="{command:'b',row:scope.row}">
-                                            Resend Email
+                                        <el-dropdown-item :disabled="scope.row.pdf_uploaded"
+                                                          :command="{command:'b',row:scope.row}">
+                                            {{$t('org.resend_email')}}
                                         </el-dropdown-item>
                                     </el-dropdown-menu>
                                 </el-dropdown>
@@ -75,7 +77,7 @@
                     </el-table>
                 </div>
             </el-tab-pane>
-            <el-tab-pane label="Individual CLA" name="second" class="margin-top-1rem">
+            <el-tab-pane :label="$t('org.individual_cla')" name="second" class="margin-top-1rem">
                 <div class="tableStyle">
                     <el-table
                             :empty-text="$t('corp.no_data')"
@@ -92,19 +94,19 @@
                         </el-table-column>
                         <el-table-column
                                 prop="language"
-                                label="Language">
+                                :label="$t('org.toLanguage')">
                         </el-table-column>
                         <el-table-column
                                 prop=""
-                                label="Operation">
+                                :label="$t('org.operation')">
                             <template slot-scope="scope">
                                 <el-dropdown placement="bottom-start" trigger="hover">
                                     <span class="el-dropdown-link">
                                         <svg-icon icon-class="operation"></svg-icon>
                                     </span>
                                     <el-dropdown-menu slot="dropdown">
-                                        <el-dropdown-item>Modify field</el-dropdown-item>
-                                        <el-dropdown-item>Add cla for other language</el-dropdown-item>
+                                        <el-dropdown-item>{{$t('org.modify_field')}}</el-dropdown-item>
+                                        <el-dropdown-item>{{$t('org.add_cla_for_other_language')}}</el-dropdown-item>
                                     </el-dropdown-menu>
                                 </el-dropdown>
                             </template>
@@ -112,7 +114,7 @@
                     </el-table>
                 </div>
             </el-tab-pane>
-            <el-tab-pane label="Corporation CLA" name="third" class="margin-top-1rem">
+            <el-tab-pane :label="$t('org.corporation_cla')" name="third" class="margin-top-1rem">
                 <div class="tableStyle">
                     <el-table
                             :empty-text="$t('corp.no_data')"
@@ -129,40 +131,42 @@
                         </el-table-column>
                         <el-table-column
                                 prop="language"
-                                label="Language">
+                                :label="$t('org.toLanguage')">
                         </el-table-column>
                         <el-table-column
-                                label="Signature">
+                                :label="$t('org.signature')">
                             <template slot-scope="scope">
                                 <el-popover
                                         width="80"
                                         trigger="hover"
                                         placement="right">
-
                                     <div class="menuBT">
                                         <!--<el-button @click="uploadOrgSignature(scope.row)" size="mini">upload</el-button>-->
                                         <el-button @click="downloadOrgSignature(scope.row)" type="" size="mini">
-                                            download
+                                            {{$t('org.download')}}
                                         </el-button>
-                                        <el-button @click="previewOrgSignature(scope.row)" type="" size="mini">preview
+                                        <el-button @click="previewOrgSignature(scope.row)" type="" size="mini">
+                                            {{$t('org.preview')}}
                                         </el-button>
                                     </div>
-
                                     <svg-icon slot="reference" class="pointer" icon-class="pdf" @click=""/>
-
                                 </el-popover>
                             </template>
                         </el-table-column>
                         <el-table-column
-                                label="Operation">
+                                :label="$t('org.operation')">
                             <template slot-scope="scope">
                                 <el-dropdown placement="bottom-start" trigger="hover">
                                     <span class="el-dropdown-link">
                                         <svg-icon icon-class="operation"></svg-icon>
                                     </span>
                                     <el-dropdown-menu slot="dropdown">
-                                        <el-dropdown-item>Modify field</el-dropdown-item>
-                                        <el-dropdown-item>Add cla for other language</el-dropdown-item>
+                                        <el-dropdown-item>
+                                            {{$t('org.modify_field')}}
+                                        </el-dropdown-item>
+                                        <el-dropdown-item>
+                                            {{$t('org.add_cla_for_other_language')}}
+                                        </el-dropdown-item>
                                     </el-dropdown-menu>
                                 </el-dropdown>
                             </template>
@@ -186,12 +190,11 @@
         <!--</el-pagination>-->
         <!--</div>-->
         <el-dialog
-                title="upload file"
+                :title="$t('org.upload_file')"
                 top="5vh"
                 :visible.sync="uploadDialogVisible"
                 width="35%">
             <div>
-
                 <div class="left">
                     <el-form v-model="form">
                         <el-form-item label="" label-width="0">
@@ -200,18 +203,21 @@
                                     ref="uploadPdf"
                                     class="upload-demo"
                                     action=""
+                                    :multiple="false"
                                     :headers="uploadHeaders"
                                     :http-request="upload"
                                     :on-preview="handlePreview"
                                     :on-remove="handleRemove"
-                                    :on-success="handleSuccess"
                                     :before-remove="beforeRemove"
+                                    :before-upload="beforeUpload"
                                     :auto-upload="false"
+                                    :on-change="handleChange"
+                                    :limit="1"
                                     :on-exceed="handleExceed"
                                     :file-list="fileList">
-                                <el-button slot="trigger" size="small" type="primary">select</el-button>
+                                <el-button slot="trigger" size="small" type="primary">{{$t('org.select')}}</el-button>
                                 <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">
-                                    upload
+                                    {{$t('org.upload')}}
                                 </el-button>
                             </el-upload>
                         </el-form-item>
@@ -227,35 +233,48 @@
                 :visible.sync="resendEmailDialogVisible"
                 width="20%">
             <div class="dialogContent">
-                Are you sure to resend email?
+                {{$t('org.resend_email_message')}}
                 <div class="dialogBtBox">
-                    <el-button class="dialogBt" size="medium" type="primary" @click="resendPDF">Yes</el-button>
-                    <el-button size="medium" @click="resendEmailDialogVisible=false">No</el-button>
+                    <el-button class="dialogBt" size="medium" type="primary" @click="resendPDF">{{$t('corp.yes')}}
+                    </el-button>
+                    <el-button size="medium" @click="resendEmailDialogVisible=false">{{$t('corp.no')}}</el-button>
                 </div>
             </div>
 
         </el-dialog>
+        <ReTryDialog :dialogVisible="reTryDialogVisible" :message="reLoginMsg"></ReTryDialog>
     </div>
 
 
 </template>
 <script>
-    import PDFJS from '../until/pdf/pdf'
     import * as url from '../until/api'
     import * as until from '../until/until'
     import pdfReader from "@components/PdfReader";
     import http from '../until/http'
     import pdf from 'vue-pdf'
     import ReLoginDialog from '../components/ReLoginDialog'
+    import ReTryDialog from '../components/ReTryDialog'
     import download from 'downloadjs'
 
     export default {
         name: "CorporationList",
         components: {
             pdfReader,
+            ReTryDialog,
+            ReLoginDialog,
+        },
+        computed: {
+            reTryDialogVisible() {
+                return this.$store.state.reTryDialogVisible
+            },
+            reLoginMsg() {
+                return this.$store.state.dialogMessage
+            },
         },
         data() {
             return {
+                uploadLoading: false,
                 individualClaData: [],
                 corpClaData: [],
                 previewOriginalDialogVisible: false,
@@ -291,7 +310,7 @@
                 window.open(url)
             },
             uploadOrgSignature(row) {
-                this.uploadUrl = `/api${url.uploadSignature}/${this.$store.state.corpItem.link_id}`;
+                this.uploadUrl = `${url.uploadSignature}/${this.$store.state.corpItem.link_id}`;
                 this.uploadOrgDialogVisible = true
             },
             previewOrgSignature(row) {
@@ -567,111 +586,6 @@
                     }
                 })
             },
-            upload(fileObj) {
-                const formData = new FormData();
-                console.log(fileObj.file);
-                formData.append('pdf', fileObj.file);
-                formData.append('type', fileObj.file.type);
-                http({
-                    url: this.uploadUrl,
-                    method: 'patch',
-                    data: formData,
-                }).then(res => {
-                }).catch(err => {
-                    if (err.data && err.data.hasOwnProperty('data')) {
-                        switch (err.data.data.error_code) {
-                            case 'cla.invalid_token':
-                                this.$store.commit('errorSet', {
-                                    dialogVisible: true,
-                                    dialogMessage: this.$t('tips.invalid_token'),
-                                });
-                                break;
-                            case 'cla.missing_token':
-                                this.$store.commit('errorSet', {
-                                    dialogVisible: true,
-                                    dialogMessage: this.$t('tips.missing_token'),
-                                });
-                                break;
-                            case 'cla.unknown_token':
-                                this.$store.commit('errorSet', {
-                                    dialogVisible: true,
-                                    dialogMessage: this.$t('tips.unknown_token'),
-                                });
-                                break;
-
-                            case 'cla.system_error':
-                                this.$store.commit('errorCodeSet', {
-                                    dialogVisible: true,
-                                    dialogMessage: this.$t('tips.system_error'),
-                                });
-                                break;
-                            default :
-                                this.$store.commit('errorCodeSet', {
-                                    dialogVisible: true,
-                                    dialogMessage: this.$t('tips.unknown_error'),
-                                });
-                                break;
-                        }
-                    } else {
-                        this.$store.commit('errorCodeSet', {
-                            dialogVisible: true,
-                            dialogMessage: this.$t('tips.system_error'),
-                        })
-                    }
-                })
-            },
-            uploadOk() {
-                let fd = new FormData();
-                for (let i = 0; i < this.fileList.length; i++) {
-                    fd.append('file', this.fileList[i], this.fileList[i].name);
-                }
-                http({
-                    url: this.uploadUrl,
-                    data: {fd},
-                }).then(res => {
-                }).catch(err => {
-                    if (err.data && err.data.hasOwnProperty('data')) {
-                        switch (err.data.data.error_code) {
-                            case 'cla.invalid_token':
-                                this.$store.commit('errorSet', {
-                                    dialogVisible: true,
-                                    dialogMessage: this.$t('tips.invalid_token'),
-                                });
-                                break;
-                            case 'cla.missing_token':
-                                this.$store.commit('errorSet', {
-                                    dialogVisible: true,
-                                    dialogMessage: this.$t('tips.missing_token'),
-                                });
-                                break;
-                            case 'cla.unknown_token':
-                                this.$store.commit('errorSet', {
-                                    dialogVisible: true,
-                                    dialogMessage: this.$t('tips.unknown_token'),
-                                });
-                                break;
-
-                            case 'cla.system_error':
-                                this.$store.commit('errorCodeSet', {
-                                    dialogVisible: true,
-                                    dialogMessage: this.$t('tips.system_error'),
-                                });
-                                break;
-                            default :
-                                this.$store.commit('errorCodeSet', {
-                                    dialogVisible: true,
-                                    dialogMessage: this.$t('tips.unknown_error'),
-                                });
-                                break;
-                        }
-                    } else {
-                        this.$store.commit('errorCodeSet', {
-                            dialogVisible: true,
-                            dialogMessage: this.$t('tips.system_error'),
-                        })
-                    }
-                })
-            },
             previewClaFile(row) {
                 http({
                     url: `${url.corporationPdf}/${this.$store.state.corpItem.link_id}/${row.admin_email}`,
@@ -783,44 +697,146 @@
                 })
             },
             uploadClaFile(row) {
-                this.uploadUrl = `/api${url.corporationPdf}/${this.$store.state.corpItem.link_id}/${row.admin_email}`;
+                this.uploadUrl = `${url.corporationPdf}/${this.$store.state.corpItem.link_id}/${row.admin_email}`;
                 this.uploadDialogVisible = true
             },
-            submitUpload() {
-                this.$refs.uploadPdf.submit();
-            },
-            handleSuccess(file, fileList) {
-                this.fileList = [];
-                this.$message.closeAll();
-                this.$message.success('success');
-                this.uploadDialogVisible = false
+            upload(fileObj) {
+                const formData = new FormData();
+                let file = fileObj.file;
+                formData.append('pdf', file);
+                formData.append('type', file.type);
+                http({
+                    url: this.uploadUrl,
+                    method: 'patch',
+                    data: formData,
+                }).then(res => {
+                    this.$refs.uploadPdf.clearFiles();
+                    this.clearFileList();
+                    this.uploadLoading.close();
+                    this.uploadDialogVisible = false;
+                    this.openSuccessMessage();
+                }).catch(err => {
+                    if (err.data && err.data.hasOwnProperty('data')) {
+                        switch (err.data.data.error_code) {
+                            case 'cla.invalid_token':
+                                this.$store.commit('errorSet', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.invalid_token'),
+                                });
+                                break;
+                            case 'cla.missing_token':
+                                this.$store.commit('errorSet', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.missing_token'),
+                                });
+                                break;
+                            case 'cla.unknown_token':
+                                this.$store.commit('errorSet', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.unknown_token'),
+                                });
+                                break;
 
+                            case 'cla.system_error':
+                                this.$store.commit('errorCodeSet', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.system_error'),
+                                });
+                                break;
+                            default :
+                                this.$store.commit('errorCodeSet', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.unknown_error'),
+                                });
+                                break;
+                        }
+                    } else {
+                        this.$store.commit('errorCodeSet', {
+                            dialogVisible: true,
+                            dialogMessage: this.$t('tips.system_error'),
+                        })
+                    }
+                })
+            },
+            submitUpload() {
+                if (this.fileList.length) {
+                    this.uploadLoading = this.$loading({
+                        lock: true,
+                        text: this.$t('org.upload_loading_text'),
+                        spinner: 'el-icon-loading',
+                        customClass: "loading_class",
+                        background: 'rgba(0, 0, 0, 0.7)'
+                    });
+                    this.$refs.uploadPdf.submit();
+                } else {
+                    this.$message.closeAll();
+                    this.$message.error('Please select file first')
+                }
+            },
+            beforeUpload(file) {
+            },
+            handleChange(file, fileList) {
+                let max_size = 2 * 1024 * 1024;
+                if (/.(PDF|pdf)$/.test(file.name)) {
+                    if (file.size < max_size) {
+                        this.fileList.push(file);
+                    } else {
+                        for (let i = 0; i < fileList.length; i++) {
+                            fileList.splice(i, 1);
+                            i--;
+                        }
+                        this.$store.commit('errorCodeSet', {
+                            dialogVisible: true,
+                            dialogMessage: this.$t('tips.file_too_large'),
+                        })
+                    }
+                } else {
+                    for (let i = 0; i < fileList.length; i++) {
+                        fileList.splice(i, 1);
+                        i--;
+                    }
+                    this.$store.commit('errorCodeSet', {
+                        dialogVisible: true,
+                        dialogMessage: this.$t('tips.not_pdf'),
+                    })
+                }
             },
             handleRemove(file, fileList) {
+                this.fileList.splice(0, 1);
+            },
+            clearFileList() {
+                for (let i = 0; i < this.fileList.length; i++) {
+                    this.fileList.splice(0, 1);
+                    i--;
+                }
             },
             handlePreview(file) {
+
             },
             handleExceed(files, fileList) {
-                this.$message.warning(`Only one files can be uploaded.`);
+                this.$message.warning(this.$t('org.file_limit_tips'));
             },
             beforeRemove(file, fileList) {
-                return this.$confirm(`Are you sure you want to remove it ${file.name}？`);
+                return this.$confirm(this.$t('org.remove_file_tips',{fileName:file.name}),{cancelButtonText:this.$t('org.cancel_remove'),confirmButtonText:this.$t('org.confirm_remove')});
             },
             openResendPdf(email) {
                 this.resendEmail = email;
                 this.resendEmailDialogVisible = true;
             },
+            openSuccessMessage(){
+                this.$message.closeAll();
+                this.$message.success(this.$t('org.success'));
+            },
             resendPDF() {
                 let email = this.resendEmail;
                 let resend_url = '';
-                resend_url = `${url.resend_pdf}/${this.$store.state.corpItem.link_id}/${email}`
+                resend_url = `${url.resend_pdf}/${this.$store.state.corpItem.link_id}/${email}`;
                 http({
                     url: resend_url,
                     method: 'post',
                 }).then(res => {
                     this.resendEmailDialogVisible = false;
-                    this.$message.closeAll();
-                    this.$message.success('success');
+                    this.openSuccessMessage();
                 }).catch(err => {
                     if (err.data && err.data.hasOwnProperty('data')) {
                         switch (err.data.data.error_code) {
@@ -879,8 +895,7 @@
                     url: `/api${url.corporationManager}/${this.$store.state.corpItem.link_id}/${email}`,
                     method: 'put',
                 }).then(res => {
-                    this.$message.closeAll()
-                    this.$message.success('success')
+                    this.openSuccessMessage();
                     this.getCorporationInfo()
                 }).catch(err => {
                     if (err.data && err.data.hasOwnProperty('data')) {
@@ -945,6 +960,18 @@
 </script>
 
 <style lang="less">
+    .loading_class {
+        .el-loading-spinner {
+            i {
+                color: #319E55;
+            }
+        }
+    }
+
+    .el-loading-spinner .el-loading-text {
+        color: #319E55;
+    }
+
     #corporationList {
         padding-top: 3rem;
 
