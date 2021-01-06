@@ -2,36 +2,34 @@
     <el-row id="configTwo">
         <div class="itemBox">
             <div class="stepTitle">
-                ③ Paste a url of a CLA file
+                ③ {{$t('org.config_cla_paste_url_title')}}
                 <el-tooltip class="item" effect="light"
-                            content="Paste a url to the original data of a CLA in the repository"
+                            :content="$t('org.config_cla_paste_url_title_tooltips')"
                             placement="right">
                     <svg-icon icon-class="bangzhu"></svg-icon>
                 </el-tooltip>
             </div>
             <div>
                 <div class="margin-top-1rem">
-                    Individual CLA url
+                    {{$t('org.config_cla_paste_individual_url')}}
                 </div>
                 <div class="margin-top-1rem">
-                    You need to paste here a url to the original data from the gitee repository, which is the cla
-                    protocol,
-                    applied to individual signatures
+                    {{$t('org.config_cla_individual_url_desc')}}
                 </div>
                 <div class="margin-top-1rem">
                     <el-row class="margin-top-1rem">
                         <el-col>
-                            <el-input placeholder="Paste a link" size="medium" v-model="cla_link_individual">
+                            <el-input :placeholder="$t('org.config_cla_url_placeholder')" size="medium" v-model="cla_link_individual">
                             </el-input>
                         </el-col>
                     </el-row>
                     <el-row class="margin-top-1rem">
-                        Individual CLA language
+                        {{$t('org.config_cla_individual_lang')}}
                     </el-row>
                     <el-row class="margin-top-1rem">
                         <el-col>
                             <el-select v-model="individualClaLanguageValue"
-                                       placeholder="select language"
+                                       :placeholder="$t('org.config_cla_select_lang')"
                                        style="width: 100%"
                                        size="medium"
                                        clearable
@@ -50,31 +48,28 @@
             </div>
             <div class="margin-top-2rem">
                 <div class="margin-top-1rem">
-                    If you need your community support corporation to sign up for CLA, please complete the following
-                    information. If not, please ignore it
+                    {{$t('org.config_cla_corp_url')}}
                 </div>
                 <div class="margin-top-1rem">
-                    Corporation CLA url
+                    {{$t('org.config_cla_paste_corp_url')}}
                 </div>
                 <div class="margin-top-1rem">
-                    You need to paste here a url to the original data from the gitee repository, which is the cla
-                    protocol,
-                    applied to corporation signatures
+                    {{$t('org.config_cla_corp_url_desc')}}
                 </div>
                 <div class="margin-top-1rem">
                     <el-row>
                         <el-col>
-                            <el-input placeholder="Paste a link" size="medium" v-model="cla_link_corporation">
+                            <el-input :placeholder="$t('org.config_cla_url_placeholder')" size="medium" v-model="cla_link_corporation">
                             </el-input>
                         </el-col>
                     </el-row>
                     <div class="margin-top-1rem">
-                        Corporation CLA language
+                        {{$t('org.config_cla_corp_lang')}}
                     </div>
                     <el-row class="margin-top-1rem">
                         <el-col>
                             <el-select v-model="corpClaLanguageValue"
-                                       placeholder="select language"
+                                       :placeholder="$t('org.config_cla_select_lang')"
                                        style="width: 100%"
                                        size="medium"
                                        clearable
@@ -90,18 +85,17 @@
                         </el-col>
                     </el-row>
                     <div class="margin-top-1rem">
-                        Upload signature file
+                        {{$t('org.config_cla_upload_file_title')}}
                     </div>
                     <div class="margin-top-1rem">
-                        You need to upload a PDF file that the community administrator has signed. If you don't have the
-                        original file, click
-                        <span @click="downloadFile" class="downloadText">download</span>
+                        {{$t('org.config_cla_corp_file')}}
+                        <span @click="downloadFile" class="downloadText">{{$t('org.config_cla_corp_file_download')}}</span>
                     </div>
                     <div class="margin-top-1rem">
                         <div>
                             <button class="showBox">
                                 <input class="inputFile" id="corp_pdf" @change="changeFile" type="file" name="file">
-                                choose file
+                                {{$t('org.config_cla_corp_choose_file')}}
                             </button>
                             <span class="signatureName">{{this.$store.state.corpFDName}}</span>
                         </div>
@@ -110,15 +104,15 @@
             </div>
         </div>
         <div class="stepBtBox">
-            <button class="step_button" @click="toPreviousPage">Previous Step</button>
-            <button class="step_button" @click="toNextPage">Next Step</button>
+            <button class="step_button" @click="toPreviousPage">{{$t('org.previous_step')}}</button>
+            <button class="step_button" @click="toNextPage">{{$t('org.next_step')}}</button>
         </div>
-        <reTryDialog :message="corpReLoginMsg" :dialogVisible="corpReTryDialogVisible"></reTryDialog>
+        <ReTryDialog :message="reLoginMsg" :dialogVisible="reTryVisible"></ReTryDialog>
     </el-row>
 
 </template>
 <script>
-    import reTryDialog from '../components/ReTryDialog'
+    import ReTryDialog from '../components/ReTryDialog'
     import * as url from '../until/api'
     import * as until from '../until/until'
     import http from '../until/http'
@@ -127,9 +121,18 @@
     export default {
         name: "ConfigClaLink",
         components: {
-            reTryDialog
+            ReTryDialog
         },
         computed: {
+            reTryVisible() {
+                return this.$store.state.reTryDialogVisible
+            },
+            reLoginDialogVisible() {
+                return this.$store.state.orgReLoginDialogVisible
+            },
+            reLoginMsg() {
+                return this.$store.state.dialogMessage
+            },
             cla_link_individual: {
                 get() {
                     return this.$store.state.claLinkIndividual;
@@ -202,10 +205,49 @@
                             download((new Blob([res.data])), `${this.$store.state.corpLanguage}_blank_signature${time}.pdf`, 'application/pdf');
                         }
                     }).catch(err => {
+                        if (err.data.hasOwnProperty('data')) {
+                            switch (err.data.data.error_code) {
+                                case 'cla.invalid_token':
+                                    this.$store.commit('setOrgReLogin', {
+                                        dialogVisible: true,
+                                        dialogMessage: this.$t('tips.invalid_token'),
+                                    });
+                                    break;
+                                case 'cla.missing_token':
+                                    this.$store.commit('setOrgReLogin', {
+                                        dialogVisible: true,
+                                        dialogMessage: this.$t('tips.missing_token'),
+                                    });
+                                    break;
+                                case 'cla.unknown_token':
+                                    this.$store.commit('setOrgReLogin', {
+                                        dialogVisible: true,
+                                        dialogMessage: this.$t('tips.unknown_token'),
+                                    });
+                                    break;
+                                case 'cla.system_error':
+                                    this.$store.commit('errorCodeSet', {
+                                        dialogVisible: true,
+                                        dialogMessage: this.$t('tips.system_error'),
+                                    });
+                                    break;
+                                default :
+                                    this.$store.commit('errorCodeSet', {
+                                        dialogVisible: true,
+                                        dialogMessage: this.$t('tips.unknown_error'),
+                                    });
+                                    break;
+                            }
+                        } else {
+                            this.$store.commit('errorCodeSet', {
+                                dialogVisible: true,
+                                dialogMessage: this.$t('tips.system_error'),
+                            })
+                        }
                     })
                 } else {
                     this.$message.closeAll();
-                    this.$message.error('Please select the language of the signature page to be downloaded first');
+                    this.$message.error(this.$t('org.config_cla_download_empty_signature_tips'));
                 }
             },
             changeIndividualLanguage(value) {

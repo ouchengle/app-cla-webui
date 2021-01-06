@@ -2,23 +2,22 @@
     <el-row id="configFields">
         <div class="itemBox">
             <div style="padding: .5rem">
-                <p style="font-size: 1.2rem">④ Edit CLA's Fields
+                <p style="font-size: 1.2rem">④ {{$t('org.config_cla_fields')}}
                     <el-tooltip class="item" effect="dark"
-                                content="The information you want contributors to fill in when they sign the cla.Title and type are required, otherwise the field will fail to be added"
+                                :content="$t('org.config_cla_fields_desc')"
                                 placement="right">
                         <svg-icon icon-class="bangzhu"></svg-icon>
                     </el-tooltip>
                 </p>
             </div>
             <div class="margin-top-1rem">
-
                 <div>
                     <div class="margin-top-1rem">
-                        For Individual Metadata
+                        {{$t('org.config_cla_individual_metadata')}}
                     </div>
                     <div class="margin-top-1rem">
                         <div class="margin-top-1rem">
-                            Configure the required field information for individual and employee signers
+                            {{$t('org.config_cla_individual_metadata_desc')}}
                         </div>
                         <div>
                             <el-row style="padding: 0.5rem 0;" type="flex" align="middle" :gutter="20"
@@ -35,7 +34,7 @@
                                     <el-input disabled="" v-model="item.description" size="medium" readonly></el-input>
                                 </el-col>
                                 <el-col :span="5" style="height: 100%">
-                                    <el-checkbox v-model="item.required" disabled="">required</el-checkbox>
+                                    <el-checkbox v-model="item.required" disabled="">{{$t('org.config_cla_fields_required')}}</el-checkbox>
                                 </el-col>
                             </el-row>
 
@@ -45,13 +44,13 @@
                                     v-for="(item,index) in individualCustomMetadataArr">
                                 <el-col :span="5">
                                     <el-input v-model="item.title" size="medium"
-                                              placeholder="please input title">
+                                              :placeholder="$t('org.config_cla_fields_title_placeholder')">
 
                                     </el-input>
                                 </el-col>
                                 <el-col :span="5">
                                     <el-select style="width: 100%" v-model="item.type"
-                                               placeholder="select data type"
+                                               :placeholder="$t('org.config_cla_fields_type_placeholder')"
                                                size="medium">
                                         <el-option
                                                 v-for="i in dataTypeOptions"
@@ -63,10 +62,10 @@
                                 </el-col>
                                 <el-col :span="5" style="height: 100%">
                                     <el-input v-model="item.description" size="medium"
-                                              placeholder="description"></el-input>
+                                              :placeholder="$t('org.config_cla_fields_desc_placeholder')"></el-input>
                                 </el-col>
                                 <el-col :span="5" style="height: 100%">
-                                    <el-checkbox v-model="item.required">required</el-checkbox>
+                                    <el-checkbox v-model="item.required">{{$t('org.config_cla_fields_required')}}</el-checkbox>
                                 </el-col>
                                 <el-col :span="4">
                                     <button class="add_button" @click="addRow(index)">+</button>
@@ -78,10 +77,10 @@
                 </div>
                 <div v-if="this.$store.state.claLinkCorp" class="margin-top-1rem">
                     <div class="margin-top-1rem">
-                        For Corporation Metadata
+                        {{$t('org.config_cla_corp_metadata')}}
                     </div>
                     <div class="margin-top-1rem">
-                        Configure the required field information for corporation signers
+                        {{$t('org.config_cla_corp_metadata_desc')}}
                     </div>
                     <div>
                         <el-row style="padding: 0.5rem 0;" type="flex" align="middle" :gutter="20"
@@ -107,13 +106,13 @@
                                 v-for="(item,index) in corporationCustomMetadataArr">
                             <el-col :span="5">
                                 <el-input v-model="item.title" size="medium"
-                                          placeholder="please input title">
+                                          :placeholder="$t('org.config_cla_fields_title_placeholder')">
 
                                 </el-input>
                             </el-col>
                             <el-col :span="5">
                                 <el-select style="width: 100%" v-model="item.type"
-                                           placeholder="select data type"
+                                           :placeholder="$t('org.config_cla_fields_type_placeholder')"
                                            size="medium">
                                     <el-option
                                             v-for="i in dataTypeOptions"
@@ -125,10 +124,10 @@
                             </el-col>
                             <el-col :span="5" style="height: 100%">
                                 <el-input v-model="item.description" size="medium"
-                                          placeholder="description"></el-input>
+                                          :placeholder="$t('org.config_cla_fields_desc_placeholder')"></el-input>
                             </el-col>
                             <el-col :span="5" style="height: 100%">
-                                <el-checkbox v-model="item.required">required</el-checkbox>
+                                <el-checkbox v-model="item.required">{{$t('org.config_cla_fields_required')}}</el-checkbox>
                             </el-col>
                             <el-col :span="4">
                                 <button class="add_button" @click="addCorpRow(index)">+</button>
@@ -140,8 +139,8 @@
             </div>
         </div>
         <div class="stepBtBox">
-            <button class="step_button" @click="toConfigClaLink">Previous Step</button>
-            <button class="step_button" @click="toNextPage">Next Step</button>
+            <button class="step_button" @click="toConfigClaLink">{{$t('org.previous_step')}}</button>
+            <button class="step_button" @click="toNextPage">{{$t('org.next_step')}}</button>
         </div>
     </el-row>
 </template>
@@ -169,53 +168,52 @@
             return {
                 individualMetadata: [],
                 corpMetadata: [],
-                dataTypeOptions: [{label: 'name', value: 'name'}, {
-                    label: 'corporationName',
+                dataTypeOptions: [{label: this.$t('org.config_cla_field_type_name'), value: 'name'}, {
+                    label: this.$t('org.config_cla_field_type_corporationName'),
                     value: 'corporationName'
-                }, {label: 'date', value: 'date'}, {
-                    label: 'telephone',
+                }, {label: this.$t('org.config_cla_field_type_date'), value: 'date'}, {
+                    label: this.$t('org.config_cla_field_type_telephone'),
                     value: 'telephone'
-                }, {label: 'address', value: 'address'}, {label: 'email', value: 'email'}, {
-                    label: 'fax',
+                }, {label: this.$t('org.config_cla_field_type_address'), value: 'address'}, {label: this.$t('org.config_cla_field_type_email'), value: 'email'}, {
+                    label: this.$t('org.config_cla_field_type_fax'),
                     value: 'fax'
                 },
                 ],
                 individualMetadataArr: [{
-                    title: 'Name',
+                    title: this.$t('org.config_cla_field_individual_default_title1'),
                     type: 'name',
-                    description: 'your name',
+                    description:  this.$t('org.config_cla_field_individual_default_title1_desc'),
                     required: true,
                 }, {
-                    title: 'E-Mail',
+                    title: this.$t('org.config_cla_field_individual_default_title2'),
                     type: 'email',
-                    description: 'your email',
+                    description:this.$t('org.config_cla_field_individual_default_title2_desc'),
                     required: true,
                 },],
                 corporationMetadataArr: [
-
                     {
-                        title: 'Authorized Representative',
+                        title: this.$t('org.config_cla_field_corp_default_title1'),
                         type: 'authorized',
-                        description: 'name of Authorized Representative',
+                        description: this.$t('org.config_cla_field_corp_default_title1_desc'),
                         required: true,
                     },
                     {
-                        title: 'Title',
+                        title: this.$t('org.config_cla_field_corp_default_title4'),
                         type: 'title',
-                        description: 'title of Authorized Representative',
+                        description:this.$t('org.config_cla_field_corp_default_title4_desc'),
                         required: true,
                     },
                     {
-                        title: 'Corporation Name',
+                        title:this.$t('org.config_cla_field_corp_default_title2'),
                         type: 'corporationName',
-                        description: 'corporation name',
+                        description: this.$t('org.config_cla_field_corp_default_title2_desc'),
                         required: true,
                     },
 
                     {
-                        title: 'E-Mail',
+                        title: this.$t('org.config_cla_field_corp_default_title3'),
                         type: 'email',
-                        description: 'corporation email',
+                        description: this.$t('org.config_cla_field_corp_default_title3_desc'),
                         required: true,
                     },],
                 initIndividualCustomMetadata: [{
@@ -280,6 +278,7 @@
                     }
                 });
                 let individualArr = this.individualMetadataArr.concat(individualMetadata);
+                console.log('individualArr===',individualArr);
                 let corpArr = this.corporationMetadataArr.concat(corpMetadata);
                 for (let i = 0; i < individualArr.length; i++) {
                     for (let j = i + 1; j < individualArr.length; j++) {

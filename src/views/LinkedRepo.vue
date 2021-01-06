@@ -155,7 +155,8 @@
             </div>
 
         </el-dialog>
-        <ReLoginDialog></ReLoginDialog>
+        <ReLoginDialog :dialogVisible="reLoginDialogVisible" :message="reLoginMsg"></ReLoginDialog>
+        <ReTryDialog :dialogVisible="reTryVisible" :message="reLoginMsg"></ReTryDialog>
     </div>
 </template>
 <script>
@@ -176,10 +177,18 @@
         },
         inject: ['setClientHeight'],
         computed: {
+            reLoginDialogVisible() {
+                return this.$store.state.orgReLoginDialogVisible
+            },
+            reTryVisible() {
+                return this.$store.state.reTryDialogVisible
+            },
+            reLoginMsg() {
+                return this.$store.state.dialogMessage
+            },
             address() {
                 return this.$store.state.domain
             },
-
         },
         data() {
             return {
@@ -340,19 +349,19 @@
                     if (err.data.hasOwnProperty('data')) {
                         switch (err.data.data.error_code) {
                             case 'cla.invalid_token':
-                                this.$store.commit('setSignReLogin', {
+                                this.$store.commit('setOrgReLogin', {
                                     dialogVisible: true,
                                     dialogMessage: this.$t('tips.invalid_token'),
                                 });
                                 break;
                             case 'cla.missing_token':
-                                this.$store.commit('setSignReLogin', {
+                                this.$store.commit('setOrgReLogin', {
                                     dialogVisible: true,
                                     dialogMessage: this.$t('tips.missing_token'),
                                 });
                                 break;
                             case 'cla.unknown_token':
-                                this.$store.commit('setSignReLogin', {
+                                this.$store.commit('setOrgReLogin', {
                                     dialogVisible: true,
                                     dialogMessage: this.$t('tips.unknown_token'),
                                 });
@@ -391,19 +400,19 @@
                         if (err.data.hasOwnProperty('data')) {
                             switch (err.data.data.error_code) {
                                 case 'cla.invalid_token':
-                                    this.$store.commit('setSignReLogin', {
+                                    this.$store.commit('setOrgReLogin', {
                                         dialogVisible: true,
                                         dialogMessage: this.$t('tips.invalid_token'),
                                     });
                                     break;
                                 case 'cla.missing_token':
-                                    this.$store.commit('setSignReLogin', {
+                                    this.$store.commit('setOrgReLogin', {
                                         dialogVisible: true,
                                         dialogMessage: this.$t('tips.missing_token'),
                                     });
                                     break;
                                 case 'cla.unknown_token':
-                                    this.$store.commit('setSignReLogin', {
+                                    this.$store.commit('setOrgReLogin', {
                                         dialogVisible: true,
                                         dialogMessage: this.$t('tips.unknown_token'),
                                     });
@@ -606,19 +615,19 @@
                     if (err.data.hasOwnProperty('data')) {
                         switch (err.data.data.error_code) {
                             case 'cla.invalid_token':
-                                this.$store.commit('setSignReLogin', {
+                                this.$store.commit('setOrgReLogin', {
                                     dialogVisible: true,
                                     dialogMessage: this.$t('tips.invalid_token'),
                                 });
                                 break;
                             case 'cla.missing_token':
-                                this.$store.commit('setSignReLogin', {
+                                this.$store.commit('setOrgReLogin', {
                                     dialogVisible: true,
                                     dialogMessage: this.$t('tips.missing_token'),
                                 });
                                 break;
                             case 'cla.unknown_token':
-                                this.$store.commit('setSignReLogin', {
+                                this.$store.commit('setOrgReLogin', {
                                     dialogVisible: true,
                                     dialogMessage: this.$t('tips.unknown_token'),
                                 });
@@ -647,7 +656,7 @@
             changePage(page) {
             },
             setDomain() {
-                let domain = window.location.href.split('/linkedRepo')[0]
+                let domain = window.location.href.split('/linkedRepo')[0];
                 if (domain === window.location.href) {
                     domain = window.location.href.split('/home')[0]
                 }

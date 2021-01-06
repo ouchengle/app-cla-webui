@@ -51,9 +51,6 @@
             NewHeader,
             NewFooter
         },
-        watch: {
-
-        },
         data() {
             return {
                 showGuide:false,
