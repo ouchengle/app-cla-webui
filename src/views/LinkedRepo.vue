@@ -605,7 +605,7 @@
             },
             unLinkRepositoryFun() {
                 http({
-                    url: `/api${url.unLinkRepository}/${this.unlinkId}`,
+                    url: `${url.unLinkRepository}/${this.unlinkId}`,
                     method: 'delete',
                 }).then(res => {
                     this.$message.success('success');

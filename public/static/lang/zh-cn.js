@@ -172,7 +172,6 @@ module.exports = {
         select_file: '选择文件',
         upload: '上传',
         corporation_name: '企业名称',
-        administrator_name: '管理员姓名',
         signed_corporation: '已签署的企业',
         create_administrator: '创建超级管理员',
         resend_email: '重发邮件',

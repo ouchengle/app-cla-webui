@@ -43,7 +43,7 @@
         if (until.getClientHeight() > document.getElementById('transparentDiv').offsetHeight) {
             document.getElementById("transparentDiv").style.height = until.getClientHeight() + 'px';
         }
-    }
+    };
     export default {
         name: 'Login',
         components: {

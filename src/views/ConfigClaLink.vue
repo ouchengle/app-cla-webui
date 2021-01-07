@@ -282,11 +282,11 @@
                 let formData = new FormData();
                 let input = document.getElementById('corp_pdf');
                 let fs = input.files;
-                let max_size = 1024 * SIGNATURE_PAGE_MAX_SIZE;
+                let _size = 1024 * this.max_size;
                 for (let i = 0; i < fs.length; i++) {
                     let d = fs[i];
                     if (/.(PDF|pdf)$/.test(d.name)) {
-                        if (d.size <= max_size) {
+                        if (d.size <= _size) {
                             formData.append("files", fs[i]);
                             this.$store.commit('setCorpFDName', formData.get('files').name);
                             let reader = new FileReader();

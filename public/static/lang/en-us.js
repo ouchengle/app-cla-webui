@@ -171,7 +171,6 @@ module.exports = {
         select_file: 'select file',
         upload: 'upload',
         corporation_name: 'Corporation Name',
-        administrator_name: 'Administrator Name',
         signed_corporation: 'Signed Corporation',
         create_administrator: 'Create Administrator',
         resend_email: 'Resend Email',

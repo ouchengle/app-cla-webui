@@ -15,7 +15,7 @@
                         </el-table-column>
                         <el-table-column
                                 prop="admin_name"
-                                :label="$t('org.administrator_name')">
+                                :label="$t('org.config_cla_field_corp_default_title1')">
                         </el-table-column>
 
                         <el-table-column
