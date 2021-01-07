@@ -100,7 +100,12 @@
                                 <input class="inputFile" id="corp_pdf" @change="changeFile" type="file" name="file">
                                 {{$t('org.config_cla_corp_choose_file')}}
                             </button>
-                            <span class="signatureName">{{this.$store.state.corpFDName}}</span>
+                            <span class="signatureName">
+                                {{this.$store.state.corpFDName}}
+                                <svg-icon class="delete-icon" v-if="this.$store.state.corpFDName" @click="deleteFile"
+                                          icon-class="clear"></svg-icon>
+                            </span>
+
                         </div>
                         <div class="margin-top-1rem file_size_tips">
                             {{$t('org.config_cla_corp_file_size',{max_size_kb:this.max_size})}}
@@ -189,6 +194,14 @@
             }
         },
         methods: {
+            deleteFile() {
+                let input = document.getElementById('corp_pdf');
+                input.value = '';
+                this.$store.commit('setCorpFDName', '');
+                this.$store.commit('setCorpFD', '');
+                sessionStorage.removeItem('corpFDName');
+                sessionStorage.removeItem('corpFD');
+            },
             init() {
                 this.$store.commit('setIndividualLanguage', '');
                 this.$store.commit('setCorpLanguage', '');
@@ -269,7 +282,6 @@
                 let formData = new FormData();
                 let input = document.getElementById('corp_pdf');
                 let fs = input.files;
-                console.log('fs===', fs);
                 let max_size = 1024 * SIGNATURE_PAGE_MAX_SIZE;
                 for (let i = 0; i < fs.length; i++) {
                     let d = fs[i];
@@ -283,8 +295,7 @@
                                 this.$store.commit('setCorpFD', reader.result)
                             };
                         } else {
-                            input.select();
-                            document.execCommand('delete');
+                            input.value = '';
                             this.$store.commit('errorCodeSet', {
                                 dialogVisible: true,
                                 dialogMessage: this.$t('tips.file_too_large'),
@@ -292,8 +303,7 @@
                             return false
                         }
                     } else {
-                        input.select();
-                        document.execCommand('delete');
+                        input.value = '';
                         this.$store.commit('errorCodeSet', {
                             dialogVisible: true,
                             dialogMessage: this.$t('tips.not_pdf'),
@@ -372,6 +382,12 @@
 
         .signatureName {
             font-size: .8rem;
+            vertical-align: text-top;
+        }
+
+        .delete-icon {
+            cursor: pointer;
+            margin-left: .5rem;
         }
 
         .downloadText {
