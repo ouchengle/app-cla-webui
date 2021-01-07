@@ -219,6 +219,7 @@
                                 <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">
                                     {{$t('org.upload')}}
                                 </el-button>
+                                <div slot="tip" class="el-upload__tip">{{$t('org.signature_file_size',{max_size_m:this.file_size})}}</div>
                             </el-upload>
                         </el-form-item>
                     </el-form>
@@ -274,6 +275,7 @@
         },
         data() {
             return {
+                file_size:SIGNATURE_FILE_MAX_SIZE,
                 uploadLoading: false,
                 individualClaData: [],
                 corpClaData: [],

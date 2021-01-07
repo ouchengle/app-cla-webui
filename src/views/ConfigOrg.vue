@@ -30,7 +30,8 @@
                 {{$t('org.config_cla_select_org_alias')}}
             </div>
             <div class="margin-top-1rem">
-                <el-input v-model="org_alias" size="medium" :placeholder="$t('org.config_cla_select_org_alias_placeholder')"></el-input>
+                <el-input v-model="org_alias" size="medium"
+                          :placeholder="$t('org.config_cla_select_org_alias_placeholder')"></el-input>
             </div>
             <div class="margin-top-1rem">
                 {{$t('org.config_cla_select_repo')}}
@@ -56,7 +57,7 @@
             </el-row>
         </div>
         <div class="orgStepBtBox">
-            <button  class="step_button" @click="toConfigClaLink">{{$t('org.next_step')}}</button>
+            <button class="step_button" @click="toConfigClaLink">{{$t('org.next_step')}}</button>
         </div>
         <ReTryDialog :message="reTryMsg" :dialogVisible="reLoginMsg"></ReTryDialog>
     </el-row>
@@ -65,6 +66,7 @@
 <script>
     import ReTryDialog from '../components/ReTryDialog'
     import * as url from '../until/api'
+
     export default {
         name: "ConfigOne",
         components: {
@@ -195,7 +197,7 @@
                     });
                     this.$store.commit('setRepositoryOptions', repositoryOptions)
                 }).catch(err => {
-                    if (err.data.hasOwnProperty('data')) {
+                    if (err.data && err.data.hasOwnProperty('data')) {
                         switch (err.data.data.error_code) {
                             case 'cla.invalid_token':
                                 this.$store.commit('setOrgReLogin', {
@@ -250,7 +252,7 @@
                         this.$store.commit('setOrgOption', orgOptions)
                     }
                 }).catch(err => {
-                    if (err.data.hasOwnProperty('data')) {
+                    if (err.data && err.data.hasOwnProperty('data')) {
                         switch (err.data.data.error_code) {
                             case 'cla.invalid_token':
                                 this.$store.commit('setOrgReLogin', {
@@ -315,12 +317,12 @@
         created() {
             this.getOrgsInfo();
         },
-        beforeRouteEnter(to,from,next){
-          next(vm=>{
-              if (from.path === '/') {
-                  vm.init();
-              }
-          })
+        beforeRouteEnter(to, from, next) {
+            next(vm => {
+                if (from.path === '/') {
+                    vm.init();
+                }
+            })
         },
     }
 </script>

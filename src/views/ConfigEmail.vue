@@ -76,7 +76,7 @@
 
     export default {
         name: "ConfigThree",
-        components:{
+        components: {
             ReLoginDialog,
             ReTryDialog
         },
@@ -151,7 +151,7 @@
                 }).then(res => {
                     window.location.href = res.data.data.url;
                 }).catch(err => {
-                    if (err.data.hasOwnProperty('data')) {
+                    if (err.data && err.data.hasOwnProperty('data')) {
                         switch (err.data.data.error_code) {
                             case 'cla.invalid_token':
                                 this.$store.commit('setOrgReLogin', {
@@ -200,7 +200,7 @@
                 }).then(res => {
                     this.emailTypeArr = res.data
                 }).catch(err => {
-                    if (err.data.hasOwnProperty('data')) {
+                    if (err.data && err.data.hasOwnProperty('data')) {
                         switch (err.data.data.error_code) {
                             case 'cla.invalid_token':
                                 this.$store.commit('setOrgReLogin', {
@@ -302,9 +302,11 @@
             background: linear-gradient(to right, #97DB30, #319E55);
             margin: 1.2rem 0;
         }
-        .email_button:focus{
+
+        .email_button:focus {
             outline: none;
         }
+
         .stepTitle {
             font-size: 1.2rem;
             padding: .5rem;

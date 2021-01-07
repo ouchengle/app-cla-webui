@@ -269,6 +269,8 @@ module.exports = {
         config_cla_check_fields_require_title: 'Require',
         submit:'submit',
         config_cla_check_file:'Signature File',
+        config_cla_corp_file_size:'File size cannot exceed {max_size_kb}kb',
+        signature_file_size:'Only PDF / PDF files can be uploaded, and no more than {max_size_m}M',
     },
 
 };

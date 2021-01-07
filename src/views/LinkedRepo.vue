@@ -166,14 +166,14 @@
     import pdf from 'vue-pdf'
     import http from '../until/http'
     import ReLoginDialog from '../components/ReLoginDialog'
-    import reTryDialog from '../components/ReTryDialog'
+    import ReTryDialog from '../components/ReTryDialog'
 
     export default {
         name: "linkedRepo",
         components: {
             pdf,
             ReLoginDialog,
-            reTryDialog
+            ReTryDialog
         },
         inject: ['setClientHeight'],
         computed: {
@@ -346,7 +346,7 @@
                         this.tableData = res.data.data;
                     }
                 }).catch(err => {
-                    if (err.data.hasOwnProperty('data')) {
+                    if (err.data && err.data.hasOwnProperty('data')) {
                         switch (err.data.data.error_code) {
                             case 'cla.invalid_token':
                                 this.$store.commit('setOrgReLogin', {
@@ -397,7 +397,7 @@
                             name = res.data.data.name
                         }
                     }).catch(err => {
-                        if (err.data.hasOwnProperty('data')) {
+                        if (err.data && err.data.hasOwnProperty('data')) {
                             switch (err.data.data.error_code) {
                                 case 'cla.invalid_token':
                                     this.$store.commit('setOrgReLogin', {
@@ -612,7 +612,7 @@
                     this.unLinkDialogVisible = false;
                     this.getLinkedRepoList()
                 }).catch(err => {
-                    if (err.data.hasOwnProperty('data')) {
+                    if (err.data && err.data.hasOwnProperty('data')) {
                         switch (err.data.data.error_code) {
                             case 'cla.invalid_token':
                                 this.$store.commit('setOrgReLogin', {

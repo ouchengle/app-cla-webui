@@ -199,6 +199,7 @@
     import http from '../until/http'
     import ReLoginDialog from '../components/ReLoginDialog'
     import ReTryDialog from '../components/ReTryDialog'
+
     export default {
         name: "ConfigCheck",
         components: {
@@ -387,7 +388,7 @@
                     this.$message.success('success');
                     this.$router.push('/home')
                 }).catch(err => {
-                    if (err.data.hasOwnProperty('data')) {
+                    if (err.data && err.data.hasOwnProperty('data')) {
                         switch (err.data.data.error_code) {
                             case 'cla.invalid_token':
                                 this.$store.commit('setOrgReLogin', {

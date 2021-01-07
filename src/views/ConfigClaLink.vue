@@ -19,7 +19,8 @@
                 <div class="margin-top-1rem">
                     <el-row class="margin-top-1rem">
                         <el-col>
-                            <el-input :placeholder="$t('org.config_cla_url_placeholder')" size="medium" v-model="cla_link_individual">
+                            <el-input :placeholder="$t('org.config_cla_url_placeholder')" size="medium"
+                                      v-model="cla_link_individual">
                             </el-input>
                         </el-col>
                     </el-row>
@@ -59,7 +60,8 @@
                 <div class="margin-top-1rem">
                     <el-row>
                         <el-col>
-                            <el-input :placeholder="$t('org.config_cla_url_placeholder')" size="medium" v-model="cla_link_corporation">
+                            <el-input :placeholder="$t('org.config_cla_url_placeholder')" size="medium"
+                                      v-model="cla_link_corporation">
                             </el-input>
                         </el-col>
                     </el-row>
@@ -89,7 +91,8 @@
                     </div>
                     <div class="margin-top-1rem">
                         {{$t('org.config_cla_corp_file')}}
-                        <span @click="downloadFile" class="downloadText">{{$t('org.config_cla_corp_file_download')}}</span>
+                        <span @click="downloadFile"
+                              class="downloadText">{{$t('org.config_cla_corp_file_download')}}</span>
                     </div>
                     <div class="margin-top-1rem">
                         <div>
@@ -98,6 +101,9 @@
                                 {{$t('org.config_cla_corp_choose_file')}}
                             </button>
                             <span class="signatureName">{{this.$store.state.corpFDName}}</span>
+                        </div>
+                        <div class="margin-top-1rem file_size_tips">
+                            {{$t('org.config_cla_corp_file_size',{max_size_kb:this.max_size})}}
                         </div>
                     </div>
                 </div>
@@ -108,20 +114,23 @@
             <button class="step_button" @click="toNextPage">{{$t('org.next_step')}}</button>
         </div>
         <ReTryDialog :message="reLoginMsg" :dialogVisible="reTryVisible"></ReTryDialog>
+        <ReLoginDialog :dialogVisible="reLoginDialogVisible" :message="reLoginMsg"></ReLoginDialog>
     </el-row>
 
 </template>
 <script>
-    import ReTryDialog from '../components/ReTryDialog'
     import * as url from '../until/api'
     import * as until from '../until/until'
     import http from '../until/http'
     import download from 'downloadjs'
+    import ReTryDialog from '../components/ReTryDialog'
+    import ReLoginDialog from '../components/ReLoginDialog'
 
     export default {
         name: "ConfigClaLink",
         components: {
-            ReTryDialog
+            ReTryDialog,
+            ReLoginDialog,
         },
         computed: {
             reTryVisible() {
@@ -174,11 +183,11 @@
         },
         data() {
             return {
+                max_size: SIGNATURE_PAGE_MAX_SIZE,
                 corp_pdf_name: '',
                 languageOptions: [{value: 'english', label: 'English'}, {value: 'chinese', label: '中文'}],
             }
-        }
-        ,
+        },
         methods: {
             init() {
                 this.$store.commit('setIndividualLanguage', '');
@@ -205,7 +214,7 @@
                             download((new Blob([res.data])), `${this.$store.state.corpLanguage}_blank_signature${time}.pdf`, 'application/pdf');
                         }
                     }).catch(err => {
-                        if (err.data.hasOwnProperty('data')) {
+                        if (err.data && err.data.hasOwnProperty('data')) {
                             switch (err.data.data.error_code) {
                                 case 'cla.invalid_token':
                                     this.$store.commit('setOrgReLogin', {
@@ -258,9 +267,10 @@
             },
             changeFile() {
                 let formData = new FormData();
-                let fs = document.getElementById('corp_pdf').files;
-                let max_kb = 200;
-                let max_size = 1024 * max_kb;
+                let input = document.getElementById('corp_pdf');
+                let fs = input.files;
+                console.log('fs===', fs);
+                let max_size = 1024 * SIGNATURE_PAGE_MAX_SIZE;
                 for (let i = 0; i < fs.length; i++) {
                     let d = fs[i];
                     if (/.(PDF|pdf)$/.test(d.name)) {
@@ -273,6 +283,8 @@
                                 this.$store.commit('setCorpFD', reader.result)
                             };
                         } else {
+                            input.select();
+                            document.execCommand('delete');
                             this.$store.commit('errorCodeSet', {
                                 dialogVisible: true,
                                 dialogMessage: this.$t('tips.file_too_large'),
@@ -280,6 +292,8 @@
                             return false
                         }
                     } else {
+                        input.select();
+                        document.execCommand('delete');
                         this.$store.commit('errorCodeSet', {
                             dialogVisible: true,
                             dialogMessage: this.$t('tips.not_pdf'),
@@ -407,6 +421,10 @@
             .emailInput {
                 cursor: pointer;
             }
+        }
+
+        .file_size_tips {
+            font-size: 0.8rem;
         }
     }
 </style>

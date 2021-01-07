@@ -119,7 +119,6 @@
             left: 280px;
         }
     }
-
     .index {
         display: flex;
         flex-direction: column;

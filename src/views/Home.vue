@@ -66,7 +66,9 @@
             margin: auto;
         }
     }
-
+    .el-dialog {
+        border-radius: 1rem;
+    }
     .el-button:active {
         color: #319E55;
         border-color: #319E55;
