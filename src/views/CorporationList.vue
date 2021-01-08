@@ -244,6 +244,7 @@
 
         </el-dialog>
         <ReTryDialog :dialogVisible="reTryDialogVisible" :message="reLoginMsg"></ReTryDialog>
+        <ReLoginDialog :dialogVisible="reLoginDialogVisible" :message="reLoginMsg"></ReLoginDialog>
     </div>
 
 
@@ -266,6 +267,9 @@
             ReLoginDialog,
         },
         computed: {
+            reLoginDialogVisible() {
+                return this.$store.state.orgReLoginDialogVisible
+            },
             reTryDialogVisible() {
                 return this.$store.state.reTryDialogVisible
             },
@@ -885,7 +889,7 @@
             menuCommand(command) {
                 switch (command.command) {
                     case 'a':
-                        this.createRoot(command.row.email);
+                        this.createRoot(command.row.admin_email);
                         break;
                     case 'b':
                         this.openResendPdf(command.row);
@@ -894,7 +898,7 @@
             },
             createRoot(email) {
                 http({
-                    url: `/api${url.corporationManager}/${this.$store.state.corpItem.link_id}/${email}`,
+                    url: `${url.corporationManager}/${this.$store.state.corpItem.link_id}/${email}`,
                     method: 'put',
                 }).then(res => {
                     this.openSuccessMessage();
@@ -921,7 +925,7 @@
                                 });
                                 break;
                             case 'cla.no_pdf_of_corp':
-                                this.$store.commit('errorSet', {
+                                this.$store.commit('errorCodeSet', {
                                     dialogVisible: true,
                                     dialogMessage: this.$t('tips.no_pdf_of_corp'),
                                 });
