@@ -894,7 +894,7 @@
             },
             createRoot(email) {
                 http({
-                    url: `/api${url.corporationManager}/${this.$store.state.corpItem.link_id}/${email}`,
+                    url: `${url.corporationManager}/${this.$store.state.corpItem.link_id}/${email}`,
                     method: 'put',
                 }).then(res => {
                     this.openSuccessMessage();
