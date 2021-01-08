@@ -962,18 +962,6 @@
 </script>
 
 <style lang="less">
-    .loading_class {
-        .el-loading-spinner {
-            i {
-                color: #319E55;
-            }
-        }
-    }
-
-    .el-loading-spinner .el-loading-text {
-        color: #319E55;
-    }
-
     #corporationList {
         padding-top: 3rem;
 
