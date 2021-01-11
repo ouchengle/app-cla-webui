@@ -865,7 +865,6 @@
         }
 
         .dialogDesc {
-
             font-size: 1.2rem;
             margin: 2rem 0;
             text-align: center;
