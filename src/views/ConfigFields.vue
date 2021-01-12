@@ -20,6 +20,20 @@
                             {{$t('org.config_cla_individual_metadata_desc')}}
                         </div>
                         <div>
+                            <el-row class="margin-top-1rem" type="flex" align="middle" :gutter="20">
+                                <el-col :span="5">
+                                    {{$t('org.config_cla_check_fields_title_title')}}
+                                </el-col>
+                                <el-col :span="5">
+                                    {{$t('org.config_cla_check_fields_type_title')}}
+                                </el-col>
+                                <el-col :span="5">
+                                    {{$t('org.config_cla_check_fields_describe_title')}}
+                                </el-col>
+                                <el-col :span="5" style="height: 100%">
+                                    {{$t('org.config_cla_check_fields_require_title')}}
+                                </el-col>
+                            </el-row>
                             <el-row style="padding: 0.5rem 0;" type="flex" align="middle" :gutter="20"
                                     v-for="(item,index) in individualMetadataArr">
                                 <el-col :span="5">
@@ -86,6 +100,20 @@
                         {{$t('org.config_cla_corp_metadata_desc')}}
                     </div>
                     <div>
+                        <el-row class="margin-top-1rem" type="flex" align="middle" :gutter="20">
+                            <el-col :span="5">
+                                {{$t('org.config_cla_check_fields_title_title')}}
+                            </el-col>
+                            <el-col :span="5">
+                                {{$t('org.config_cla_check_fields_type_title')}}
+                            </el-col>
+                            <el-col :span="5">
+                                {{$t('org.config_cla_check_fields_describe_title')}}
+                            </el-col>
+                            <el-col :span="5" style="height: 100%">
+                                {{$t('org.config_cla_check_fields_require_title')}}
+                            </el-col>
+                        </el-row>
                         <el-row style="padding: 0.5rem 0;" type="flex" align="middle" :gutter="20"
                                 v-for="(item,index) in corporationMetadataArr">
                             <el-col :span="5">
