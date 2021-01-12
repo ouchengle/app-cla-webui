@@ -28,7 +28,8 @@
                 :visible.sync="emailDialogVisible"
                 width="35%">
             <div>
-                <p :class="{word_break:this.lang==='1'}" class="dialogDesc">{{$t('org.config_cla_email_platform_select')}}</p>
+                <p :class="{word_break:this.lang==='1'}" class="dialogDesc">
+                    {{$t('org.config_cla_email_platform_select')}}</p>
                 <div>
                     <el-row>
                         <el-col :offset="4" :span="16">
@@ -59,10 +60,10 @@
                     </el-col>
 
                 </el-row>
-                <span slot="footer" class="dialog-footer">
+                <div slot="footer" class="dialog-footer">
                     <button class="cancelBt" @click="emailDialogVisible = false">{{$t('org.cancel_remove')}}</button>
                     <button class="email_button" @click="authorizeEmail()">{{$t('org.confirm_remove')}}</button>
-                </span>
+                </div>
             </div>
         </el-dialog>
         <ReLoginDialog :dialogVisible="reLoginDialogVisible" :message="reLoginMsg"></ReLoginDialog>
@@ -278,9 +279,14 @@
     }
 
     #configThree {
-        .my-select{
+        .my-select {
             width: 100%;
         }
+
+        .dialog-footer {
+            text-align: center;
+        }
+
         .word_break {
             word-break: break-all;
         }
@@ -289,9 +295,14 @@
             text-align: center;
         }
 
+        .dialogDesc {
+            font-size: 1.2rem;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
         .authorize_desc {
             padding: 2rem 0;
-            text-align: left;
             font-size: 1.3rem
         }
 
