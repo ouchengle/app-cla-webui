@@ -144,7 +144,7 @@
                 </div>
                 <div v-if="this.$store.state.claLinkCorp">
                     <el-row class="margin-top-1rem">
-                        {{$t('org.config_cla_fields_required')}}
+                        {{$t('org.config_cla_corp_metadata')}}
                     </el-row>
                     <div>
                         <el-row class="margin-top-1rem" type="flex" align="middle" :gutter="20">
