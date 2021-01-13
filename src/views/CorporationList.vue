@@ -112,7 +112,9 @@
                                     </span>
                                     <el-dropdown-menu slot="dropdown">
                                         <el-dropdown-item>{{$t('org.modify_field')}}</el-dropdown-item>
-                                        <el-dropdown-item>{{$t('org.add_cla_for_other_language')}}</el-dropdown-item>
+                                        <el-dropdown-item @click.native="addIndividualCla(scope.row)">
+                                            {{$t('org.add_cla_for_other_language')}}
+                                        </el-dropdown-item>
                                     </el-dropdown-menu>
                                 </el-dropdown>
                             </template>
@@ -174,7 +176,7 @@
                                         <el-dropdown-item>
                                             {{$t('org.modify_field')}}
                                         </el-dropdown-item>
-                                        <el-dropdown-item>
+                                        <el-dropdown-item @click.native="addCorpCla(scope.row)">
                                             {{$t('org.add_cla_for_other_language')}}
                                         </el-dropdown-item>
                                     </el-dropdown-menu>
@@ -248,9 +250,9 @@
             <div class="dialogContent">
                 {{$t('org.resend_email_message')}}
                 <div class="dialogBtBox">
-                    <el-button class="dialogBt" size="medium" type="primary" @click="resendPDF">{{$t('corp.yes')}}
-                    </el-button>
-                    <el-button size="medium" @click="resendEmailDialogVisible=false">{{$t('corp.no')}}</el-button>
+                    <button class="button" @click="resendPDF">{{$t('corp.yes')}}
+                    </button>
+                    <button class="cancelBt" @click="resendEmailDialogVisible=false">{{$t('corp.no')}}</button>
                 </div>
             </div>
 
@@ -324,12 +326,60 @@
         },
         inject: ['setClientHeight'],
         methods: {
+            addIndividualCla(row) {
+                this.$router.push('/addIndividualCla');
+                this.setIndividualPD(row)
+            },
+            setIndividualPD(row) {
+                this.$store.commit('setChooseOrg', this.$store.state.corpItem.org_id);
+                this.$store.commit('setChooseRepo', this.$store.state.corpItem.repo_id);
+                this.$store.commit('setOrgAlias', this.$store.state.corpItem.org_alias);
+                this.$store.commit('setEmail', this.$store.state.corpItem.org_email);
+                this.$store.commit('setBindType', 'add-bind');
+                if (row.fields.length > 3) {
+                    let data = [];
+                    row.fields.forEach((item, index) => {
+                        if (index > 2) {
+                            let field = {};
+                            for (let key in item) {
+                                if (key !== 'id') {
+                                    Object.assign(field, {[key]: item[key]});
+                                }
+                            }
+                            data.push(field);
+                        }
+                    });
+                    this.$store.commit('setIndividualCustomMetadataArr', data);
+                }
+            },
+            addCorpCla(row) {
+                this.$router.push('/addCorpCla');
+                this.setCorpPD(row)
+            },
+            setCorpPD(row) {
+                this.$store.commit('setChooseOrg', this.$store.state.corpItem.org_id);
+                this.$store.commit('setChooseRepo', this.$store.state.corpItem.repo_id);
+                this.$store.commit('setOrgAlias', this.$store.state.corpItem.org_alias);
+                this.$store.commit('setEmail', this.$store.state.corpItem.org_email);
+                this.$store.commit('setBindType', 'add-bind');
+                if (row.fields.length > 4) {
+                    let data = [];
+                    row.fields.forEach((item, index) => {
+                        if (index > 3) {
+                            let field = {};
+                            for (let key in item) {
+                                if (key !== 'id') {
+                                    Object.assign(field, {[key]: item[key]});
+                                }
+                            }
+                            data.push(field);
+                        }
+                    });
+                    this.$store.commit('setCorporationCustomMetadataArr', data);
+                }
+            },
             checkUrl(url) {
                 window.open(url)
-            },
-            uploadOrgSignature(row) {
-                this.uploadUrl = `${url.uploadSignature}/${this.$store.state.corpItem.link_id}`;
-                this.uploadOrgDialogVisible = true
             },
             previewOrgSignature(row) {
                 http({
@@ -733,6 +783,7 @@
                     this.uploadLoading.close();
                     this.uploadDialogVisible = false;
                     this.openSuccessMessage();
+                    this.getCorporationInfo()
                 }).catch(err => {
                     if (err.data && err.data.hasOwnProperty('data')) {
                         switch (err.data.data.error_code) {
@@ -907,7 +958,7 @@
                         this.createRoot(command.row.admin_email);
                         break;
                     case 'b':
-                        this.openResendPdf(command.row);
+                        this.openResendPdf(command.row.admin_email);
                         break;
                 }
             },
@@ -975,6 +1026,7 @@
             },
         },
         created() {
+            until.clearSession(this);
             this.getCorporationInfo();
         },
         mounted() {
@@ -989,6 +1041,37 @@
 <style lang="less">
     #corporationList {
         padding-top: 3rem;
+
+        & .button {
+            width: 6rem;
+            height: 2rem;
+            border-radius: 1rem;
+            border: none;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            background: linear-gradient(to right, #97DB30, #319E55);
+            margin-bottom: 1rem;
+        }
+
+        & .button:focus {
+            outline: none;
+        }
+        .cancelBt {
+            width: 6rem;
+            height: 2rem;
+            border-radius: 1rem;
+            border: 1px solid black;
+            color: black;
+            font-size: 1rem;
+            cursor: pointer;
+            background-color: white;
+            margin-left: 1rem;
+        }
+
+        .cancelBt:focus {
+            outline: none;
+        }
 
         .margin-top-1rem {
             margin-top: 1rem;
@@ -1111,6 +1194,7 @@
             flex-direction: column;
             justify-content: center;
         }
+
     }
 
     .el-popover {

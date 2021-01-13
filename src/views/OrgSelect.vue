@@ -26,16 +26,13 @@
                             </el-select>
                         </el-col>
                     </el-row>
-                    <el-row class="marginTop buttonRow">
-                        <el-col align="center">
+                    <div class="marginTop buttonRow">
                             <div class="buttonBox">
-                                <el-button class="button" type="primary" size="medium" @click="submit">
+                                <button class="org-button" @click="submit">
                                     {{$t('corp.submit')}}
-                                </el-button>
+                                </button>
                             </div>
-
-                        </el-col>
-                    </el-row>
+                    </div>
                 </div>
             </div>
         </el-col>
@@ -88,6 +85,9 @@
 </script>
 
 <style lang="less">
+    .el-select-dropdown__item.selected {
+        color: #319E55;
+    }
     .el-select .el-input.is-focus .el-input__inner {
         border-color: #319E55
     }
@@ -117,7 +117,7 @@
             left: 50%;
         }
 
-        .button {
+        .org-button {
             position: relative;
             left: -50%;
             top: -2rem;
@@ -131,7 +131,7 @@
             background: linear-gradient(to right, #97DB30, #319E55);
         }
 
-        .button:focus {
+        .org-button:focus {
             outline: none;
         }
 

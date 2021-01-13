@@ -254,47 +254,9 @@
                 }
             },
             clearConfigSession() {
-                this.$store.commit('setOrgOption', []);
-                this.$store.commit('setOrgValue', '');
-                this.$store.commit('setOrgChoose', '');
-                this.$store.commit('setRepositoryOptions', []);
-                this.$store.commit('setRepositoryChoose', '');
-                this.$store.commit('setRepositoryValue', '');
-                this.$store.commit('setOrgAlias', '');
-                this.$store.commit('setIndividualLanguage', '');
-                this.$store.commit('setCorpLanguage', '');
-                this.$store.commit('setClaLinkIndividual', '');
-                this.$store.commit('setClaLinkCorp', '');
-                this.$store.commit('setCorpFDName', '');
-                this.$store.commit('setCorpFD', '');
-                this.$store.commit('setIndividualMetadata', this.individualMetadataArr);
-                this.$store.commit('setCorpMetadata', this.corporationMetadataArr);
-                this.$store.commit('setIndividualCustomMetadataArr', this.initIndividualCustomMetadata);
-                this.$store.commit('setCorporationCustomMetadataArr', this.initCorpCustomMetadata);
-                this.$store.commit('setEmail', '');
-                this.$store.commit('setIsEmail', false);
-                this.$store.commit('setChooseRepo', '');
-                this.$store.commit('setChooseOrg', '');
-                sessionStorage.removeItem('orgOptions');
-                sessionStorage.removeItem('orgValue');
-                sessionStorage.removeItem('orgChoose');
-                sessionStorage.removeItem('orgAlias');
-                sessionStorage.removeItem('repositoryOptions');
-                sessionStorage.removeItem('repositoryChoose');
-                sessionStorage.removeItem('repositoryValue');
-                sessionStorage.removeItem('individualLanguage');
-                sessionStorage.removeItem('corpLanguage');
-                sessionStorage.removeItem('claLinkIndividual');
-                sessionStorage.removeItem('claLinkCorp');
-                sessionStorage.removeItem('corpFDName');
-                sessionStorage.removeItem('corpFD');
-                sessionStorage.removeItem('individualMetadata');
-                sessionStorage.removeItem('corporationMetadata');
-                sessionStorage.removeItem('individualCustomMetadataArr');
-                sessionStorage.removeItem('corporationCustomMetadataArr');
-                sessionStorage.removeItem('email');
-                sessionStorage.removeItem('chooseOrg');
-                sessionStorage.removeItem('chooseRepo');
+                until.clearSession(this);
+                this.$store.commit('setCorpItem', '');
+                sessionStorage.removeItem('corpItem');
             },
             configCla() {
                 this.$router.push('/bind-cla')
@@ -346,7 +308,7 @@
                             }
                         }, 20)
                     } else {
-                        this.tableData = res.data.data;
+                        this.tableData = [];
                     }
                 }).catch(err => {
                     if (err.data && err.data.hasOwnProperty('data')) {
@@ -611,6 +573,7 @@
                     url: `${url.unLinkRepository}/${this.unlinkId}`,
                     method: 'delete',
                 }).then(res => {
+                    this.$message.closeAll();
                     this.$message.success('success');
                     this.unLinkDialogVisible = false;
                     this.getLinkedRepoList()

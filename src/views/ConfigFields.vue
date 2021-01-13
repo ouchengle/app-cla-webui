@@ -128,7 +128,9 @@
                                 <el-input disabled="" v-model="item.description" size="medium" readonly></el-input>
                             </el-col>
                             <el-col :span="5" style="height: 100%">
-                                <el-checkbox v-model="item.required" disabled="">required</el-checkbox>
+                                <el-checkbox v-model="item.required" disabled="">
+                                    {{$t('org.config_cla_fields_required')}}
+                                </el-checkbox>
                             </el-col>
                         </el-row>
                     </div>
@@ -211,17 +213,25 @@
                     value: 'fax'
                 },
                 ],
-                individualMetadataArr: [{
-                    title: 'Name',
-                    type: 'name',
-                    description: 'your name',
-                    required: true,
-                }, {
-                    title: 'E-Mail',
-                    type: 'email',
-                    description: 'your email',
-                    required: true,
-                },],
+                individualMetadataArr: [
+                    {
+                        title: 'ID',
+                        type: 'platform_id',
+                        description: 'The ID of your authorized account',
+                        required: true,
+                    },
+                    {
+                        title: 'E-Mail',
+                        type: 'email',
+                        description: 'The email of your authorized account',
+                        required: true,
+                    },
+                    {
+                        title: 'Name',
+                        type: 'name',
+                        description: 'your name',
+                        required: true,
+                    },],
                 corporationMetadataArr: [
                     {
                         title: 'Authorized Representative',
@@ -271,17 +281,24 @@
         methods: {
             init() {
                 if (this.$store.state.individualLanguage === 'chinese') {
-                    this.individualMetadataArr = [{
-                        title: '姓名',
-                        type: 'name',
-                        description: '你的姓名',
-                        required: true,
-                    }, {
-                        title: '邮箱',
-                        type: 'email',
-                        description: '你的邮箱',
-                        required: true,
-                    },]
+                    this.individualMetadataArr = [
+                        {
+                            title: `ID`,
+                            type: 'platform_id',
+                            description: '授权账号的ID',
+                            required: true,
+                        }, {
+                            title: '邮箱',
+                            type: 'email',
+                            description: '授权账号的邮箱',
+                            required: true,
+                        },
+                        {
+                            title: '姓名',
+                            type: 'name',
+                            description: '你的姓名',
+                            required: true,
+                        },]
                 }
                 if (this.$store.state.corpLanguage === 'chinese') {
                     this.corporationMetadataArr = [
@@ -352,7 +369,6 @@
                     }
                 });
                 let individualArr = this.individualMetadataArr.concat(individualMetadata);
-                console.log('individualArr===', individualArr);
                 let corpArr = this.corporationMetadataArr.concat(corpMetadata);
                 for (let i = 0; i < individualArr.length; i++) {
                     for (let j = i + 1; j < individualArr.length; j++) {
@@ -383,40 +399,6 @@
                 this.individualMetadata = individualMetadata;
                 this.corpMetadata = corpMetadata;
                 return {individualArr, corpArr};
-            },
-            editMetadata() {
-                let metadataArr = this.checkMetadata();
-                if (metadataArr) {
-                    let individualArr = metadataArr.individualArr;
-                    let corpArr = metadataArr.corpArr;
-                    let individualFields = [];
-                    let corpFields = [];
-                    individualArr.forEach((item, index) => {
-                        if (item.title !== '' && item.type !== '') {
-                            individualFields.push({
-                                id: index + '',
-                                title: item.title,
-                                type: item.type,
-                                description: item.description,
-                                required: item.required,
-                            })
-                        }
-                    });
-                    corpArr.forEach((item, index) => {
-                        if (item.title !== '' && item.type !== '') {
-                            corpFields.push({
-                                id: index + '',
-                                title: item.title,
-                                type: item.type,
-                                description: item.description,
-                                required: item.required,
-                            })
-                        }
-                    });
-                    return {individualFields, corpFields}
-                } else {
-                    return false
-                }
             },
             addRow(index) {
                 let metadata = this.individualCustomMetadataArr;
@@ -469,57 +451,6 @@
 
 <style lang="less">
     #configFields {
-        .el-checkbox__input.is-disabled .el-checkbox__inner, .el-checkbox__input.is-disabled .el-checkbox__inner::after {
-            cursor: default;
-        }
-
-        .el-checkbox__input.is-disabled + span.el-checkbox__label {
-            cursor: default;
-            color: #C0C4CC;
-        }
-
-        .el-checkbox__label {
-            display: inline-grid;
-            white-space: pre-line;
-            font-size: 1.2rem;
-        }
-
-        .el-checkbox__input.is-checked + .el-checkbox__label {
-            display: inline-grid;
-            white-space: pre-line;
-            color: #606266;
-            font-size: 1.2rem;
-        }
-
-        .el-checkbox__input.is-checked .el-checkbox__inner, .el-checkbox__input.is-indeterminate .el-checkbox__inner {
-            background-color: #3EA650;
-            border-color: #3EA650;
-        }
-
-        .el-checkbox__input.is-focus .el-checkbox__inner {
-            border-color: #3EA650;
-        }
-
-        .el-checkbox__inner {
-            border: 1px solid #3EA650;
-            width: 20px;
-            height: 20px;
-        }
-
-        .el-checkbox__inner:hover {
-            border: 1px solid #3EA650;
-        }
-
-        .el-checkbox__inner:focus {
-            border: 1px solid #3EA650;
-        }
-
-        .el-checkbox__inner:after {
-            height: 10px;
-            left: 7px;
-            top: 2px
-        }
-
         .deleteBt {
             width: 3rem;
             height: 3rem;

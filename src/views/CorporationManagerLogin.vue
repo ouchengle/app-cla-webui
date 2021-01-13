@@ -146,6 +146,7 @@
                         })
                     }
                 }).catch(err => {
+                    console.log(err);
                     if (err.data&&err.data.hasOwnProperty('data')) {
                         switch (err.data.data.error_code) {
                             case 'cla.invalid_token':
@@ -172,7 +173,12 @@
                                     dialogMessage: this.$t('tips.id_pwd_err'),
                                 });
                                 break;
-
+                            case 'cla.wrong_id_or_pw':
+                                this.$store.commit('errorCodeSet', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.id_pwd_err'),
+                                });
+                                break;
                             case 'cla.system_error':
                                 this.$store.commit('errorCodeSet', {
                                     dialogVisible: true,
@@ -187,6 +193,7 @@
                                 break;
                         }
                     } else {
+                        console.log('else');
                         this.$store.commit('errorCodeSet', {
                             dialogVisible: true,
                             dialogMessage: this.$t('tips.system_error'),
