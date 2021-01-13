@@ -727,7 +727,7 @@
                             }],
                         })
                     }
-                })
+                });
                 Object.assign(form, {code: ''});
                 Object.assign(this.myForm, {code: ''});
                 Object.assign(rules, {
@@ -803,6 +803,12 @@
                                     dialogMessage: this.$t('tips.has_signed'),
                                 });
                                 break;
+                            case 'cla.resigned':
+                                this.$store.commit('setSignReLogin', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.has_signed'),
+                                });
+                                break;
                             case 'cla.invalid_parameter':
                                 this.$store.commit('setSignReLogin', {
                                     dialogVisible: true,
@@ -839,6 +845,12 @@
                                     dialogMessage: this.$t('tips.no_corp_manager'),
                                 });
                                 break;
+                            case 'cla.no_employee_manager':
+                                this.$store.commit('setSignReLogin', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.no_corp_manager'),
+                                });
+                                break;
                             case 'cla.has_not_signed':
                                 this.$store.commit('setSignReLogin', {
                                     dialogVisible: true,
@@ -863,7 +875,6 @@
                                     dialogMessage: this.$t('tips.expired_verification_code'),
                                 });
                                 break;
-
                             case 'cla.not_same_corp':
                                 this.$store.commit('errorCodeSet', {
                                     dialogVisible: true,
@@ -1056,9 +1067,11 @@
             border: 1px solid #F3F3F3;
             font-size: 1.2rem;
         }
+
         .el-input__inner:focus {
             border-color: #319E55
         }
+
         & .el-form-item {
             margin-bottom: 28px
         }

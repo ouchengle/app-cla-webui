@@ -229,7 +229,9 @@
                                 <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">
                                     {{$t('org.upload')}}
                                 </el-button>
-                                <div slot="tip" class="el-upload__tip">{{$t('org.signature_file_size',{max_size_m:this.file_size})}}</div>
+                                <div slot="tip" class="el-upload__tip">
+                                    {{$t('org.signature_file_size',{max_size_m:this.file_size})}}
+                                </div>
                             </el-upload>
                         </el-form-item>
                     </el-form>
@@ -289,7 +291,7 @@
         },
         data() {
             return {
-                file_size:SIGNATURE_FILE_MAX_SIZE,
+                file_size: SIGNATURE_FILE_MAX_SIZE,
                 uploadLoading: false,
                 individualClaData: [],
                 corpClaData: [],
@@ -833,13 +835,16 @@
                 this.$message.warning(this.$t('org.file_limit_tips'));
             },
             beforeRemove(file, fileList) {
-                return this.$confirm(this.$t('org.remove_file_tips',{fileName:file.name}),{cancelButtonText:this.$t('org.cancel_remove'),confirmButtonText:this.$t('org.confirm_remove')});
+                return this.$confirm(this.$t('org.remove_file_tips', {fileName: file.name}), {
+                    cancelButtonText: this.$t('org.cancel_remove'),
+                    confirmButtonText: this.$t('org.confirm_remove')
+                });
             },
             openResendPdf(email) {
                 this.resendEmail = email;
                 this.resendEmailDialogVisible = true;
             },
-            openSuccessMessage(){
+            openSuccessMessage() {
                 this.$message.closeAll();
                 this.$message.success(this.$t('org.success'));
             },
@@ -935,6 +940,12 @@
                                 });
                                 break;
                             case 'cla.no_pdf_of_corp':
+                                this.$store.commit('errorCodeSet', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.no_pdf_of_corp'),
+                                });
+                                break;
+                            case 'cla.unuploaded':
                                 this.$store.commit('errorCodeSet', {
                                     dialogVisible: true,
                                     dialogMessage: this.$t('tips.no_pdf_of_corp'),
