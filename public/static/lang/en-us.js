@@ -35,6 +35,7 @@ module.exports = {
         checkBoxText2: "and hereby consent to the processing of my data by",
         claSignPlatform: " CLA signing platform ",
         checkBoxText3: "in Hong Kong.",
+        verifyCode:'Verify Code',
         sendCode: 'send code',
         reSendCode: '{second}s can resend',
         sign: 'SIGN',

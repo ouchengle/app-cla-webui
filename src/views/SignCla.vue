@@ -27,7 +27,7 @@
                                 </el-form-item>
                                 <el-form-item
                                         v-if="rules.code&&(loginType==='corporation'||loginType==='employee')"
-                                        label="Verify Code"
+                                        :label="$t('signPage.verifyCode')"
                                         :required="rules.code[0].required"
                                         prop="code">
 

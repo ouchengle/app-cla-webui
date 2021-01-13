@@ -35,6 +35,7 @@ module.exports = {
         checkBoxText2: "，并同意在香港通过",
         claSignPlatform: "CLA签署平台",
         checkBoxText3: "处理我的数据",
+        verifyCode:'验证码',
         sendCode: '发送验证码',
         reSendCode: '{second}秒重发',
         sign: '签 署',

@@ -323,7 +323,7 @@
                 let formData = new FormData();
                 if (this.$store.state.corpFD) {
                     corp_pdf = this.dataURLtoFile(this.$store.state.corpFD, this.corpFileName);
-                    formData.append('org_signature_file', corp_pdf);
+                    formData.append(ORG_SIGNATURE_FILE, corp_pdf);
                 }
                 let obj = {};
                 let corpCla = {};
