@@ -111,7 +111,7 @@
                                         <svg-icon icon-class="operation"></svg-icon>
                                     </span>
                                     <el-dropdown-menu slot="dropdown">
-                                        <el-dropdown-item>{{$t('org.modify_field')}}</el-dropdown-item>
+                                        <!--<el-dropdown-item>{{$t('org.modify_field')}}</el-dropdown-item>-->
                                         <el-dropdown-item @click.native="addIndividualCla(scope.row)">
                                             {{$t('org.add_cla_for_other_language')}}
                                         </el-dropdown-item>
@@ -173,9 +173,9 @@
                                         <svg-icon icon-class="operation"></svg-icon>
                                     </span>
                                     <el-dropdown-menu slot="dropdown">
-                                        <el-dropdown-item>
-                                            {{$t('org.modify_field')}}
-                                        </el-dropdown-item>
+                                        <!--<el-dropdown-item>-->
+                                            <!--{{$t('org.modify_field')}}-->
+                                        <!--</el-dropdown-item>-->
                                         <el-dropdown-item @click.native="addCorpCla(scope.row)">
                                             {{$t('org.add_cla_for_other_language')}}
                                         </el-dropdown-item>

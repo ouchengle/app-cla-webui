@@ -67,4 +67,15 @@ export const clearSession = (_this) => {
     sessionStorage.removeItem('bindType');
     sessionStorage.removeItem('addLang');
 };
+export const setI18nLang = () => {
+    let lang = localStorage.getItem('lang');
+    if (lang === null) {
+        localStorage.setItem('lang', '0');
+        return 'en-us'
+    } else if (lang === '1') {
+        return 'zh-cn'
+    } else if (lang === '0') {
+        return 'en-us'
+    }
+};
 

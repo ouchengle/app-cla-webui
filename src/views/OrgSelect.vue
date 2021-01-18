@@ -28,7 +28,7 @@
                     </el-row>
                     <div class="marginTop buttonRow">
                             <div class="buttonBox">
-                                <button class="org-button" @click="submit">
+                                <button style="height: 4rem" class="org-button" @click="submit">
                                     {{$t('corp.submit')}}
                                 </button>
                             </div>
@@ -110,30 +110,32 @@
 
         .buttonRow {
             position: relative;
+            .buttonBox {
+                position: absolute;
+                left: 50%;
+                .org-button {
+                    position: relative;
+                    left: -50%;
+                    top: -2rem;
+                    width: 15rem;
+                    height: 4rem;
+                    border-radius: 2rem;
+                    border: none;
+                    color: white;
+                    font-size: 1.5rem;
+                    cursor: pointer;
+                    background: linear-gradient(to right, #97DB30, #319E55);
+                }
+
+                .org-button:focus {
+                    outline: none;
+                }
+            }
         }
 
-        .buttonBox {
-            position: absolute;
-            left: 50%;
-        }
 
-        .org-button {
-            position: relative;
-            left: -50%;
-            top: -2rem;
-            width: 15rem;
-            height: 4rem;
-            border-radius: 2rem;
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-            background: linear-gradient(to right, #97DB30, #319E55);
-        }
 
-        .org-button:focus {
-            outline: none;
-        }
+
 
         .formBack_Box {
             width: 100%;
