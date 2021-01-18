@@ -21,17 +21,16 @@
                                         :key="item.value"
                                         :value="item.value"
                                         :label="item.label">
-
                                 </el-option>
                             </el-select>
                         </el-col>
                     </el-row>
                     <div class="marginTop buttonRow">
-                            <div class="buttonBox">
-                                <button style="height: 4rem" class="org-button" @click="submit">
-                                    {{$t('corp.submit')}}
-                                </button>
-                            </div>
+                        <div class="buttonBox">
+                            <button class="org-button" @click="submit">
+                                {{$t('corp.submit')}}
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -46,7 +45,7 @@
         name: "OrgSelect",
         computed: {
             orgData() {
-                let data = []
+                let data = [];
                 if (this.$store.state.loginInfo.userInfo.length) {
                     this.$store.state.loginInfo.userInfo.forEach((item, index) => {
                         if (item.repo_id) {
@@ -68,11 +67,12 @@
         methods: {
             ...mapActions(['setLoginInfoAct', 'setCorpTokenAct']),
             changeOrg(value) {
+                this.orgValue = value;
             },
             submit() {
-                let data = JSON.parse(JSON.stringify(this.$store.state.loginInfo))
-                Object.assign(data, {orgValue: this.orgValue})
-                this.setCorpTokenAct(data.userInfo[this.orgValue].token)
+                let data = JSON.parse(JSON.stringify(this.$store.state.loginInfo));
+                Object.assign(data, {orgValue: this.orgValue});
+                this.setCorpTokenAct(data.userInfo[this.orgValue].token);
                 this.setLoginInfoAct(data);
                 if (data.userInfo[this.orgValue].role === 'admin') {
                     this.$router.push('/rootManager')
@@ -88,6 +88,7 @@
     .el-select-dropdown__item.selected {
         color: #319E55;
     }
+
     .el-select .el-input.is-focus .el-input__inner {
         border-color: #319E55
     }
@@ -110,9 +111,12 @@
 
         .buttonRow {
             position: relative;
+
             .buttonBox {
+                height: 4rem;
                 position: absolute;
                 left: 50%;
+
                 .org-button {
                     position: relative;
                     left: -50%;
@@ -132,9 +136,6 @@
                 }
             }
         }
-
-
-
 
 
         .formBack_Box {
