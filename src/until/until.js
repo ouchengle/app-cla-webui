@@ -34,8 +34,8 @@ export const clearSession = (_this) => {
     _this.$store.commit('setClaLinkCorp', '');
     _this.$store.commit('setCorpFDName', '');
     _this.$store.commit('setCorpFD', '');
-    _this.$store.commit('setIndividualMetadata', INDIVIDUALMETADATAARR);
-    _this.$store.commit('setCorpMetadata', CORPORATIONMETADATAARR);
+    _this.$store.commit('setIndividualMetadata', INDIVIDUALMETADATAARR_EN);
+    _this.$store.commit('setCorpMetadata', CORPORATIONMETADATAARR_EN);
     _this.$store.commit('setIndividualCustomMetadataArr', INITINDIVIDUALCUSTOMMETADATA);
     _this.$store.commit('setCorporationCustomMetadataArr', INITCORPCUSTOMMETADATA);
     _this.$store.commit('setEmail', '');
@@ -77,5 +77,11 @@ export const setI18nLang = () => {
     } else if (lang === '0') {
         return 'en-us'
     }
+};
+export const initialsToUpperCase = (string) => {
+    let initials = string.slice(0, 1);
+    let upper = initials.toUpperCase();
+    return upper + string.slice(1)
+
 };
 

@@ -281,6 +281,9 @@
             ReLoginDialog,
         },
         computed: {
+            platform(){
+              return this.$store.state.platform.toLowerCase()
+            } ,
             reLoginDialogVisible() {
                 return this.$store.state.orgReLoginDialogVisible
             },
@@ -308,7 +311,6 @@
                 uploadUrl: '',
                 access_token: this.$store.state.access_token,
                 refresh_token: this.$store.state.refresh_token,
-                platform: this.$store.state.platform,
                 user: {
                     userName: this.$store.state.user.userName,
                     userId: this.$store.state.user.userId,

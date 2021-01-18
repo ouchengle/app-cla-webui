@@ -3,9 +3,9 @@ const SIGNATURE_FILE_MAX_SIZE = 2;
 const SIGNATURE_PAGE_NAME = 'signature_page';
 const ORG_SIGNATURE_FILE = 'org_signature_file';
 const COPYRIGHT = 'Copyright ©2020 claSign';
-const INDIVIDUALMETADATAARR = [
+const INDIVIDUALMETADATAARR_EN = [
     {
-        title: `ID`,
+        title: `${sessionStorage.getItem('platform')}-ID`,
         type: 'platform_id',
         description: 'The ID of your authorized account',
         required: true,
@@ -22,7 +22,25 @@ const INDIVIDUALMETADATAARR = [
         description: 'your name',
         required: true,
     },];
-const CORPORATIONMETADATAARR = [
+const INDIVIDUALMETADATAARR_ZH = [
+    {
+        title: `${sessionStorage.getItem('platform')}-ID`,
+        type: 'platform_id',
+        description: '授权账号的ID',
+        required: true,
+    }, {
+        title: '邮箱',
+        type: 'email',
+        description: '授权账号的邮箱',
+        required: true,
+    },
+    {
+        title: '姓名',
+        type: 'name',
+        description: '你的姓名',
+        required: true,
+    },];
+const CORPORATIONMETADATAARR_EN = [
     {
         title: 'Authorized Representative',
         type: 'authorized',
@@ -48,6 +66,31 @@ const CORPORATIONMETADATAARR = [
         description: 'corporation email',
         required: true,
     },];
+const CORPORATIONMETADATAARR_ZH =  [
+    {
+        title: '授权代表',
+        type: 'authorized',
+        description: '授权代表的姓名',
+        required: true,
+    },
+    {
+        title: '职位',
+        type: 'title',
+        description: '授权代表的职位',
+        required: true,
+    },
+    {
+        title: '公司名称',
+        type: 'corporationName',
+        description: '签署者所在公司名称',
+        required: true,
+    },
+    {
+        title: '邮箱',
+        type: 'email',
+        description: '签署者所在公司的邮箱',
+        required: true,
+    },];
 const INITINDIVIDUALCUSTOMMETADATA = [{
     title: '',
     type: '',
@@ -60,3 +103,17 @@ const INITCORPCUSTOMMETADATA = [{
     description: '',
     required: false,
 }];
+const DATATYPEOPTIONS = [
+    {label: 'name', value: 'name'}, {
+    label: 'corporationName',
+    value: 'corporationName'
+}, {label: 'date', value: 'date'}, {
+    label: 'telephone',
+    value: 'telephone'
+}, {label: 'address', value: 'address'}, {label: 'email', value: 'email'}, {
+    label: 'fax',
+    value: 'fax'
+},
+];
+const EMAIL_UNAUTHORIZE = 'email_is_unauthorized';
+const SYSTEM_ERROR = 'system_error';

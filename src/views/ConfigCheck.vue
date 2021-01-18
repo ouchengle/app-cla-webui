@@ -276,11 +276,13 @@
             corp_pdf_name() {
                 return this.$store.state.corpFDName
             },
+            platform(){
+               return this.$store.state.platform.toLowerCase()
+            },
         },
         data() {
             return {
                 corpFileName: SIGNATURE_PAGE_NAME,
-                platform: this.$store.state.platform,
                 isVerify: false,
                 previewShow: false,
                 loginType: this.$store.state.loginType,

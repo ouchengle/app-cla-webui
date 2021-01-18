@@ -325,7 +325,10 @@ export default new Vuex.Store({
             commit('setLoginType', loginType)
         },
         setPlatformAct({commit}, platform) {
-            commit('setPlatform', platform)
+            let initials = platform.substring(0, 1);
+            let upper = initials.toUpperCase();
+            let end  = platform.substring(1);
+            commit('setPlatform', upper + end)
         },
         setTokenAct({commit}, data) {
             commit('setToken', data);

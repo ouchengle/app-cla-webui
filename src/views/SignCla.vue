@@ -444,12 +444,12 @@
                         }
                         this.$cookie.remove(name, {path: '/'});
                     });
-                    if (error_code === 'unauthorized') {
+                    if (error_code === EMAIL_UNAUTHORIZE) {
                         this.$store.commit('setSignReLogin', {
                             dialogVisible: true,
                             dialogMessage: this.$t('tips.not_authorize_email'),
                         });
-                    } else if (error_code === 'system_error') {
+                    } else if (error_code === SYSTEM_ERROR) {
                         this.$store.commit('setSignReLogin', {
                             dialogVisible: true,
                             dialogMessage: this.$t('tips.not_commit_email'),
@@ -779,7 +779,7 @@
                 if (this.$store.state.loginType === 'individual') {
                     myUrl = `${url.individual_signing}/${this.link_id}/${this.cla_lang}/${this.cla_hash}`;
                     obj = {
-                        id:this.myForm.sign_id,
+                        id: this.myForm.sign_id,
                         name: this.myForm.name,
                         email: this.myForm.email,
                         info: info,
@@ -797,7 +797,7 @@
                 } else if (this.$store.state.loginType === 'employee') {
                     myUrl = `${url.employee_signing}/${this.link_id}/${this.cla_lang}/${this.cla_hash}`;
                     obj = {
-                        id:this.myForm.sign_id,
+                        id: this.myForm.sign_id,
                         name: this.myForm.name,
                         email: this.myForm.email,
                         verification_code: this.ruleForm.code,

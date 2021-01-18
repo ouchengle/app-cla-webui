@@ -227,49 +227,9 @@
                 corpMetadata: [],
                 max_size: SIGNATURE_PAGE_MAX_SIZE,
                 corp_pdf_name: '',
-                dataTypeOptions: [{label: 'name', value: 'name'}, {
-                    label: 'corporationName',
-                    value: 'corporationName'
-                }, {label: 'date', value: 'date'}, {
-                    label: 'telephone',
-                    value: 'telephone'
-                }, {label: 'address', value: 'address'}, {label: 'email', value: 'email'}, {
-                    label: 'fax',
-                    value: 'fax'
-                },
-                ],
+                dataTypeOptions: DATATYPEOPTIONS,
                 languageOptions: [{value: 'english', label: 'English'}, {value: 'chinese', label: '中文'}],
-                corporationMetadataArr: [
-                    {
-                        title: 'Authorized Representative',
-                        type: 'authorized',
-                        description: 'name of Authorized Representative',
-                        required: true,
-                    },
-                    {
-                        title: 'Title',
-                        type: 'title',
-                        description: 'title of Authorized Representative',
-                        required: true,
-                    },
-                    {
-                        title: 'Corporation Name',
-                        type: 'corporationName',
-                        description: 'corporation name',
-                        required: true,
-                    },
-                    {
-                        title: 'E-Mail',
-                        type: 'email',
-                        description: 'corporation email',
-                        required: true,
-                    },],
-                initCorpCustomMetadata: [{
-                    title: '',
-                    type: '',
-                    description: '',
-                    required: false,
-                }],
+                corporationMetadataArr: CORPORATIONMETADATAARR_EN,
             }
         },
         methods: {
@@ -373,57 +333,9 @@
             },
             initMetadata(lang) {
                 if (lang === 'chinese') {
-                    this.corporationMetadataArr = [
-                        {
-                            title: '授权代表',
-                            type: 'authorized',
-                            description: '授权代表的姓名',
-                            required: true,
-                        },
-                        {
-                            title: '职位',
-                            type: 'title',
-                            description: '授权代表的职位',
-                            required: true,
-                        },
-                        {
-                            title: '公司名称',
-                            type: 'corporationName',
-                            description: '公司名称',
-                            required: true,
-                        },
-                        {
-                            title: '邮箱',
-                            type: 'email',
-                            description: '公司邮箱',
-                            required: true,
-                        },]
+                    this.corporationMetadataArr = CORPORATIONMETADATAARR_ZH
                 } else if (lang === 'english') {
-                    this.corporationMetadataArr = [
-                        {
-                            title: 'Authorized Representative',
-                            type: 'authorized',
-                            description: 'name of Authorized Representative',
-                            required: true,
-                        },
-                        {
-                            title: 'Title',
-                            type: 'title',
-                            description: 'title of Authorized Representative',
-                            required: true,
-                        },
-                        {
-                            title: 'Corporation Name',
-                            type: 'corporationName',
-                            description: 'corporation name',
-                            required: true,
-                        },
-                        {
-                            title: 'E-Mail',
-                            type: 'email',
-                            description: 'corporation email',
-                            required: true,
-                        },]
+                    this.corporationMetadataArr = CORPORATIONMETADATAARR_EN
                 }
             },
             init() {

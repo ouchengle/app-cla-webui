@@ -197,45 +197,18 @@
         data() {
             return {
                 individualMetadata: [],
-                dataTypeOptions: [{label: 'name', value: 'name'}, {
-                    label: 'corporationName',
-                    value: 'corporationName'
-                }, {label: 'date', value: 'date'}, {
-                    label: 'telephone',
-                    value: 'telephone'
-                }, {label: 'address', value: 'address'}, {label: 'email', value: 'email'}, {
-                    label: 'fax',
-                    value: 'fax'
-                },
-                ],
+                dataTypeOptions: DATATYPEOPTIONS,
                 languageOptions: [{value: 'english', label: 'English'}, {value: 'chinese', label: '中文'}],
-                individualMetadataArr: INDIVIDUALMETADATAARR,
+                individualMetadataArr: INDIVIDUALMETADATAARR_EN,
                 initIndividualCustomMetadata: INITINDIVIDUALCUSTOMMETADATA,
             }
         },
         methods: {
             initMetadata(lang) {
                 if (lang === 'chinese') {
-                    this.individualMetadataArr = [
-                        {
-                            title: `ID`,
-                            type: 'platform_id',
-                            description: '授权账号的ID',
-                            required: true,
-                        }, {
-                            title: '邮箱',
-                            type: 'email',
-                            description: '你的邮箱',
-                            required: true,
-                        },
-                        {
-                            title: '姓名',
-                            type: 'name',
-                            description: '你的姓名',
-                            required: true,
-                        },]
+                    this.individualMetadataArr = INDIVIDUALMETADATAARR_ZH
                 } else if (lang === 'english') {
-                    this.individualMetadataArr = INDIVIDUALMETADATAARR
+                    this.individualMetadataArr = INDIVIDUALMETADATAARR_EN
                 }
             },
             init() {
