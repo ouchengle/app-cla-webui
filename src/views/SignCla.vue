@@ -16,7 +16,8 @@
                                               :label="item.title"
                                               :required="item.required"
                                               :prop="item.id">
-                                    <el-input v-if="item.type==='email'" :placeholder="$t('signPage.holder',{title:item.title})"
+                                    <el-input v-if="item.type==='email'"
+                                              :placeholder="$t('signPage.holder',{title:item.title})"
                                               :readonly="loginType!=='corporation'" v-model="ruleForm[item.id]"
                                               size="small" @blur="setMyForm(item.type,ruleForm[item.id])"></el-input>
                                     <el-input v-else-if="item.type==='platform_id'"
@@ -25,7 +26,8 @@
                                               size="small" @blur="setMyForm(item.type,ruleForm[item.id])"></el-input>
                                     <el-input v-else-if="item.type==='date'" readonly="" v-model="ruleForm[item.id]"
                                               size="small" @blur="setMyForm(item.type,ruleForm[item.id])"></el-input>
-                                    <el-input v-else v-model="ruleForm[item.id]" :placeholder="$t('signPage.holder',{title:item.title})" size="small"
+                                    <el-input v-else v-model="ruleForm[item.id]"
+                                              :placeholder="$t('signPage.holder',{title:item.title})" size="small"
                                               @blur="setMyForm(item.type,ruleForm[item.id])"></el-input>
                                 </el-form-item>
                                 <el-form-item
@@ -826,9 +828,15 @@
                     if (err.data && err.data.hasOwnProperty('data')) {
                         switch (err.data.data.error_code) {
                             case 'cla.resigned':
+                                let message = '';
+                                if (this.$store.state.loginType === 'corporation') {
+                                    message = this.$t('tips.corp_has_signed');
+                                } else {
+                                    message = this.$t('tips.has_signed')
+                                }
                                 this.$store.commit('setSignReLogin', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.has_signed'),
+                                    dialogMessage: message,
                                 });
                                 break;
                             case 'cla.invalid_parameter':

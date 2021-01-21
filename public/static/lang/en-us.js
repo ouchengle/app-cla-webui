@@ -50,6 +50,7 @@ module.exports = {
         no_cla_binding_emp: 'There is no CLA to sign for employee.',
         no_cla_binding_individual: 'There is no CLA to sign for individual.',
         has_signed: 'You have signed this CLA before.',
+        corp_has_signed:'The corporation has  signed this CLA before.',
         invalid_parameter: 'The parameter is invalid and cannot be signed',
         no_corp_manager: 'Your company has not added any managers for this project.You can\'t sign',
         has_not_signed: 'Your corporation has not signed.',

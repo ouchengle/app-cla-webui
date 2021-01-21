@@ -50,6 +50,7 @@ module.exports = {
         no_cla_binding_emp: '该组织没有可用的员工贡献者许可协议',
         no_cla_binding_individual: '该组织没有可用的个人贡献者许可协议',
         has_signed: '您已签署过这份贡献者许可协议',
+        corp_has_signed:'该企业已经签署过这份贡献者许可协议',
         invalid_parameter: '参数无效，无法签署',
         no_corp_manager: '该公司尚未添加任何管理员。你无法签署',
         has_not_signed: '该公司尚未签署',
