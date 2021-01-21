@@ -446,17 +446,6 @@
                         }
                         this.$cookie.remove(name, {path: '/'});
                     });
-                    if (error_code === EMAIL_UNAUTHORIZE) {
-                        this.$store.commit('setSignReLogin', {
-                            dialogVisible: true,
-                            dialogMessage: this.$t('tips.not_authorize_email'),
-                        });
-                    } else if (error_code === SYSTEM_ERROR) {
-                        this.$store.commit('setSignReLogin', {
-                            dialogVisible: true,
-                            dialogMessage: this.$t('tips.not_commit_email'),
-                        });
-                    }
                     let data = {access_token, refresh_token, platform_token, resolve};
                     this.$store.commit('setSignToken', data);
                 } else {
@@ -465,33 +454,49 @@
             },
             setData(res, resolve) {
                 if (res && res.data.data) {
-                    let data = res.data.data;
-                    this.signPageData = data.clas;
-                    this.languageOptions = [];
-                    this.link_id = data.link_id;
-                    if (localStorage.getItem('lang') === '0') {
-                        this.lang = 'english'
-                    } else if (localStorage.getItem('lang') === '1') {
-                        this.lang = 'chinese'
-                    }
-                    this.signPageData.forEach((item, index) => {
-                        if (item.language === this.lang) {
-                            this.cla_lang = item.language;
-                            this.value = index;
-                            this.cla_hash = item.cla_hash;
-                            this.setClaText(index);
-                            resolve('complete')
+                    if (res.data.data.clas) {
+                        this.signPageData = res.data.data.clas;
+                        this.languageOptions = [];
+                        this.link_id = res.data.data.link_id;
+                        if (localStorage.getItem('lang') === '0') {
+                            this.lang = 'english'
+                        } else if (localStorage.getItem('lang') === '1') {
+                            this.lang = 'chinese'
                         }
-                        this.languageOptions.push({value: index, label: item.language})
-                    });
-                    if (!this.cla_lang) {
-                        document.getElementById('claBox').innerHTML = '';
-                        this.ruleForm = {};
-                        this.rules = {};
-                        this.fields = [];
-                        this.$message.closeAll();
-                        this.$message.error({message: this.$t('tips.no_lang', {language: this.lang}), duration: 8000})
+                        this.signPageData.forEach((item, index) => {
+                            if (item.language === this.lang) {
+                                this.cla_lang = item.language;
+                                this.value = index;
+                                this.cla_hash = item.cla_hash;
+                                this.setClaText(index);
+                                resolve('complete')
+                            }
+                            this.languageOptions.push({value: index, label: item.language})
+                        });
+                        if (!this.cla_lang) {
+                            document.getElementById('claBox').innerHTML = '';
+                            this.ruleForm = {};
+                            this.rules = {};
+                            this.fields = [];
+                            this.$message.closeAll();
+                            this.$message.error({message: this.$t('tips.no_lang', {language: this.lang}), duration: 8000})
+                        }
+                    }else{
+                        let message = '';
+                        if (this.$store.state.loginType === 'corporation') {
+                            message = this.$t('tips.no_cla_binding_corp')
+                        } else if (this.$store.state.loginType === 'employee') {
+                            message = this.$t('tips.no_cla_binding_emp')
+                        }
+                        if (this.$store.state.loginType === 'individual') {
+                            message = this.$t('tips.no_cla_binding_individual')
+                        }
+                        this.$store.commit('setSignReLogin', {
+                            dialogVisible: true,
+                            dialogMessage: message,
+                        });
                     }
+
                 }
             },
             getSignPage(resolve) {

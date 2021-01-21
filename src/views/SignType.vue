@@ -872,7 +872,7 @@
                                 case 'auth_failed':
                                     this.$store.commit('errorCodeSet', {
                                         dialogVisible: true,
-                                        dialogMessage: this.$t('tips.not_authorize_email'),
+                                        dialogMessage: this.$t('tips.refuse_authorize',{platform:this.$store.state.repoInfo.platform}),
                                     });
                                     break;
                                 case EMAIL_UNAUTHORIZE:
@@ -881,10 +881,16 @@
                                         dialogMessage: this.$t('tips.not_authorize_email'),
                                     });
                                     break;
+                                case NO_PUBLIC_EMAIL:
+                                    this.$store.commit('errorCodeSet', {
+                                        dialogVisible: true,
+                                        dialogMessage: this.$t('tips.no_public_email',{platform:this.$store.state.repoInfo.platform}),
+                                    });
+                                    break;
                                 case SYSTEM_ERROR:
                                     this.$store.commit('errorCodeSet', {
                                         dialogVisible: true,
-                                        dialogMessage: this.$t('tips.not_commit_email', {platform: this.$store.state.repoInfo.platform}),
+                                        dialogMessage: this.$t('tips.system_error'),
                                     });
                                     break;
                             }
