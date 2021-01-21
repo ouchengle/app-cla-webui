@@ -490,7 +490,7 @@
                         this.rules = {};
                         this.fields = [];
                         this.$message.closeAll();
-                        this.$message.error(this.$t('tips.no_lang', {language: this.lang}))
+                        this.$message.error({message: this.$t('tips.no_lang', {language: this.lang}), duration: 8000})
                     }
                 }
             },
