@@ -192,7 +192,7 @@ module.exports = {
         individual_cla: 'Individual CLA',
         toLanguage: 'Language',
         modify_field: 'Modify field',
-        add_cla_for_other_language: 'Add cla for other language',
+        add_cla_for_other_language: 'Add CLA for other language',
         corporation_cla: 'Corporation CLA',
         signature: 'Signature',
         download: 'download',

@@ -193,7 +193,7 @@ module.exports = {
         individual_cla: '个人CLA',
         toLanguage: '语言',
         modify_field: '调整字段',
-        add_cla_for_other_language: '添加其他语言的签名页',
+        add_cla_for_other_language: '添加其他语言的CLA',
         corporation_cla: '企业CLA',
         signature: '签名页',
         download: '下载',
