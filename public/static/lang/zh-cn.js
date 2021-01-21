@@ -118,6 +118,7 @@ module.exports = {
         unmatched_user_id:'签署的ID与授权账号ID不相同',
         no_link:'不存在的link_id',
         unmatched_cla:'当前的CLA不是最新的CLA，请刷新页面后重试',
+        link_exists:'该社区已经存在绑定信息',
     },
     header: {
         home: '首页',

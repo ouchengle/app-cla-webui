@@ -118,6 +118,7 @@ module.exports = {
         unmatched_user_id:'The signed ID is not the same as the authorized account ID',
         no_link:'the link id is not exists',
         unmatched_cla:'The current CLA is not the latest CLA, please refresh the page and try again',
+        link_exists:'Binding information already exists in this community',
     },
     header: {
         home: 'Home',
