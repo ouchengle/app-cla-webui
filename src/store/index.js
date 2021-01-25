@@ -42,6 +42,7 @@ export default new Vuex.Store({
             userEmail: sessionStorage.getItem('userEmail') || undefined,
         },
         dialogVisible: false,
+        emailErrVisible: false,
         dialogMessage: '',
         reTryDialogVisible: false,
         signSuccessDialogVisible: false,
@@ -71,6 +72,9 @@ export default new Vuex.Store({
         addLang: sessionStorage.getItem('addLang') || undefined,
     },
     mutations: {
+        setEmailErr(state, data) {
+            state.emailErrVisible = data;
+        },
         setAddLang(state, data) {
             state.addLang = data;
             sessionStorage.setItem('addLang', data);

@@ -580,12 +580,6 @@
                                     dialogMessage: this.$t('tips.uncompleted_signing'),
                                 });
                                 break;
-                            case 'cla.no_link':
-                                this.$store.commit('setSignReLogin', {
-                                    dialogVisible: true,
-                                    dialogMessage: this.$t('tips.no_link'),
-                                });
-                                break;
                             case 'cla.unknown_email_platform':
                                 this.$store.commit('errorCodeSet', {
                                     dialogVisible: true,
@@ -929,7 +923,7 @@
                                 });
                                 break;
                             case 'cla.no_link':
-                                this.$store.commit('errorCodeSet', {
+                                this.$store.commit('setSignReLogin', {
                                     dialogVisible: true,
                                     dialogMessage: this.$t('tips.no_link'),
                                 });

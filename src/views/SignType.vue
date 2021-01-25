@@ -735,6 +735,7 @@
         </div>
         <NewFooter></NewFooter>
         <ReTryDialog :dialogVisible="reTryDialogVisible" :message="reLoginMsg"></ReTryDialog>
+        <EmailReTryDialog :dialogVisible="emailReTryDialogVisible"></EmailReTryDialog>
     </el-row>
 </template>
 <script>
@@ -747,6 +748,7 @@
     import Select from '@components/Select'
     import {mapActions} from 'vuex'
     import ReTryDialog from '../components/ReTryDialog'
+    import EmailReTryDialog from '../components/EmailReTryDialog'
 
     window.onresize = () => {
         if (until.getClientHeight() > document.getElementById('transparentDiv').offsetHeight) {
@@ -760,9 +762,13 @@
             NewHeader,
             NewFooter,
             ReTryDialog,
+            EmailReTryDialog,
         },
 
         computed: {
+            emailReTryDialogVisible() {
+                return this.$store.state.emailErrVisible
+            },
             reTryDialogVisible() {
                 return this.$store.state.reTryDialogVisible
             },
@@ -841,7 +847,7 @@
                                 case 'auth_failed':
                                     this.$store.commit('errorCodeSet', {
                                         dialogVisible: true,
-                                        dialogMessage: this.$t('tips.refuse_authorize',{platform:this.$store.state.repoInfo.platform}),
+                                        dialogMessage: this.$t('tips.refuse_authorize', {platform: this.$store.state.repoInfo.platform}),
                                     });
                                     break;
                                 case EMAIL_UNAUTHORIZE:
@@ -851,10 +857,7 @@
                                     });
                                     break;
                                 case NO_PUBLIC_EMAIL:
-                                    this.$store.commit('errorCodeSet', {
-                                        dialogVisible: true,
-                                        dialogMessage: this.$t('tips.no_public_email',{platform:this.$store.state.repoInfo.platform}),
-                                    });
+                                    this.$store.commit('setEmailErr', true,);
                                     break;
                                 case SYSTEM_ERROR:
                                     this.$store.commit('errorCodeSet', {

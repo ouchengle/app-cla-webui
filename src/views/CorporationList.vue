@@ -7,6 +7,7 @@
                             :empty-text="$t('corp.no_data')"
                             :data="tableData"
                             align="center"
+                            :row-class-name="createdAdmin"
                             class="tableClass"
                             style="width: 100%;">
                         <el-table-column
@@ -19,13 +20,11 @@
                                 prop="admin_name"
                                 :label="$t('org.config_cla_field_corp_default_title1')">
                         </el-table-column>
-
                         <el-table-column
                                 min-width="30"
                                 prop="admin_email"
                                 :label="$t('org.to_email')">
                         </el-table-column>
-
                         <el-table-column
                                 min-width="10">
                             <template slot="header" slot-scope="scope">
@@ -38,7 +37,6 @@
                                         width="80"
                                         trigger="hover"
                                         placement="right">
-
                                     <div class="menuBT">
                                         <el-button @click="uploadClaFile(scope.row)" size="mini">
                                             {{$t('org.upload')}}
@@ -51,11 +49,9 @@
                                         </el-button>
                                     </div>
                                     <svg-icon slot="reference" class="pointer" icon-class="pdf" @click=""/>
-
                                 </el-popover>
                             </template>
                         </el-table-column>
-
                         <el-table-column
                                 min-width="10"
                                 :label="$t('org.operation')">
@@ -329,6 +325,11 @@
         },
         inject: ['setClientHeight'],
         methods: {
+            createdAdmin(param) {
+                if (param.row.admin_added) {
+                    return 'mark-row'
+                }
+            },
             createCorpCla() {
                 this.$router.push('/addCorpCla');
                 this.setCheckInfo();
@@ -623,6 +624,12 @@
                     if (err.data && err.data.hasOwnProperty('data')) {
                         switch (err.data.data.error_code) {
                             case 'cla.invalid_token':
+                                this.$store.commit('errorSet', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.invalid_token'),
+                                });
+                                break;
+                            case 'cla.expired_token':
                                 this.$store.commit('errorSet', {
                                     dialogVisible: true,
                                     dialogMessage: this.$t('tips.invalid_token'),

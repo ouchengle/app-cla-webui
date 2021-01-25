@@ -207,6 +207,10 @@
         border-color: #319E55;
     }
 
+    .el-table .mark-row {
+        color: #319E55;
+    }
+
     .tableClass {
         border: 1px solid black;
         border-radius: 1.5rem;
