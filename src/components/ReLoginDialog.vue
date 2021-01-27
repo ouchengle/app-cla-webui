@@ -13,7 +13,7 @@
             </div>
             <el-row>
                 <el-col align="center">
-                    <p>{{message}}</p>
+                    <p class="dialogMessage">{{message}}</p>
                     <button class="dialogBt" @click="clickGoHome()">{{$t('tips.dialogBt')}}</button>
                 </el-col>
             </el-row>

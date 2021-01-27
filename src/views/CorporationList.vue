@@ -263,7 +263,6 @@
 <script>
     import * as url from '../until/api'
     import * as until from '../until/until'
-    import pdfReader from "@components/PdfReader";
     import http from '../until/http'
     import pdf from 'vue-pdf'
     import ReLoginDialog from '../components/ReLoginDialog'
@@ -273,7 +272,6 @@
     export default {
         name: "CorporationList",
         components: {
-            pdfReader,
             ReTryDialog,
             ReLoginDialog,
         },

@@ -479,9 +479,12 @@
                             this.rules = {};
                             this.fields = [];
                             this.$message.closeAll();
-                            this.$message.error({message: this.$t('tips.no_lang', {language: this.lang}), duration: 8000})
+                            this.$message.error({
+                                message: this.$t('tips.no_lang', {language: this.lang}),
+                                duration: 8000
+                            })
                         }
-                    }else{
+                    } else {
                         let message = '';
                         if (this.$store.state.loginType === 'corporation') {
                             message = this.$t('tips.no_cla_binding_corp')
@@ -1011,6 +1014,7 @@
             margin: auto;
         }
     }
+
 
     .signBtBox {
         display: flex;

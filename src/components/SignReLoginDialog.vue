@@ -13,7 +13,7 @@
             </div>
             <el-row>
                 <el-col align="center">
-                    <p class="messageBox">{{message}}</p>
+                    <p class="dialogMessage">{{message}}</p>
                     <button class="dialogBt" @click="clickGoHome()">{{$t('tips.dialogBt')}}</button>
                 </el-col>
             </el-row>
@@ -61,9 +61,6 @@
 
 <style lang="less">
     #signReLoginDialog {
-        .messageBox {
-            word-break: keep-all;
-        }
         .dialogBt {
             margin-top: 3rem;
             width: 8rem;

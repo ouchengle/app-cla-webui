@@ -1027,6 +1027,7 @@
     @import "../assets/font/css/Roboto-Regular.css";
 
     @media screen and (min-width: 100px) and (max-width: 1200px) {
+
         #section {
             width: 100%;
         }

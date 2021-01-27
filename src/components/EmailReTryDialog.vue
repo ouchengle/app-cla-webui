@@ -13,7 +13,7 @@
             </div>
             <el-row>
                 <el-col align="center">
-                    <p>{{$t('tips.no_public_email_1',{platform:this.$store.state.repoInfo.platform})}}
+                    <p class="dialogMessage">{{$t('tips.no_public_email_1',{platform:this.$store.state.repoInfo.platform})}}
                         <a :href="emailSetAddress" target="_blank">{{this.$t('tips.click_here')}}</a>{{emailNotOpenEnd}}</p>
                     <button class="dialogBt" @click="reTry()">{{$t('tips.dialogBt')}}</button>
                 </el-col>

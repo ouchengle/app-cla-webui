@@ -13,8 +13,8 @@ import Lang_En from '../public/static/lang/en-us'
 import Cookie from 'js-cookie'
 import Const_config from '../public/static/const-config';
 import * as until from './until/until'
+import '../src/assets/css/global.css'
 Vue.use(Cookie);
-
 Vue.prototype.$cookie = Cookie;
 Vue.prototype.$axios = axios;
 Vue.use(ElementUI);

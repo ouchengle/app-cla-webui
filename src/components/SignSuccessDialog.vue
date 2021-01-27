@@ -13,7 +13,7 @@
             </div>
             <el-row>
                 <el-col align="center">
-                    <p class="messageBox">{{message}}</p>
+                    <p class="dialogMessage">{{message}}</p>
                     <button class="dialogBt" @click="clickGoHome()">{{$t('tips.dialogBt')}}</button>
                 </el-col>
             </el-row>
@@ -75,10 +75,6 @@
             color: white;
             cursor: pointer;
             outline: none;
-        }
-
-        .messageBox {
-            word-break: keep-all;
         }
 
         .el-dialog__header {
