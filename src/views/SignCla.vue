@@ -2,14 +2,66 @@
     <el-row id="signType">
         <Header></Header>
         <div id="singCla_section">
-            <el-row v-if="!isSendCode" class="content">
+            <el-row class="content">
                 <el-col>
                     <p class="contentTitle"><span>{{apply_to}}</span>{{ $t('signPage.claTitle') }}</p>
                     <el-row class="marginTop3rem" id="claBox">
                     </el-row>
                     <el-row class="marginTop3rem form">
                         <el-col>
-                            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-position="left"
+                            <el-form v-if="isMobile" :model="ruleForm" :rules="rules" ref="ruleForm" label-position="left"
+                                     label-width="25%"
+                                     class="demo-ruleForm">
+                                <el-form-item v-for="(item,index) in fields"
+                                              label-width="0"
+                                              :required="item.required"
+                                              :prop="item.id">
+                                    <div>{{item.title}}</div>
+                                    <el-input v-if="item.type==='email'"
+                                              :placeholder="$t('signPage.holder',{title:item.title})"
+                                              :readonly="loginType!=='corporation'" v-model="ruleForm[item.id]"
+                                              size="small" @blur="setMyForm(item.type,ruleForm[item.id])"></el-input>
+                                    <el-input v-else-if="item.type==='platform_id'"
+                                              :readonly="loginType!=='corporation'"
+                                              v-model="ruleForm[item.id]"
+                                              size="small" @blur="setMyForm(item.type,ruleForm[item.id])"></el-input>
+                                    <el-input v-else-if="item.type==='date'" readonly="" v-model="ruleForm[item.id]"
+                                              size="small" @blur="setMyForm(item.type,ruleForm[item.id])"></el-input>
+                                    <el-input v-else v-model="ruleForm[item.id]"
+                                              :placeholder="$t('signPage.holder',{title:item.title})" size="small"
+                                              @blur="setMyForm(item.type,ruleForm[item.id])"></el-input>
+                                </el-form-item>
+                                <el-form-item
+                                        v-if="rules.code&&(loginType==='corporation'||loginType==='employee')"
+                                        :required="rules.code[0].required"
+                                        label-width="0"
+                                        prop="code">
+                                    <div>{{$t('signPage.verifyCode')}}</div>
+                                    <el-input v-model="ruleForm.code" :placeholder="$t('signPage.verifyCodeHolder')"
+                                              size="small">
+                                    </el-input>
+                                </el-form-item>
+                                <button v-if="isMobile" class="marginTop1rem mobileBt"
+                                        type="button"
+                                        :disabled="sendBtTextFromLang!==$t('signPage.sendCode')"
+                                        @click="sendCode()">{{sendBtTextFromLang}}
+                                </button>
+                                <div class="borderClass fontSize12"><span style="color: #F56C6C;">*</span>{{$t('signPage.requireText')}}
+                                </div>
+                                <div class="marginTop1rem fontSize12">
+                                    <el-checkbox v-model="isRead"><span>{{$t('signPage.checkBoxText1')}}<span
+                                            class="privacy" @click="">{{$t('signPage.privacy')}}</span>{{$t('signPage.checkBoxText2')}}<span
+                                            class="privacy" @click="toIndex()">{{$t('signPage.claSignPlatform')}}</span>{{$t('signPage.checkBoxText3')}}</span>
+                                    </el-checkbox>
+                                </div>
+                                <el-form-item label-width="0" class="marginTop1rem signBtBox">
+                                    <button  class="mobileBt" type="button"
+                                             @click="submitForm('ruleForm')">
+                                        {{$t('signPage.sign')}}
+                                    </button>
+                                </el-form-item>
+                            </el-form>
+                            <el-form v-else :model="ruleForm" :rules="rules" ref="ruleForm" label-position="left"
                                      label-width="25%"
                                      class="demo-ruleForm">
                                 <el-form-item v-for="(item,index) in fields"
@@ -31,11 +83,10 @@
                                               @blur="setMyForm(item.type,ruleForm[item.id])"></el-input>
                                 </el-form-item>
                                 <el-form-item
-                                        v-if="rules.code&&(loginType==='corporation'||loginType==='employee')"
+                                        v-if="rules.code&&(loginType==='corporation'||loginType==='employee')&&!isMobile"
                                         :label="$t('signPage.verifyCode')"
                                         :required="rules.code[0].required"
                                         prop="code">
-
                                     <el-input v-model="ruleForm.code" :placeholder="$t('signPage.verifyCodeHolder')"
                                               size="small">
                                         <el-button slot="append"
@@ -44,6 +95,20 @@
                                         </el-button>
                                     </el-input>
                                 </el-form-item>
+                                <el-form-item
+                                        v-if="rules.code&&(loginType==='corporation'||loginType==='employee')&&isMobile"
+                                        :label="$t('signPage.verifyCode')"
+                                        :required="rules.code[0].required"
+                                        prop="code">
+                                    <el-input v-model="ruleForm.code" :placeholder="$t('signPage.verifyCodeHolder')"
+                                              size="small">
+                                    </el-input>
+                                </el-form-item>
+                                <button v-if="isMobile" class="marginTop1rem mobileBt"
+                                        type="button"
+                                        :disabled="sendBtTextFromLang!==$t('signPage.sendCode')"
+                                        @click="sendCode()">{{sendBtTextFromLang}}
+                                </button>
                                 <div class="borderClass fontSize12"><span style="color: #F56C6C;">*</span>{{$t('signPage.requireText')}}
                                 </div>
                                 <div class="marginTop1rem fontSize12">
@@ -53,7 +118,11 @@
                                     </el-checkbox>
                                 </div>
                                 <el-form-item label-width="0" class="marginTop1rem signBtBox">
-                                    <button class="button" type="button" @click="submitForm('ruleForm')">
+                                    <button v-if="isMobile" class="mobileBt" type="button"
+                                            @click="submitForm('ruleForm')">
+                                        {{$t('signPage.sign')}}
+                                    </button>
+                                    <button v-else class="button" type="button" @click="submitForm('ruleForm')">
                                         {{$t('signPage.sign')}}
                                     </button>
                                 </el-form-item>
@@ -62,9 +131,7 @@
                     </el-row>
                 </el-col>
             </el-row>
-
         </div>
-
         <Footer></Footer>
         <ReLoginDialog :dialogVisible="reLoginDialogVisible" :message="reLoginMsg"></ReLoginDialog>
         <ReTryDialog :dialogVisible="reTryDialogVisible" :message="reLoginMsg"></ReTryDialog>
@@ -76,15 +143,16 @@
 <script>
     import Header from '@components/NewHeader'
     import Footer from '@components/NewFooter'
-    import * as until from '../until/until'
-    import * as url from '../until/api'
+    import * as util from '../util/util'
+    import * as url from '../util/api'
     import {mapActions} from 'vuex'
-    import http from '../until/sign_http'
-    import axios from '../until/_axios'
+    import http from '../util/sign_http'
+    import axios from '../util/_axios'
     import ReLoginDialog from '../components/ReLoginDialog'
     import ReTryDialog from '../components/ReTryDialog'
     import SignSuccessDialog from '../components/SignSuccessDialog'
     import SignReLoginDialog from '../components/SignReLoginDialog'
+    import isMobile from 'is-mobile'
 
     export default {
 
@@ -174,6 +242,7 @@
         },
         data() {
             return {
+                isMobile: true,
                 lang: '',
                 cla_hash: '',
                 second: '',
@@ -189,7 +258,6 @@
                 fields: [],
                 claIdArr: [],
                 isVerify: false,
-                isSendCode: false,
                 verifyCode: '',
                 platform: this.$store.state.repoInfo.platform,
                 dialogVisible: false,
@@ -214,6 +282,9 @@
         },
         methods: {
             ...mapActions(['setTokenAct', 'setRepoInfoAct', 'viewPrivacy']),
+            browserRedirect() {
+                this.isMobile = isMobile();
+            },
             toIndex() {
                 let date = new Date();
                 date.setTime(date.getTime() - 10000);
@@ -222,10 +293,10 @@
                 let params = repoInfo.repo_id ? `${repoInfo.platform}/${repoInfo.org_id}/${repoInfo.repo_id}` : `${repoInfo.platform}/${repoInfo.org_id}`;
                 let path = '';
                 if (sessionStorage.getItem('orgAddress')) {
-                    path = `${this.signRouter}/${until.strToBase64(params)}/${sessionStorage.getItem('orgAddress')}`
+                    path = `${this.signRouter}/${util.strToBase64(params)}/${sessionStorage.getItem('orgAddress')}`
 
                 } else {
-                    path = `${this.signRouter}/${until.strToBase64(params)}`
+                    path = `${this.signRouter}/${util.strToBase64(params)}`
                 }
                 window.open(`${this.domain}${path}`)
             },
@@ -560,6 +631,12 @@
                                 });
                                 break;
                             case 'cla.invalid_token':
+                                this.$store.commit('setSignReLogin', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.invalid_token'),
+                                });
+                                break;
+                            case 'cla.expired_token':
                                 this.$store.commit('setSignReLogin', {
                                     dialogVisible: true,
                                     dialogMessage: this.$t('tips.invalid_token'),
@@ -974,13 +1051,14 @@
             },
             setClientHeight() {
                 this.$nextTick(() => {
-                    if (until.getClientHeight() > document.getElementById('signType').offsetHeight) {
-                        document.getElementById('signType').style.minHeight = until.getClientHeight() + 'px'
+                    if (util.getClientHeight() > document.getElementById('signType').offsetHeight) {
+                        document.getElementById('signType').style.minHeight = util.getClientHeight() + 'px'
                     }
                 })
             },
         },
         created() {
+            // this.browserRedirect();
             new Promise((resolve, reject) => {
                 this.getCookieData(resolve);
             }).then(res => {
@@ -997,8 +1075,8 @@
         }
     }
     window.onresize = () => {
-        if (until.getClientHeight() > document.getElementById('signType').offsetHeight) {
-            document.getElementById("signType").style.height = until.getClientHeight() + 'px'
+        if (util.getClientHeight() > document.getElementById('signType').offsetHeight) {
+            document.getElementById("signType").style.height = util.getClientHeight() + 'px'
         }
     }
 </script>
@@ -1015,10 +1093,15 @@
         }
     }
 
-
     .signBtBox {
         display: flex;
         justify-content: center;
+        width: 100%;
+
+        .el-form-item__content {
+            width: 100%;
+            text-align: center;
+        }
     }
 
     .dialogBt {
@@ -1038,7 +1121,6 @@
         cursor: pointer;
         color: #319E55;
     }
-
 
     .codeBox .el-button--medium, .codeBox .el-button {
         border-radius: 0 4px 4px 0;
@@ -1185,8 +1267,6 @@
     }
 
     #claBox {
-        /*border-bottom: 1px dashed lightgrey;*/
-        /*padding-bottom: 2rem;*/
         margin-bottom: 2rem;
         border-radius: 1.25rem;
         white-space: pre-wrap;
@@ -1212,6 +1292,23 @@
 
         & .el-dialog {
             border-radius: 1rem;
+        }
+
+        .mobileBt {
+            font-family: Roboto-Light, sans-serif;
+            width: 100%;
+            height: 3rem;
+            border-radius: 1.5rem;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            background: linear-gradient(to right, #97DB30, #319E55);
+            margin: 1rem 0;
+        }
+
+        .mobileBt:focus {
+            outline: none;
         }
 
         #singCla_section {

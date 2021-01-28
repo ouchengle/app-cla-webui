@@ -76,7 +76,8 @@
                                                 </el-col>
                                                 <el-col :span="19" class="textCol">
                                                     <div class="rightText padding-left-1rem">
-                                                        {{ $t('signType.corpStep1_1') }}<span>{{ $t('signType.corpBt') }}</span>{{
+                                                        {{ $t('signType.corpStep1_1') }}<span class="pointer"
+                                                                                              @click="submit('corporation')">{{ $t('signType.corpBt') }}</span>{{
                                                         $t('signType.corpStep1_2') }}
                                                     </div>
                                                 </el-col>
@@ -191,9 +192,9 @@
                                                 </el-col>
                                                 <el-col :span="19" class="textCol">
                                                     <div class="rightText padding-left-1rem">
-                                                        {{ $t('signType.corpStep1_1')
-                                                        }}<span>{{ $t('signType.empBt') }}</span>{{
-                                                        $t('signType.corpStep1_2') }}
+                                                        {{ $t('signType.empStep1_1')}}
+                                                        <span class="pointer" @click="submit('employee')">{{ $t('signType.empBt') }}</span>
+                                                        {{$t('signType.corpStep1_2')}}
                                                     </div>
                                                 </el-col>
                                             </el-row>
@@ -291,8 +292,8 @@
                                                 </el-col>
                                                 <el-col :span="19" class="textCol">
                                                     <div class="rightText padding-left-1rem">
-                                                        {{ $t('signType.corpStep1_1')
-                                                        }}<span>{{ $t('signType.individualBt') }}</span>{{
+                                                        {{ $t('signType.individualStep1_1')
+                                                        }}<span class="pointer" @click="submit('employee')">{{ $t('signType.individualBt') }}</span>{{
                                                         $t('signType.corpStep1_2') }}
                                                     </div>
                                                 </el-col>
@@ -377,31 +378,37 @@
                         </el-col>
                         <el-col :span="10" style="height: 100%;">
                             <el-row class="signType" style="height: 100%">
-                                <el-col id="sign" style="height: 100%">
-                                    <el-row style="height: 50%">
-                                    </el-row>
+                                <div id="sign">
                                     <el-row style="height: 50%">
                                         <el-col align="right" class="buttonBox">
                                             <div id="btBox">
                                                 <div>
-
-                                                    <button class="button" @click="submit('corporation')">
-                                                        {{ $t('signType.corpBt') }}
-                                                    </button>
+                                                    <el-tooltip :content="corpBtTooltip" placement="top" effect="light"
+                                                                popper-class="my_tooltip">
+                                                        <button class="button" @click="submit('corporation')">
+                                                            {{ $t('signType.corpBt') }}
+                                                        </button>
+                                                    </el-tooltip>
                                                 </div>
                                                 <div>
-                                                    <button class="button" @click="submit('employee')">
-                                                        {{ $t('signType.empBt') }}
-                                                    </button>
+                                                    <el-tooltip :content="empBtTooltip" placement="top" effect="light"
+                                                                popper-class="my_tooltip">
+                                                        <button class="button" @click="submit('employee')">
+                                                            {{ $t('signType.empBt') }}
+                                                        </button>
+                                                    </el-tooltip>
                                                 </div>
-                                                <button class="button" @click="submit('individual')">
-                                                    {{ $t('signType.individualBt') }}
-                                                </button>
+                                                <el-tooltip :content="individualBtTooltip" placement="top"
+                                                            effect="light"
+                                                            popper-class="my_tooltip">
+                                                    <button class="button" @click="submit('individual')">
+                                                        {{ $t('signType.individualBt') }}
+                                                    </button>
+                                                </el-tooltip>
                                             </div>
                                         </el-col>
                                     </el-row>
-                                </el-col>
-
+                                </div>
                             </el-row>
                         </el-col>
                     </el-row>
@@ -449,7 +456,8 @@
                                         </el-col>
                                         <el-col :span="10" class="textCol">
                                             <div class="rightText">
-                                                {{ $t('signType.corpStep1_1') }}<span>{{ $t('signType.corpBt') }}</span>{{
+                                                {{ $t('signType.corpStep1_1') }}
+                                                <span class="pointer" @click="submit('corporation')">{{ $t('signType.corpBt') }}</span>{{
                                                 $t('signType.corpStep1_2') }}
                                             </div>
                                         </el-col>
@@ -577,8 +585,9 @@
                                         </el-col>
                                         <el-col :span="10" class="textCol">
                                             <div class="rightText">
-                                                {{ $t('signType.corpStep1_1') }}<span>{{ $t('signType.empBt') }}</span>{{
-                                                $t('signType.corpStep1_2') }}
+                                                {{ $t('signType.empStep1_1')}}
+                                                <span class="pointer" @click="submit('employee')">{{ $t('signType.empBt') }}</span>
+                                                {{$t('signType.corpStep1_2')}}
                                             </div>
                                         </el-col>
                                     </el-row>
@@ -664,8 +673,8 @@
                                         </el-col>
                                         <el-col :span="10" class="textCol">
                                             <div class="rightText">
-                                                {{ $t('signType.corpStep1_1')
-                                                }}<span>{{ $t('signType.individualBt') }}</span>{{
+                                                {{ $t('signType.individualStep1_1')
+                                                }}<span class="pointer" @click="submit('employee')">{{ $t('signType.individualBt') }}</span>{{
                                                 $t('signType.corpStep1_2') }}
                                             </div>
                                         </el-col>
@@ -741,9 +750,9 @@
 <script>
     import NewHeader from '@components/NewHeader'
     import NewFooter from '@components/NewFooter'
-    import * as until from '../until/until'
-    import * as url from '../until/api'
-    import http from '../until/http'
+    import * as util from '../util/util'
+    import * as url from '../util/api'
+    import http from '../util/http'
     import isMobile from 'is-mobile'
     import Select from '@components/Select'
     import {mapActions} from 'vuex'
@@ -751,8 +760,8 @@
     import EmailReTryDialog from '../components/EmailReTryDialog'
 
     window.onresize = () => {
-        if (until.getClientHeight() > document.getElementById('transparentDiv').offsetHeight) {
-            document.getElementById("transparentDiv").style.height = until.getClientHeight() + 'px';
+        if (util.getClientHeight() > document.getElementById('transparentDiv').offsetHeight) {
+            document.getElementById("transparentDiv").style.height = util.getClientHeight() + 'px';
         }
     }
     export default {
@@ -764,8 +773,16 @@
             ReTryDialog,
             EmailReTryDialog,
         },
-
         computed: {
+            corpBtTooltip(){
+              return  `${this.$t('signType.corpStep1_1')}${this.$t('signType.corpBt')}${this.$t('signType.corpStep1_2')}`
+            },
+            empBtTooltip(){
+               return `${this.$t('signType.empStep1_1')}${this.$t('signType.empBt')}${this.$t('signType.corpStep1_2')}`
+            },
+            individualBtTooltip(){
+               return `${this.$t('signType.individualStep1_1')}${this.$t('signType.individualBt')}${this.$t('signType.corpStep1_2')}`
+            },
             emailReTryDialogVisible() {
                 return this.$store.state.emailErrVisible
             },
@@ -881,7 +898,7 @@
                         params = `${repoInfo.platform}/${repoInfo.org_id}`
                         this.repo = ''
                     }
-                    let base64Params = until.strToBase64(params);
+                    let base64Params = util.strToBase64(params);
                     this.$router.replace(`${this.$store.state.signRouter}/${base64Params}`);
                 } else {
                     let repoInfoParams = '';
@@ -893,7 +910,7 @@
                         sessionStorage.removeItem('orgAddress');
                         repoInfoParams = params
                     }
-                    let arg = until.base64ToStr(repoInfoParams);
+                    let arg = util.base64ToStr(repoInfoParams);
                     if (arg) {
                         let args = arg.split('/');
                         if (args.length < 2) {
@@ -931,9 +948,9 @@
                                         let params = repoInfo.repo_id ? `${repoInfo.platform}/${repoInfo.org_id}/${repoInfo.repo_id}` : `${repoInfo.platform}/${repoInfo.org_id}`
                                         let path = '';
                                         if (sessionStorage.getItem('orgAddress')) {
-                                            path = `${this.signRouter}/${until.strToBase64(params)}/${sessionStorage.getItem('orgAddress')}`
+                                            path = `${this.signRouter}/${util.strToBase64(params)}/${sessionStorage.getItem('orgAddress')}`
                                         } else {
-                                            path = `${this.signRouter}/${until.strToBase64(params)}`
+                                            path = `${this.signRouter}/${util.strToBase64(params)}`
                                         }
                                         this.$router.replace(path)
                                         break;
@@ -991,8 +1008,8 @@
             },
             setClientHeight() {
                 this.$nextTick(() => {
-                    if (until.getClientHeight() > document.getElementById('transparentDiv').offsetHeight) {
-                        this.transparentDiv.height = until.getClientHeight() + 'px'
+                    if (util.getClientHeight() > document.getElementById('transparentDiv').offsetHeight) {
+                        this.transparentDiv.height = util.getClientHeight() + 'px'
                     }
                 })
             },
@@ -1014,7 +1031,7 @@
         },
         mounted() {
             if (!this.isMobile) {
-                until.setMinHeight('sign', 'btBox');
+                util.setMinHeight('sign', 'btBox');
             }
             this.setClientHeight();
         }
@@ -1057,6 +1074,13 @@
     #transparentDiv {
         text-align: center;
         width: 100%;
+
+        .btTypeClass {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
 
         .padding-bottom-5rem {
             padding-bottom: 5rem;
@@ -1112,9 +1136,10 @@
             font-family: Roboto-Bold, sans-serif;
 
             & > div {
+                height: 100%;
                 display: flex;
                 flex-direction: column;
-                justify-content: space-between;
+                justify-content: flex-end;
             }
         }
 

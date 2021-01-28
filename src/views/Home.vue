@@ -10,13 +10,13 @@
     </div>
 </template>
 <script>
-    import * as until from '../until/until'
+    import * as util from '../util/util'
     import Header from '@components/NewHeader'
     import Footer from '@components/NewFooter'
 
     window.onresize = () => {
-        if (until.getClientHeight() > document.getElementById('home').offsetHeight) {
-            document.getElementById("home").style.minHeight = until.getClientHeight() + 'px'
+        if (util.getClientHeight() > document.getElementById('home').offsetHeight) {
+            document.getElementById("home").style.minHeight = util.getClientHeight() + 'px'
         }
     };
     export default {
@@ -41,8 +41,8 @@
             setClientHeight() {
                 this.$nextTick(() => {
                     document.getElementById("home").style.minHeight = '0px';
-                    if (until.getClientHeight() > document.getElementById('home').offsetHeight) {
-                        document.getElementById("home").style.minHeight = until.getClientHeight() + 'px'
+                    if (util.getClientHeight() > document.getElementById('home').offsetHeight) {
+                        document.getElementById("home").style.minHeight = util.getClientHeight() + 'px'
                     } else {
                         document.getElementById("home").style.minHeight = document.getElementById('home').offsetHeight + 'px'
                     }

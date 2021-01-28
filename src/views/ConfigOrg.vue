@@ -67,8 +67,8 @@
 <script>
     import ReTryDialog from '../components/ReTryDialog'
     import ReLoginDialog from '../components/ReLoginDialog'
-    import * as url from '../until/api'
-    import _axios from '../until/_axios'
+    import * as url from '../util/api'
+    import _axios from '../util/_axios'
 
     export default {
         name: "ConfigOne",

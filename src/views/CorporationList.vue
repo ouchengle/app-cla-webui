@@ -261,9 +261,9 @@
 
 </template>
 <script>
-    import * as url from '../until/api'
-    import * as until from '../until/until'
-    import http from '../until/http'
+    import * as url from '../util/api'
+    import * as util from '../util/util'
+    import http from '../util/http'
     import pdf from 'vue-pdf'
     import ReLoginDialog from '../components/ReLoginDialog'
     import ReTryDialog from '../components/ReTryDialog'
@@ -449,7 +449,7 @@
                     responseType: 'blob',
                 }).then(res => {
                     if (res && res.data) {
-                        let time = until.getNowDateToTime();
+                        let time = util.getNowDateToTime();
                         download((new Blob([res.data])), `${this.$store.state.corpItem.org_id}_${row.language}_signature${time}.pdf`, 'application/pdf');
                     } else {
                         this.$store.commit('errorCodeSet', {
@@ -726,7 +726,7 @@
                     responseType: 'blob',
                 }).then(res => {
                     if (res.data) {
-                        let time = until.getNowDateToTime();
+                        let time = util.getNowDateToTime();
                         download((new Blob([res.data])), `${row.corporation_name}_signature${time}.pdf`, 'application/pdf');
                     } else {
                         this.$store.commit('errorCodeSet', {
@@ -1039,7 +1039,7 @@
             },
         },
         created() {
-            until.clearSession(this);
+            util.clearSession(this);
             this.getCorporationInfo();
         },
         mounted() {
@@ -1192,10 +1192,6 @@
 
         .hoverUnderline:hover {
             text-decoration: underline;
-        }
-
-        .pointer {
-            cursor: pointer;
         }
 
         .disableClass {

@@ -22,7 +22,7 @@
 </template>
 
 <script>
-    import * as until from '../until/until'
+    import * as util from '../util/util'
 
     export default {
         name: "SignSuccessDialog",
@@ -38,8 +38,7 @@
                 this.$store.commit('setSignSuccess', {
                     dialogVisible: false,
                     dialogMessage: '',
-                })
-
+                });
                 if (sessionStorage.getItem('orgAddress')) {
                     window.location.href = sessionStorage.getItem('orgAddress')
                 } else {
@@ -50,9 +49,9 @@
                     let params = repoInfo.repo_id ? `${repoInfo.platform}/${repoInfo.org_id}/${repoInfo.repo_id}` : `${repoInfo.platform}/${repoInfo.org_id}`
                     let path = '';
                     if (sessionStorage.getItem('orgAddress')) {
-                        path = `${this.signRouter}/${until.strToBase64(params)}/${sessionStorage.getItem('orgAddress')}`
+                        path = `${this.signRouter}/${util.strToBase64(params)}/${sessionStorage.getItem('orgAddress')}`
                     } else {
-                        path = `${this.signRouter}/${until.strToBase64(params)}`
+                        path = `${this.signRouter}/${util.strToBase64(params)}`
                     }
                     this.$router.replace(path)
                 }

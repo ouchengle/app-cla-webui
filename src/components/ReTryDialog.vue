@@ -6,7 +6,7 @@
                 :close-on-press-escape="false"
                 :show-close="false"
                 :close-on-click-modal="false"
-                width="30%">
+                :width="dialogWidth">
             <div class="titleBox">
                 <svg-icon icon-class="fail_icon" class="dialogIcon"></svg-icon>
                 <span>{{$t('tips.failedTitle')}}</span>
@@ -23,12 +23,20 @@
 
 <script>
     export default {
-
         name: "ReLoginDialog",
         props: ['dialogVisible', 'message'],
+        computed: {
+            dialogWidth() {
+                console.log(this.IS_MOBILE);
+                if (this.IS_MOBILE) {
+                    return '80%'
+                } else {
+                    return '30%'
+                }
+            },
+        },
         data() {
-            return {
-            }
+            return {}
         },
         methods: {
             reTry() {
@@ -43,7 +51,7 @@
 </script>
 
 <style lang="less">
-    #reTryDialog{
+    #reTryDialog {
         .dialogBt {
             margin-top: 3rem;
             width: 8rem;
@@ -55,17 +63,21 @@
             cursor: pointer;
             outline: none;
         }
-        .el-dialog__header{
+
+        .el-dialog__header {
             padding: 0;
         }
-        .el-dialog__body{
+
+        .el-dialog__body {
             padding: 20px;
         }
+
         .titleBox {
             text-align: left;
             font-size: 1.5rem;
             color: #E22424;
             margin-bottom: 1rem;
+
             .dialogIcon {
                 width: 1.5rem;
                 height: 1.5rem;
