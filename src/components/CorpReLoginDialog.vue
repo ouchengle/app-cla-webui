@@ -6,7 +6,7 @@
                 :close-on-press-escape="false"
                 :show-close="false"
                 :close-on-click-modal="false"
-                width="30%">
+                :width="dialogWidth">
             <div class="titleBox">
                 <svg-icon icon-class="fail_icon" class="dialogIcon"></svg-icon>
                 <span>{{$t('tips.failedTitle')}}</span>
@@ -25,6 +25,15 @@
     export default {
         name: "ReLoginDialog",
         props: ['dialogVisible', 'message'],
+        computed: {
+            dialogWidth() {
+                if (this.IS_MOBILE) {
+                    return '80%'
+                } else {
+                    return '30%'
+                }
+            },
+        },
         data() {
             return {
             }

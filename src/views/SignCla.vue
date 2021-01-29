@@ -9,14 +9,14 @@
                     </el-row>
                     <el-row class="marginTop3rem form">
                         <el-col>
-                            <el-form v-if="isMobile" :model="ruleForm" :rules="rules" ref="ruleForm" label-position="left"
+                            <el-form v-if="this.IS_MOBILE" :model="ruleForm" :rules="rules" ref="ruleForm" label-position="left"
                                      label-width="25%"
                                      class="demo-ruleForm">
                                 <el-form-item v-for="(item,index) in fields"
                                               label-width="0"
                                               :required="item.required"
                                               :prop="item.id">
-                                    <div>{{item.title}}</div>
+                                    <div><span v-if="item.required" class="requiredIcon">*</span>{{item.title}}</div>
                                     <el-input v-if="item.type==='email'"
                                               :placeholder="$t('signPage.holder',{title:item.title})"
                                               :readonly="loginType!=='corporation'" v-model="ruleForm[item.id]"
@@ -36,12 +36,12 @@
                                         :required="rules.code[0].required"
                                         label-width="0"
                                         prop="code">
-                                    <div>{{$t('signPage.verifyCode')}}</div>
+                                    <div><span v-if="rules.code[0].required" class="requiredIcon">*</span>{{$t('signPage.verifyCode')}}</div>
                                     <el-input v-model="ruleForm.code" :placeholder="$t('signPage.verifyCodeHolder')"
                                               size="small">
                                     </el-input>
                                 </el-form-item>
-                                <button v-if="isMobile" class="marginTop1rem mobileBt"
+                                <button v-if="this.IS_MOBILE" class="marginTop1rem mobileBt"
                                         type="button"
                                         :disabled="sendBtTextFromLang!==$t('signPage.sendCode')"
                                         @click="sendCode()">{{sendBtTextFromLang}}
@@ -83,7 +83,7 @@
                                               @blur="setMyForm(item.type,ruleForm[item.id])"></el-input>
                                 </el-form-item>
                                 <el-form-item
-                                        v-if="rules.code&&(loginType==='corporation'||loginType==='employee')&&!isMobile"
+                                        v-if="rules.code&&(loginType==='corporation'||loginType==='employee')&&!this.IS_MOBILE"
                                         :label="$t('signPage.verifyCode')"
                                         :required="rules.code[0].required"
                                         prop="code">
@@ -96,7 +96,7 @@
                                     </el-input>
                                 </el-form-item>
                                 <el-form-item
-                                        v-if="rules.code&&(loginType==='corporation'||loginType==='employee')&&isMobile"
+                                        v-if="rules.code&&(loginType==='corporation'||loginType==='employee')&&this.IS_MOBILE"
                                         :label="$t('signPage.verifyCode')"
                                         :required="rules.code[0].required"
                                         prop="code">
@@ -104,12 +104,12 @@
                                               size="small">
                                     </el-input>
                                 </el-form-item>
-                                <button v-if="isMobile" class="marginTop1rem mobileBt"
+                                <button v-if="this.IS_MOBILE" class="marginTop1rem mobileBt"
                                         type="button"
                                         :disabled="sendBtTextFromLang!==$t('signPage.sendCode')"
                                         @click="sendCode()">{{sendBtTextFromLang}}
                                 </button>
-                                <div class="borderClass fontSize12"><span style="color: #F56C6C;">*</span>{{$t('signPage.requireText')}}
+                                <div class="borderClass fontSize12"><span class="requiredIcon">*</span>{{$t('signPage.requireText')}}
                                 </div>
                                 <div class="marginTop1rem fontSize12">
                                     <el-checkbox v-model="isRead"><span>{{$t('signPage.checkBoxText1')}}<span
@@ -118,7 +118,7 @@
                                     </el-checkbox>
                                 </div>
                                 <el-form-item label-width="0" class="marginTop1rem signBtBox">
-                                    <button v-if="isMobile" class="mobileBt" type="button"
+                                    <button v-if="this.IS_MOBILE" class="mobileBt" type="button"
                                             @click="submitForm('ruleForm')">
                                         {{$t('signPage.sign')}}
                                     </button>
@@ -152,8 +152,6 @@
     import ReTryDialog from '../components/ReTryDialog'
     import SignSuccessDialog from '../components/SignSuccessDialog'
     import SignReLoginDialog from '../components/SignReLoginDialog'
-    import isMobile from 'is-mobile'
-
     export default {
 
         name: "SignType",
@@ -242,7 +240,6 @@
         },
         data() {
             return {
-                isMobile: true,
                 lang: '',
                 cla_hash: '',
                 second: '',
@@ -282,9 +279,6 @@
         },
         methods: {
             ...mapActions(['setTokenAct', 'setRepoInfoAct', 'viewPrivacy']),
-            browserRedirect() {
-                this.isMobile = isMobile();
-            },
             toIndex() {
                 let date = new Date();
                 date.setTime(date.getTime() - 10000);
@@ -1058,7 +1052,6 @@
             },
         },
         created() {
-            // this.browserRedirect();
             new Promise((resolve, reject) => {
                 this.getCookieData(resolve);
             }).then(res => {
@@ -1289,7 +1282,9 @@
         display: flex;
         flex-direction: column;
         box-sizing: border-box;
-
+        .requiredIcon{
+            color: #F56C6C;
+        }
         & .el-dialog {
             border-radius: 1rem;
         }

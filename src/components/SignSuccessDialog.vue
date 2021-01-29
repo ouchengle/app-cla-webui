@@ -6,7 +6,7 @@
                 :close-on-press-escape="false"
                 :show-close="false"
                 :close-on-click-modal="false"
-                width="30%">
+                :width="dialogWidth">
             <div class="titleBox">
                 <svg-icon icon-class="chenggong" class="dialogIcon"></svg-icon>
                 <span>{{$t('tips.successTitle')}}</span>
@@ -27,6 +27,15 @@
     export default {
         name: "SignSuccessDialog",
         props: ['dialogVisible', 'message'],
+        computed: {
+            dialogWidth() {
+                if (this.IS_MOBILE) {
+                    return '80%'
+                } else {
+                    return '30%'
+                }
+            },
+        },
         data() {
             return {
                 domain: this.$store.state.domain,

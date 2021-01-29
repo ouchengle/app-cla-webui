@@ -1,7 +1,7 @@
 <template>
     <el-row class="index" id="transparentDiv" ref="transparentDiv" :style="transparentDiv">
         <NewHeader></NewHeader>
-        <div v-if="isMobile">
+        <div v-if="IS_MOBILE">
             <el-row id="mobile_section">
                 <el-col>
                     <el-row>
@@ -753,7 +753,6 @@
     import * as util from '../util/util'
     import * as url from '../util/api'
     import http from '../util/http'
-    import isMobile from 'is-mobile'
     import Select from '@components/Select'
     import {mapActions} from 'vuex'
     import ReTryDialog from '../components/ReTryDialog'
@@ -801,7 +800,6 @@
                 corpGuideIsOpen: false,
                 individualGuideIsOpen: false,
                 employeeGuideIsOpen: false,
-                isMobile: false,
                 base64Params: '',
                 platform: '',
                 org: '',
@@ -827,9 +825,6 @@
             },
             clickCorpGuide() {
                 this.corpGuideIsOpen = !this.corpGuideIsOpen
-            },
-            browserRedirect() {
-                this.isMobile = isMobile();
             },
             toCorpLogin() {
                 this.$store.commit('setLoginType', 'corporationManager');
@@ -1024,13 +1019,12 @@
             },
         },
         created() {
-            this.browserRedirect();
             this.clearSignPageSession();
             this.setDomain();
             this.getRepoInfo();
         },
         mounted() {
-            if (!this.isMobile) {
+            if (!this.IS_MOBILE) {
                 util.setMinHeight('sign', 'btBox');
             }
             this.setClientHeight();

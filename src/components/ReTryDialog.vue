@@ -27,7 +27,6 @@
         props: ['dialogVisible', 'message'],
         computed: {
             dialogWidth() {
-                console.log(this.IS_MOBILE);
                 if (this.IS_MOBILE) {
                     return '80%'
                 } else {

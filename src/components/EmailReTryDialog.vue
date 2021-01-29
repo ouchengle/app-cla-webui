@@ -6,7 +6,7 @@
                 :close-on-press-escape="false"
                 :show-close="false"
                 :close-on-click-modal="false"
-                width="30%">
+                :width="dialogWidth">
             <div class="titleBox">
                 <svg-icon icon-class="fail_icon" class="dialogIcon"></svg-icon>
                 <span>{{$t('tips.failedTitle')}}</span>
@@ -28,6 +28,13 @@
         name: "EmailReLoginDialog",
         props: ['dialogVisible'],
         computed:{
+            dialogWidth() {
+                if (this.IS_MOBILE) {
+                    return '80%'
+                } else {
+                    return '30%'
+                }
+            },
             emailNotOpenEnd(){
                 if (this.$store.state.repoInfo.platform.toLowerCase() === 'gitee') {
                     return this.$t('tips.gitee_no_public_email_2')
