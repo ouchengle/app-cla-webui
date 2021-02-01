@@ -216,6 +216,7 @@
                 }
             })
         },
+        inject: ['setClientHeight'],
         methods: {
             init() {
                 if (this.$store.state.individualLanguage === 'chinese') {
@@ -342,7 +343,10 @@
         },
         created() {
             this.init();
-        }
+        },
+        updated() {
+            this.setClientHeight();
+        },
     }
 </script>
 

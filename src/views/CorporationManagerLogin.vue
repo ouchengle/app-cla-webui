@@ -27,9 +27,7 @@
 
             <reTryDialog :message="corpReLoginMsg" :dialogVisible="corpReTryDialogVisible"></reTryDialog>
         </el-col>
-
     </el-row>
-
 </template>
 
 <script>
@@ -37,8 +35,6 @@
     import http from '../util/http'
     import {mapActions} from 'vuex'
     import reTryDialog from '../components/ReTryDialog'
-
-
     export default {
         name: "RepoSelect",
         components: {
