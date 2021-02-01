@@ -102,6 +102,9 @@
                 margin-right: .5rem;
             }
 
+            span {
+                font-size: 1rem;
+            }
         }
     }
 
