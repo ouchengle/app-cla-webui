@@ -77,12 +77,6 @@
                     }
                 })
             },
-            setDomain() {
-                this.$store.commit('setDomain', window.location.href.split('/index')[0])
-            },
-        },
-        created() {
-            this.setDomain()
         },
         mounted() {
             this.setClientHeight();
