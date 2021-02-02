@@ -78,5 +78,19 @@ export const setI18nLang = () => {
         return 'en-us'
     }
 };
+export const clearManagerSession = (_this) => {
+    _this.$store.commit('managerList', '');
+    _this.$store.commit('userLimit', '');
+    _this.$store.commit('token', '');
+    _this.$store.commit('loginInfo', '');
+    _this.$store.commit('pwdIsChanged', '');
+    sessionStorage.removeItem('managerList');
+    sessionStorage.removeItem('userLimit');
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('loginInfo');
+    sessionStorage.removeItem('pwdIsChanged');
+};
+
+
 
 

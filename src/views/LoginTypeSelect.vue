@@ -56,7 +56,9 @@
                 }
             },
             clearSessionStorage() {
+                let showHeaderMenu = sessionStorage.getItem('showHeaderMenu');
                 sessionStorage.clear();
+                sessionStorage.setItem('showHeaderMenu',showHeaderMenu);
                 this.setDomain();
             },
         },
