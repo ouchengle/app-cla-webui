@@ -280,7 +280,7 @@
                 return this.$store.state.platform.toLowerCase()
             },
             reLoginDialogVisible() {
-                return this.$store.state.orgReLoginDialogVisible
+                return this.$store.state.dialogVisible
             },
             reTryDialogVisible() {
                 return this.$store.state.reTryDialogVisible
@@ -580,6 +580,12 @@
                     if (err.data && err.data.hasOwnProperty('data')) {
                         switch (err.data.data.error_code) {
                             case 'cla.invalid_token':
+                                this.$store.commit('errorSet', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.invalid_token'),
+                                });
+                                break;
+                            case 'cla.expired_token':
                                 this.$store.commit('errorSet', {
                                     dialogVisible: true,
                                     dialogMessage: this.$t('tips.invalid_token'),
