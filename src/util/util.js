@@ -36,8 +36,8 @@ export const clearSession = (_this) => {
     _this.$store.commit('setCorpFD', '');
     _this.$store.commit('setIndividualMetadata', INDIVIDUALMETADATAARR_EN);
     _this.$store.commit('setCorpMetadata', CORPORATIONMETADATAARR_EN);
-    _this.$store.commit('setIndividualCustomMetadataArr', INITINDIVIDUALCUSTOMMETADATA);
-    _this.$store.commit('setCorporationCustomMetadataArr', INITCORPCUSTOMMETADATA);
+    _this.$store.commit('setIndividualCustomMetadataArr', []);
+    _this.$store.commit('setCorporationCustomMetadataArr', []);
     _this.$store.commit('setEmail', '');
     _this.$store.commit('setIsEmail', false);
     _this.$store.commit('setChooseRepo', '');
