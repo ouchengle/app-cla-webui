@@ -1,50 +1,43 @@
 <template>
     <el-row id="platformSelect" style="height: 100%">
         <el-col align="right" class="formBox">
-            <el-row>
-                <el-col :offset="4" :span="10">
+            <el-row :gutter="20">
+                <el-col :span="10">
                     <div class="icon_back">
                         <div class="icon_box">
                             <div class="loginSvg">
                                 <svg-icon icon-class="gitee_new" class="loginIcon"></svg-icon>
                             </div>
-
                         </div>
-                        <div class="icon_box ">
+                        <div class="icon_box">
                             <div class="loginBt">
                                 <button class="button" @click="getLoginUrl('gitee')">
                                     {{$t('corp.login_in')}}
                                 </button>
                             </div>
-
                         </div>
                     </div>
-
                 </el-col>
-                <!--<el-col :span="10">-->
-                <!--<div class="icon_back">-->
-                <!--<div class="icon_box">-->
-                <!--<div class="loginSvg">-->
-                <!--<svg-icon icon-class="github_new" class="loginIcon"></svg-icon>-->
-
-                <!--</div>-->
-                <!--</div>-->
-                <!--<div class="icon_box">-->
-                <!--<div class="loginBt">-->
-                <!--<button class="button" @click="getLoginUrl('github')">-->
-                <!--{{$t('corp.login_in')}}-->
-                <!--</button>-->
-                <!--</div>-->
-
-                <!--</div>-->
-
-                <!--</div>-->
-                <!--</el-col>-->
+                <el-col :offset="4" :span="10">
+                    <div class="icon_back">
+                        <div class="icon_box">
+                            <div class="loginSvg">
+                                <svg-icon icon-class="github_new" class="loginIcon"></svg-icon>
+                            </div>
+                        </div>
+                        <div class="icon_box">
+                            <div class="loginBt">
+                                <button class="button" @click="getLoginUrl('github')">
+                                    {{$t('corp.login_in')}}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </el-col>
             </el-row>
             <reTryDialog  :message="corpReLoginMsg" :dialogVisible="corpReTryDialogVisible"></reTryDialog>
         </el-col>
     </el-row>
-
 </template>
 
 <script>

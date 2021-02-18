@@ -187,9 +187,15 @@
                 }
             },
             getRepositoriesOfOrg(org, org_id) {
+                let _url = '';
+                if (this.$store.state.platform==='Gitee'){
+                    _url = `https://gitee.com/api/v5/orgs/${org}/repos`
+                }else if (this.$store.state.platform === 'Github') {
+                    _url = `https://api.github.com/orgs/${org}/repos`
+                }
                 let obj = {access_token: this.$store.state.platform_token, org: org, page: 1, per_page: 100};
                 _axios({
-                    url: `https://gitee.com/api/v5/orgs/${org}/repos`,
+                    url: _url,
                     params: obj,
                 }).then(res => {
                     let repositoryOptions = [];
@@ -212,11 +218,18 @@
                 })
             },
             getOrgsInfo() {
+                let _url = '';
+                if (this.$store.state.platform==='Gitee'){
+                    _url = url.getGiteeOrgsInfo
+                }else if (this.$store.state.platform === 'Github') {
+                    _url = url.getGithubOrgsInfo
+                }
                 let obj = {access_token: this.$store.state.platform_token, admin: true, page: 1, per_page: 100};
                 _axios({
-                    url: url.getOrgsInfo,
+                    url: _url,
                     params: obj,
                 }).then(res => {
+                    console.log(res);
                     if (res.status === 200) {
                         let orgOptions = [];
                         res.data.forEach((item, index) => {
