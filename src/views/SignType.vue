@@ -757,14 +757,8 @@
     import {mapActions} from 'vuex'
     import ReTryDialog from '../components/ReTryDialog'
     import EmailReTryDialog from '../components/EmailReTryDialog'
-
-    window.onresize = () => {
-        if (util.getClientHeight() > document.getElementById('transparentDiv').offsetHeight) {
-            document.getElementById("transparentDiv").style.height = util.getClientHeight() + 'px';
-        }
-    }
     export default {
-        name: 'Login',
+        name: 'SignType',
         components: {
             Select,
             NewHeader,
@@ -995,8 +989,11 @@
             },
             setClientHeight() {
                 this.$nextTick(() => {
+                    document.getElementById("transparentDiv").style.minHeight = '0px';
                     if (util.getClientHeight() > document.getElementById('transparentDiv').offsetHeight) {
-                        this.transparentDiv.height = util.getClientHeight() + 'px'
+                        document.getElementById("transparentDiv").style.minHeight = util.getClientHeight() + 'px'
+                    } else {
+                        document.getElementById("transparentDiv").style.minHeight = document.getElementById('transparentDiv').offsetHeight + 'px'
                     }
                 })
             },
@@ -1020,6 +1017,14 @@
                 util.setMinHeight('sign', 'btBox');
             }
             this.setClientHeight();
+            window.onresize = () => {
+                if (util.getClientHeight() > document.getElementById('transparentDiv').offsetHeight) {
+                    document.getElementById("transparentDiv").style.minHeight = util.getClientHeight() + 'px';
+                }
+            }
+        },
+        destroyed() {
+            window.onresize = null;
         }
     }
 </script>

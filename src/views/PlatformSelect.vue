@@ -2,7 +2,7 @@
     <el-row id="platformSelect" style="height: 100%">
         <el-col align="right" class="formBox">
             <el-row :gutter="20">
-                <el-col :span="10">
+                <el-col :span="12">
                     <div class="icon_back">
                         <div class="icon_box">
                             <div class="loginSvg">
@@ -18,7 +18,7 @@
                         </div>
                     </div>
                 </el-col>
-                <el-col :offset="4" :span="10">
+                <el-col :span="12">
                     <div class="icon_back">
                         <div class="icon_box">
                             <div class="loginSvg">
@@ -163,7 +163,7 @@
             background-color: white;
             border-radius: 1rem;
             height: 12.5rem;
-            width: 15rem;
+            width: 14rem;
             box-shadow: 0 0 20px 10px #F3F3F3;
             display: flex;
             flex-direction: column;
