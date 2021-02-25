@@ -121,6 +121,21 @@
     outline: none;
 }
 
+.deleteBt {
+    width: 5rem;
+    height: 2rem;
+    border-radius: 1rem;
+    border: none;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    background: linear-gradient(to right, #FF9D58, #E22424);
+}
+
+.deleteBt:focus {
+    outline: none;
+}
+
 .cancelBt {
     width: 5rem;
     height: 2rem;

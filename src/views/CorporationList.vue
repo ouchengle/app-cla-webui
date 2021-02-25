@@ -108,6 +108,9 @@
                                     </span>
                                     <el-dropdown-menu slot="dropdown">
                                         <!--<el-dropdown-item>{{$t('org.modify_field')}}</el-dropdown-item>-->
+                                        <el-dropdown-item @click.native="clickDeleteCla(scope.row,'individual')">
+                                            {{$t('org.delete_cla')}}
+                                        </el-dropdown-item>
                                         <el-dropdown-item @click.native="addIndividualCla(scope.row)">
                                             {{$t('org.add_cla_for_other_language')}}
                                         </el-dropdown-item>
@@ -172,6 +175,9 @@
                                         <!--<el-dropdown-item>-->
                                         <!--{{$t('org.modify_field')}}-->
                                         <!--</el-dropdown-item>-->
+                                        <el-dropdown-item @click.native="clickDeleteCla(scope.row,'corporation')">
+                                            {{$t('org.delete_cla')}}
+                                        </el-dropdown-item>
                                         <el-dropdown-item @click.native="addCorpCla(scope.row)">
                                             {{$t('org.add_cla_for_other_language')}}
                                         </el-dropdown-item>
@@ -179,13 +185,11 @@
                                 </el-dropdown>
                             </template>
                         </el-table-column>
-
                     </el-table>
                     <el-button v-else @click="createCorpCla">{{$t('org.addCorpCla')}}</el-button>
                 </div>
             </el-tab-pane>
         </el-tabs>
-
         <!--<div class="paginationClass">-->
         <!--<el-pagination-->
         <!--background-->
@@ -234,11 +238,8 @@
                             </el-upload>
                         </el-form-item>
                     </el-form>
-
-
                 </div>
             </div>
-
         </el-dialog>
         <el-dialog
                 top="5vh"
@@ -252,8 +253,8 @@
                     <button class="cancelBt" @click="resendEmailDialogVisible=false">{{$t('corp.no')}}</button>
                 </div>
             </div>
-
         </el-dialog>
+        <DeleteDialog :deleteVisible="deleteVisible" @delete="submitDeleteCla" @cancel="cancelDeleteCla"></DeleteDialog>
         <ReTryDialog :dialogVisible="reTryDialogVisible" :message="reLoginMsg"></ReTryDialog>
         <ReLoginDialog :dialogVisible="reLoginDialogVisible" :message="reLoginMsg"></ReLoginDialog>
     </div>
@@ -266,6 +267,7 @@
     import http from '../util/http'
     import ReLoginDialog from '../components/ReLoginDialog'
     import ReTryDialog from '../components/ReTryDialog'
+    import DeleteDialog from '../components/DeleteDialog'
     import download from 'downloadjs'
 
     export default {
@@ -273,6 +275,7 @@
         components: {
             ReTryDialog,
             ReLoginDialog,
+            DeleteDialog,
         },
         computed: {
             platform() {
@@ -290,6 +293,9 @@
         },
         data() {
             return {
+                delete_apply: '',
+                deleteRow: '',
+                deleteVisible: false,
                 file_size: SIGNATURE_FILE_MAX_SIZE,
                 uploadLoading: false,
                 individualClaData: [],
@@ -322,6 +328,74 @@
         },
         inject: ['setClientHeight'],
         methods: {
+            submitDeleteCla() {
+                this.deleteVisible = false;
+                this.deleteCla(this.deleteRow)
+            },
+            cancelDeleteCla() {
+                this.deleteVisible = false;
+            },
+            clickDeleteCla(row, apply_to) {
+                this.delete_apply = apply_to
+                this.deleteRow = row;
+                this.deleteVisible = true;
+            },
+            deleteCla(row) {
+                console.log(row);
+                http({
+                    url: `${url.delCla}/${this.$store.state.corpItem.link_id}/${this.delete_apply}/${row.language}`,
+                    method: 'delete'
+                }).then(res => {
+                    console.log(res);
+                    this.getIndividualClaInfo()
+                }).catch(err => {
+                    if (err.data && err.data.hasOwnProperty('data')) {
+                        switch (err.data.data.error_code) {
+                            case 'cla.invalid_token':
+                                this.$store.commit('errorSet', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.invalid_token'),
+                                });
+                                break;
+                            case 'cla.expired_token':
+                                this.$store.commit('setSignReLogin', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.invalid_token'),
+                                });
+                                break;
+                            case 'cla.missing_token':
+                                this.$store.commit('errorSet', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.missing_token'),
+                                });
+                                break;
+                            case 'cla.unknown_token':
+                                this.$store.commit('errorSet', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.unknown_token'),
+                                });
+                                break;
+                            case 'cla.system_error':
+                                this.$store.commit('errorCodeSet', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.system_error'),
+                                });
+                                break;
+                            default :
+                                this.$store.commit('errorCodeSet', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.unknown_error'),
+                                });
+                                break;
+                        }
+                    } else {
+                        this.$store.commit('errorCodeSet', {
+                            dialogVisible: true,
+                            dialogMessage: this.$t('tips.system_error'),
+                        })
+                    }
+                })
+            },
             createdAdmin(param) {
                 if (param.row.admin_added) {
                     return 'mark-row'
@@ -404,6 +478,12 @@
                         switch (err.data.data.error_code) {
                             case 'cla.invalid_token':
                                 this.$store.commit('errorSet', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.invalid_token'),
+                                });
+                                break;
+                            case 'cla.expired_token':
+                                this.$store.commit('setSignReLogin', {
                                     dialogVisible: true,
                                     dialogMessage: this.$t('tips.invalid_token'),
                                 });

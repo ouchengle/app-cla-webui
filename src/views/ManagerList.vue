@@ -1,7 +1,6 @@
 <template>
 
     <el-row id="userList">
-
         <el-col>
             <p id="tabName">{{$t('header.manager')}}</p>
             <el-row class="tableBox">
@@ -9,7 +8,6 @@
                     <el-row>
                         <el-col align="left">
                             <button class="button" @click="createManager">{{$t('header.createManager')}}</button>
-                            <!--<button class="button" @click="multipleChoice=true">{{$t('corp.batch')}}</button>-->
                         </el-col>
                     </el-row>
                     <el-row>
@@ -68,8 +66,6 @@
             <corpReLoginDialog :message="corpReLoginMsg" :dialogVisible="corpReLoginDialogVisible"></corpReLoginDialog>
             <reTryDialog :message="corpReLoginMsg" :dialogVisible="corpReTryDialogVisible"></reTryDialog>
         </el-col>
-
-
         <el-dialog
                 width="20%"
                 title=""
@@ -79,14 +75,12 @@
             <el-row align="center">
                 {{$t('corp.deleteTips')}}
             </el-row>
-            <el-row align="center" class="marginTop1rem contentTitle">
+            <el-row align="center" class="margin-top-1rem">
 
                 <button class="deleteBt" @click="submit()">{{$t('corp.yes')}}</button>
                 <button class="cancelBt" @click="deleteUserVisible=false">{{$t('corp.no')}}</button>
             </el-row>
-
         </el-dialog>
-
     </el-row>
 
 </template>
@@ -290,43 +284,8 @@
             border-radius: 1.5rem;
         }
 
-        & .marginTop1rem {
-            margin-top: 1rem;
-        }
-
         & .el-dialog {
             border-radius: 1rem;
-        }
-
-        & .cancelBt {
-            width: 5rem;
-            height: 2rem;
-            border-radius: 1rem;
-            border: 1px solid black;
-            color: black;
-            font-size: 1rem;
-            cursor: pointer;
-            background-color: white;
-            margin-left: 1rem;
-        }
-
-        & .cancelBt:focus {
-            outline: none;
-        }
-
-        & .deleteBt {
-            width: 5rem;
-            height: 2rem;
-            border-radius: 1rem;
-            border: none;
-            color: white;
-            font-size: 1rem;
-            cursor: pointer;
-            background: linear-gradient(to right, #FF9D58, #E22424);
-        }
-
-        & .deleteBt:focus {
-            outline: none;
         }
 
         & .button {
@@ -352,7 +311,6 @@
             font-size: 2rem;
             text-align: left;
         }
-
 
         & .el-checkbox__inner {
             border: 1px solid #319E55;
