@@ -129,6 +129,7 @@ module.exports = {
         unmatched_cla: '当前的CLA不是最新的CLA，请刷新页面后重试',
         link_exists: '该社区已经存在绑定信息',
         checkRepoMessage: '您输入的仓库不属于该组织或者该仓库为私有仓库或者该仓库不存在，是否继续？',
+        cla_is_used: '该CLA已经被使用',
     },
     header: {
         home: '首页',
@@ -202,7 +203,7 @@ module.exports = {
         individual_cla: '个人CLA',
         toLanguage: '语言',
         modify_field: '调整字段',
-        delete_cla:'删除CLA',
+        delete_cla: '删除CLA',
         add_cla_for_other_language: '添加其他语言的CLA',
         corporation_cla: '企业CLA',
         signature: '签名页',

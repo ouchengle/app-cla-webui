@@ -341,12 +341,11 @@
                 this.deleteVisible = true;
             },
             deleteCla(row) {
-                console.log(row);
                 http({
                     url: `${url.delCla}/${this.$store.state.corpItem.link_id}/${this.delete_apply}/${row.language}`,
                     method: 'delete'
                 }).then(res => {
-                    console.log(res);
+                    util.successMessage(this);
                     this.getIndividualClaInfo()
                 }).catch(err => {
                     if (err.data && err.data.hasOwnProperty('data')) {
@@ -375,6 +374,12 @@
                                     dialogMessage: this.$t('tips.unknown_token'),
                                 });
                                 break;
+                            case 'cla.cla_is_used':
+                                this.$store.commit('errorCodeSet', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.cla_is_used'),
+                                });
+                                break;
                             case 'cla.system_error':
                                 this.$store.commit('errorCodeSet', {
                                     dialogVisible: true,
@@ -398,7 +403,9 @@
             },
             createdAdmin(param) {
                 if (param.row.admin_added) {
-                    return 'mark-row'
+                    return 'mark-row-green'
+                } else if (param.row.pdf_uploaded) {
+                    return 'mark-row-orange'
                 }
             },
             createCorpCla() {

@@ -90,6 +90,10 @@ export const clearManagerSession = (_this) => {
     sessionStorage.removeItem('loginInfo');
     sessionStorage.removeItem('pwdIsChanged');
 };
+export const successMessage = (_this)=>{
+    _this.$message.closeAll();
+    _this.$message.success(_this.$t('tips.successTitle'))
+};
 
 
 

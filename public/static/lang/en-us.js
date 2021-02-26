@@ -129,6 +129,7 @@ module.exports = {
         unmatched_cla: 'The current CLA is not the latest CLA, please refresh the page and try again',
         link_exists: 'Binding information already exists in this community',
         checkRepoMessage: 'The repository you entered does not belong to the organization, or the repository is private or does not exist. Do you want to continue?',
+        cla_is_used: 'The cla has been used',
     },
     header: {
         home: 'Home',
@@ -201,7 +202,7 @@ module.exports = {
         individual_cla: 'Individual CLA',
         toLanguage: 'Language',
         modify_field: 'Modify field',
-        delete_cla:'Delete CLA',
+        delete_cla: 'Delete CLA',
         add_cla_for_other_language: 'Add CLA for other language',
         corporation_cla: 'Corporation CLA',
         signature: 'Signature',

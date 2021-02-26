@@ -1,5 +1,4 @@
 <template>
-
     <el-row id="userList">
         <el-col>
             <p id="tabName">{{$t('header.manager')}}</p>
@@ -62,25 +61,11 @@
                     </el-row>
                 </el-col>
             </el-row>
-
             <corpReLoginDialog :message="corpReLoginMsg" :dialogVisible="corpReLoginDialogVisible"></corpReLoginDialog>
             <reTryDialog :message="corpReLoginMsg" :dialogVisible="corpReTryDialogVisible"></reTryDialog>
+            <DeleteDialog :deleteVisible="deleteUserVisible" @delete="submitDeleteManager"
+                          @cancel="cancelDeleteManager"></DeleteDialog>
         </el-col>
-        <el-dialog
-                width="20%"
-                title=""
-                align="center"
-                :show-close="false"
-                :visible.sync="deleteUserVisible">
-            <el-row align="center">
-                {{$t('corp.deleteTips')}}
-            </el-row>
-            <el-row align="center" class="margin-top-1rem">
-
-                <button class="deleteBt" @click="submit()">{{$t('corp.yes')}}</button>
-                <button class="cancelBt" @click="deleteUserVisible=false">{{$t('corp.no')}}</button>
-            </el-row>
-        </el-dialog>
     </el-row>
 
 </template>
@@ -91,6 +76,7 @@
     import http from '../util/http'
     import corpReLoginDialog from '../components/CorpReLoginDialog'
     import reTryDialog from '../components/ReTryDialog'
+    import DeleteDialog from '../components/DeleteDialog'
 
     export default {
         name: "UserList",
@@ -114,7 +100,8 @@
         },
         components: {
             corpReLoginDialog,
-            reTryDialog
+            reTryDialog,
+            DeleteDialog,
         },
         data() {
             return {
@@ -131,6 +118,13 @@
         },
         methods: {
             ...mapActions(['setUserLimitAct']),
+            submitDeleteManager() {
+                this.deleteUserVisible = false;
+                this.deleteManager();
+            },
+            cancelDeleteManager() {
+                this.deleteUserVisible = false;
+            },
             createManager() {
                 this.$router.push('/createManager');
             },
@@ -204,7 +198,7 @@
                     }
                 })
             },
-            submit() {
+            deleteManager() {
                 let obj = {
                     managers: this.emails
                 };
@@ -214,12 +208,17 @@
                     data: obj,
                 }).then(res => {
                     this.getEmployeeManager();
-                    this.deleteUserVisible = false
                 }).catch(err => {
                     if (err.data && err.data.hasOwnProperty('data')) {
                         switch (err.data.data.error_code) {
                             case 'cla.invalid_token':
                                 this.$store.commit('errorSet', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.invalid_token'),
+                                });
+                                break;
+                            case 'cla.expired_token':
+                                this.$store.commit('setSignReLogin', {
                                     dialogVisible: true,
                                     dialogMessage: this.$t('tips.invalid_token'),
                                 });

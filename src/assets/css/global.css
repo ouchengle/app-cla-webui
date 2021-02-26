@@ -171,8 +171,12 @@
     border-color: #319E55;
 }
 
-.el-table .mark-row {
+.el-table .mark-row-green {
     color: #319E55;
+}
+
+.el-table .mark-row-orange {
+    color: #FF9D58;
 }
 
 .tableClass {
