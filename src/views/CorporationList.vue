@@ -79,6 +79,7 @@
             <el-tab-pane :label="$t('org.individual_cla')" name="second" class="margin-top-1rem">
                 <div class="tableStyle">
                     <el-table
+                            v-if="individualClaData.length"
                             :empty-text="$t('corp.no_data')"
                             :data="individualClaData"
                             class="tableClass"
@@ -119,6 +120,7 @@
                             </template>
                         </el-table-column>
                     </el-table>
+                    <el-button v-else @click="createIndividualCla">{{$t('org.addIndividualCla')}}</el-button>
                 </div>
             </el-tab-pane>
             <el-tab-pane :label="$t('org.corporation_cla')" name="third" class="margin-top-1rem">
@@ -248,7 +250,7 @@
             <div class="dialogContent">
                 {{$t('org.resend_email_message')}}
                 <div class="dialogBtBox">
-                    <button class="button" @click="resendPDF">{{$t('corp.yes')}}
+                    <button class="button_submit" @click="resendPDF">{{$t('corp.yes')}}
                     </button>
                     <button class="cancelBt" @click="resendEmailDialogVisible=false">{{$t('corp.no')}}</button>
                 </div>
@@ -336,7 +338,7 @@
                 this.deleteVisible = false;
             },
             clickDeleteCla(row, apply_to) {
-                this.delete_apply = apply_to
+                this.delete_apply = apply_to;
                 this.deleteRow = row;
                 this.deleteVisible = true;
             },
@@ -410,6 +412,10 @@
             },
             createCorpCla() {
                 this.$router.push('/addCorpCla');
+                this.setCheckInfo();
+            },
+            createIndividualCla() {
+                this.$router.push('/addIndividualCla');
                 this.setCheckInfo();
             },
             addIndividualCla(row) {
@@ -893,7 +899,7 @@
                     this.clearFileList();
                     this.uploadLoading.close();
                     this.uploadDialogVisible = false;
-                    this.openSuccessMessage();
+                    util.successMessage(this);
                     this.getCorporationInfo()
                 }).catch(err => {
                     if (err.data && err.data.hasOwnProperty('data')) {
@@ -956,7 +962,7 @@
             beforeUpload(file) {
             },
             handleChange(file, fileList) {
-                let max_size = 2 * 1024 * 1024;
+                let max_size = this.file_size * 1024 * 1024;
                 if (/.(PDF|pdf)$/.test(file.name)) {
                     if (file.size < max_size) {
                         this.fileList.push(file);
@@ -1006,10 +1012,6 @@
                 this.resendEmail = email;
                 this.resendEmailDialogVisible = true;
             },
-            openSuccessMessage() {
-                this.$message.closeAll();
-                this.$message.success(this.$t('org.success'));
-            },
             resendPDF() {
                 let email = this.resendEmail;
                 let resend_url = '';
@@ -1019,7 +1021,7 @@
                     method: 'post',
                 }).then(res => {
                     this.resendEmailDialogVisible = false;
-                    this.openSuccessMessage();
+                    util.successMessage(this)
                 }).catch(err => {
                     if (err.data && err.data.hasOwnProperty('data')) {
                         switch (err.data.data.error_code) {
@@ -1078,7 +1080,7 @@
                     url: `${url.corporationManager}/${this.$store.state.corpItem.link_id}/${email}`,
                     method: 'put',
                 }).then(res => {
-                    this.openSuccessMessage();
+                    util.successMessage(this);
                     this.getCorporationInfo()
                 }).catch(err => {
                     if (err.data && err.data.hasOwnProperty('data')) {
@@ -1153,38 +1155,6 @@
     #corporationList {
         padding-top: 3rem;
 
-        & .button {
-            width: 6rem;
-            height: 2rem;
-            border-radius: 1rem;
-            border: none;
-            color: white;
-            font-size: 1rem;
-            cursor: pointer;
-            background: linear-gradient(to right, #97DB30, #319E55);
-            margin-bottom: 1rem;
-        }
-
-        & .button:focus {
-            outline: none;
-        }
-
-        .cancelBt {
-            width: 6rem;
-            height: 2rem;
-            border-radius: 1rem;
-            border: 1px solid black;
-            color: black;
-            font-size: 1rem;
-            cursor: pointer;
-            background-color: white;
-            margin-left: 1rem;
-        }
-
-        .cancelBt:focus {
-            outline: none;
-        }
-
         .margin-top-1rem {
             margin-top: 1rem;
         }
@@ -1217,18 +1187,6 @@
 
         .dialogBtBox {
             margin-top: 2rem;
-
-            button {
-                width: 4rem;
-            }
-
-            button:nth-of-type(2) {
-                margin-left: 3rem;
-            }
-        }
-
-        .dialogBt {
-
         }
 
         .el-button.is-disabled, .el-button.is-disabled:focus, .el-button.is-disabled:hover {

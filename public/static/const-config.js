@@ -1,5 +1,5 @@
-const SIGNATURE_PAGE_MAX_SIZE = 200;
-const SIGNATURE_FILE_MAX_SIZE = 2;
+const SIGNATURE_PAGE_MAX_SIZE = 200;      //kb
+const SIGNATURE_FILE_MAX_SIZE = 3;        //M
 const SIGNATURE_PAGE_NAME = 'signature_page';
 const ORG_SIGNATURE_FILE = 'org_signature_file';
 const COPYRIGHT = 'Copyright ©2020 claSign';
@@ -66,7 +66,7 @@ const CORPORATIONMETADATAARR_EN = [
         description: 'corporation email',
         required: true,
     },];
-const CORPORATIONMETADATAARR_ZH =  [
+const CORPORATIONMETADATAARR_ZH = [
     {
         title: '授权代表',
         type: 'authorized',
@@ -105,16 +105,19 @@ const INITCORPCUSTOMMETADATA = [{
 }];
 const DATATYPEOPTIONS = [
     {label: 'name', value: 'name'}, {
-    label: 'corporationName',
-    value: 'corporationName'
-}, {label: 'date', value: 'date'}, {
-    label: 'telephone',
-    value: 'telephone'
-}, {label: 'address', value: 'address'}, {label: 'email', value: 'email'}, {
-    label: 'fax',
-    value: 'fax'
-},
+        label: 'corporationName',
+        value: 'corporationName'
+    }, {label: 'date', value: 'date'}, {
+        label: 'telephone',
+        value: 'telephone'
+    }, {label: 'address', value: 'address'}, {label: 'email', value: 'email'}, {
+        label: 'fax',
+        value: 'fax'
+    },
 ];
 const EMAIL_UNAUTHORIZE = 'refuse_to_authorize_email';
 const NO_PUBLIC_EMAIL = 'no_public_email';
 const SYSTEM_ERROR = 'system_error';
+const GITEE_CHECK_REPO_401_ERROR_PRIVATE = '401 Unauthorized: no \'projects\' scope';
+const GITEE_CHECK_REPO_401_ERROR_TOKEN_EXIST = '401 Unauthorized: Access token does not exist';
+

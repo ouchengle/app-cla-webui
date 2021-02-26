@@ -221,7 +221,7 @@ module.exports = {
         config_cla_select_org_tile: 'Choose a organization or repository',
         config_cla_select_org: 'Select an organization that needs to configure cla',
         config_cla_select_org_placeholder: 'select organization',
-        config_cla_select_org_alias: 'You need an alias for the organization you choose',
+        config_cla_select_org_alias: 'You need an alias for the organization you choose. If you do not fill in the alias, it will be the same as the organization name by default',
         config_cla_select_org_alias_placeholder: 'input organization alias',
         config_cla_select_repo: 'If you want to configure CLA for a repository under the organization, please input the repository. If not, please ignore it',
         config_cla_select_repo_placeholder: 'please input repository',

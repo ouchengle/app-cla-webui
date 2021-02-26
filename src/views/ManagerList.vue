@@ -74,6 +74,7 @@
     import * as url from '../util/api'
     import {mapActions} from 'vuex'
     import http from '../util/http'
+    import * as util from '../util/util'
     import corpReLoginDialog from '../components/CorpReLoginDialog'
     import reTryDialog from '../components/ReTryDialog'
     import DeleteDialog from '../components/DeleteDialog'
@@ -146,7 +147,6 @@
                     this.emails.push({email: row.email})
                 }
                 this.deleteUserVisible = true
-
             },
             getEmployeeManager() {
                 http({
@@ -207,6 +207,7 @@
                     method: 'delete',
                     data: obj,
                 }).then(res => {
+                    util.successMessage(this);
                     this.getEmployeeManager();
                 }).catch(err => {
                     if (err.data && err.data.hasOwnProperty('data')) {
