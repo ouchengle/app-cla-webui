@@ -19,7 +19,7 @@ const INDIVIDUALMETADATAARR_EN = [
     {
         title: 'Name',
         type: 'name',
-        description: 'your name',
+        description: 'Your name',
         required: true,
     },];
 const INDIVIDUALMETADATAARR_ZH = [
@@ -91,13 +91,7 @@ const CORPORATIONMETADATAARR_ZH = [
         description: '签署者所在公司的邮箱',
         required: true,
     },];
-const INITINDIVIDUALCUSTOMMETADATA = [{
-    title: '',
-    type: '',
-    description: '',
-    required: false,
-}];
-const INITCORPCUSTOMMETADATA = [{
+const INITCUSTOMMETADATA = [{
     title: '',
     type: '',
     description: '',

@@ -411,23 +411,21 @@
                 }
             },
             createCorpCla() {
-                this.$router.push('/addCorpCla');
+                this.$store.commit('setAddBindFirst', true);
                 this.setCheckInfo();
+                this.$router.push('/addCorpCla');
             },
             createIndividualCla() {
-                this.$router.push('/addIndividualCla');
+                this.$store.commit('setAddBindFirst', true);
                 this.setCheckInfo();
+                this.$router.push('/addIndividualCla');
             },
             addIndividualCla(row) {
                 this.$router.push('/addIndividualCla');
                 this.setIndividualPD(row)
             },
             setIndividualPD(row) {
-                this.$store.commit('setChooseOrg', this.$store.state.corpItem.org_id);
-                this.$store.commit('setChooseRepo', this.$store.state.corpItem.repo_id);
-                this.$store.commit('setOrgAlias', this.$store.state.corpItem.org_alias);
-                this.$store.commit('setEmail', this.$store.state.corpItem.org_email);
-                this.$store.commit('setBindType', 'add-bind');
+                this.setCheckInfo();
                 if (row.fields.length > 3) {
                     let data = [];
                     row.fields.forEach((item, index) => {
@@ -445,15 +443,15 @@
                 }
             },
             addCorpCla(row) {
-                this.$router.push('/addCorpCla');
                 this.setCorpPD(row)
+                this.$router.push('/addCorpCla');
             },
             setCheckInfo() {
+                this.$store.commit('setBindType', 'add-bind');
                 this.$store.commit('setChooseOrg', this.$store.state.corpItem.org_id);
                 this.$store.commit('setChooseRepo', this.$store.state.corpItem.repo_id);
                 this.$store.commit('setOrgAlias', this.$store.state.corpItem.org_alias);
                 this.$store.commit('setEmail', this.$store.state.corpItem.org_email);
-                this.$store.commit('setBindType', 'add-bind');
             },
             setCorpPD(row) {
                 this.setCheckInfo();

@@ -45,6 +45,7 @@ export const clearSession = (_this) => {
     _this.$store.commit('setBindType', '');
     _this.$store.commit('setAddLang', '');
     _this.$store.commit('setRepo', '');
+    _this.$store.commit('setAddBindFirst', '');
     sessionStorage.removeItem('orgOptions');
     sessionStorage.removeItem('orgValue');
     sessionStorage.removeItem('orgChoose');
@@ -68,6 +69,7 @@ export const clearSession = (_this) => {
     sessionStorage.removeItem('bindType');
     sessionStorage.removeItem('addLang');
     sessionStorage.removeItem('repo');
+    sessionStorage.removeItem('add_bind_first');
 };
 export const setI18nLang = () => {
     let lang = localStorage.getItem('lang');
