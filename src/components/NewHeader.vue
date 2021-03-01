@@ -282,7 +282,7 @@
 </script>
 
 <style scoped lang="less">
-    @media screen and (min-width:600px) and (max-width:1200px) {
+    @media screen and (max-width:1200px) {
         .headerBox{
             width: 100%;
         }
