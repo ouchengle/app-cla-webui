@@ -42,6 +42,15 @@
             corpReLoginDialog,
             reTryDialog
         },
+        watch: {
+            '$i18n.locale'() {
+                this.$refs['ruleForm'] && this.$refs['ruleForm'].fields.forEach(item => {
+                    if (item.validateState === 'error') {
+                        this.$refs['ruleForm'].validateField(item.labelFor)
+                    }
+                });
+            },
+        },
         computed: {
             orgValue() {
                 return this.$store.state.loginInfo.orgValue

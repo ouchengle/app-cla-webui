@@ -103,9 +103,6 @@
                 width="35%">
             <div>
                 <p class="dialogDesc">{{this.$t('org.unlink_p')}}</p>
-                <div style="text-align: center">
-                    <svg-icon style="width: 30rem;height: 20rem;margin:0 auto" icon-class="error"></svg-icon>
-                </div>
                 <div style="padding: 0 6rem;text-align: left;font-size: 1.3rem">
                     <p style="text-align: center">{{this.$t('org.unlink_will')}}</p>
                     <ul>
@@ -113,14 +110,11 @@
                         <li>{{this.$t('org.unlink_desc2')}}</li>
                     </ul>
                 </div>
-
                 <div class="right">
                     <el-button @click="unLinkDialogVisible = false">{{this.$t('corp.cancel')}}</el-button>
                     <el-button type="danger" @click="unLinkRepositoryFun()">{{this.$t('org.unlink')}}</el-button>
                 </div>
-
             </div>
-
         </el-dialog>
         <el-dialog
                 title="upload"

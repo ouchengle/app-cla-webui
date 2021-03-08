@@ -253,6 +253,59 @@
     margin-top: 1rem;
 }
 
+.margin-top-2rem {
+    margin-top: 2rem;
+}
+
+.margin-top-3rem {
+    margin-top: 3rem;
+}
+
+.margin-top-5rem {
+    margin-top: 5rem;
+}
+
+.margin-bottom-1rem {
+    margin-bottom: 1rem;
+}
+
+.margin-bottom-2rem {
+    margin-bottom: 2rem;
+}
+
+.margin-bottom-3rem {
+    margin-bottom: 3rem;
+}
+
 .align_left {
     text-align: left;
+}
+
+.el-step__head.is-finish, .el-step__title.is-finish {
+    color: #319E55;
+    border-color: #319E55;
+}
+.reset_pwd_button {
+    font-family: Roboto-Light, sans-serif;
+    width: 15rem;
+    height: 3rem;
+    border-radius: 1.5rem;
+    border: none;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    background: linear-gradient(to right, #97DB30, #319E55);
+    margin: 1rem 0;
+}
+.reset_pwd_button:focus {
+    outline: none;
+}
+.findPwdBox{
+    width: 500px;
+    margin: 5rem auto 0;
+    background-color: white;
+    padding: 5rem 2rem 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 0 20px 10px #F3F3F3;
+
 }
