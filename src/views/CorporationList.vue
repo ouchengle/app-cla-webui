@@ -1,8 +1,8 @@
 <template>
     <div id="corporationList">
-        <el-tabs v-model="activeName" type="border-card" @tab-click="tabsHandleClick">
+        <el-tabs v-model="activeName" @tab-click="tabsHandleClick">
             <el-tab-pane :label="$t('org.signed_corporation')" name="first" class="margin-top-1rem">
-                <el-tabs v-model="corpActiveName"  @tab-click="corpTabsHandleClick">
+                <el-tabs v-model="corpActiveName" @tab-click="corpTabsHandleClick">
                     <el-tab-pane :label="$t('org.not_complete')" name="first" class="margin-top-1rem">
                         <div class="tableStyle">
                             <el-table
@@ -18,12 +18,12 @@
                                         :label="$t('org.corporation_name')">
                                 </el-table-column>
                                 <el-table-column
-                                        min-width="10"
+                                        min-width="15"
                                         prop="admin_name"
                                         :label="$t('org.config_cla_field_corp_default_title1')">
                                 </el-table-column>
                                 <el-table-column
-                                        min-width="20"
+                                        min-width="15"
                                         prop="admin_email"
                                         :label="$t('org.to_email')">
                                 </el-table-column>
@@ -100,6 +100,7 @@
                                     :empty-text="$t('corp.no_data')"
                                     :data="signedCompleted"
                                     class="tableClass"
+                                    :row-class-name="createdAdmin"
                                     align="center"
                                     style="width: 100%;">
                                 <el-table-column
@@ -218,35 +219,6 @@
                                         :label="$t('org.date')">
                                 </el-table-column>
                                 <el-table-column
-                                        min-width="10">
-                                    <template slot="header" slot-scope="scope">
-                                        <el-tooltip effect="dark" :content="$t('org.corp_signed_pdf')" placement="top">
-                                            <span>PDF</span>
-                                        </el-tooltip>
-                                    </template>
-                                    <template slot-scope="scope">
-                                        <el-popover
-                                                width="80"
-                                                trigger="hover"
-                                                placement="right">
-                                            <div class="menuBT">
-                                                <el-button @click="uploadClaFile(scope.row)" size="mini">
-                                                    {{$t('org.upload')}}
-                                                </el-button>
-                                                <el-button v-if="scope.row.pdf_uploaded"
-                                                           @click="downloadClaFile(scope.row)"
-                                                           size="mini">{{$t('org.download')}}
-                                                </el-button>
-                                                <el-button v-if="scope.row.pdf_uploaded"
-                                                           @click="previewClaFile(scope.row)"
-                                                           type="" size="mini">{{$t('org.preview')}}
-                                                </el-button>
-                                            </div>
-                                            <svg-icon slot="reference" class="pointer" icon-class="pdf" @click=""/>
-                                        </el-popover>
-                                    </template>
-                                </el-table-column>
-                                <el-table-column
                                         min-width="10"
                                         :label="$t('org.operation')">
                                     <template slot-scope="scope">
@@ -255,11 +227,11 @@
                                         <svg-icon icon-class="operation"></svg-icon>
                                     </span>
                                             <el-dropdown-menu slot="dropdown">
-                                                <el-dropdown-item :command="{command:'d',row:scope.row}">
-                                                    {{$t('corp.reduction')}}
+                                                <el-dropdown-item disabled="" :command="{command:'d',row:scope.row}">
+                                                    {{$t('org.reduction')}}
                                                 </el-dropdown-item>
-                                                <el-dropdown-item :command="{command:'e',row:scope.row}">
-                                                    {{$t('corp.deleteCompletely')}}
+                                                <el-dropdown-item disabled="" :command="{command:'e',row:scope.row}">
+                                                    {{$t('org.deleteCompletely')}}
                                                 </el-dropdown-item>
                                             </el-dropdown-menu>
                                         </el-dropdown>
@@ -544,6 +516,21 @@
         },
         inject: ['setClientHeight'],
         methods: {
+            sortDate(dataArr) {
+                dataArr.forEach(item => {
+                    let dateNum = parseInt(item.date.replace(/-/g, ''));
+                    Object.assign(item, {dateNum: dateNum})
+                })
+                for (let i = 0; i < dataArr.length; i++) {
+                    for (let j = i + 1; j < dataArr.length; j++) {
+                        if (dataArr[i].dateNum < dataArr[j].dateNum) {
+                            let data = dataArr[i]
+                            dataArr[i] = dataArr[j]
+                            dataArr[j] = data
+                        }
+                    }
+                }
+            },
             submitDeleteCorpComplete() {
                 this.deleteCompleteVisible = false;
                 // http({
@@ -1022,6 +1009,8 @@
                     url: `${url.getCorporationSigning}/${this.$store.state.corpItem.link_id}`,
                 }).then(resp => {
                     this.tableData = resp.data.data;
+                    this.signedCompleted = [];
+                    this.signedNotCompleted = [];
                     this.tableData.forEach(item => {
                         if (item.admin_added) {
                             this.signedCompleted.push(item)
@@ -1029,6 +1018,8 @@
                             this.signedNotCompleted.push(item)
                         }
                     })
+                    this.sortDate(this.signedCompleted)
+                    this.sortDate(this.signedNotCompleted)
                 }).catch(err => {
                     if (err.data && err.data.hasOwnProperty('data')) {
                         switch (err.data.data.error_code) {
@@ -1082,6 +1073,7 @@
                     url: `${url.getDeletedCorpInfo}/${this.$store.state.corpItem.link_id}`,
                 }).then(resp => {
                     this.deletedCorpInfo = resp.data.data;
+                    this.sortDate(this.deletedCorpInfo)
                 }).catch(err => {
                     if (err.data && err.data.hasOwnProperty('data')) {
                         switch (err.data.data.error_code) {

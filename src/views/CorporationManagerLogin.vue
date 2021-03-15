@@ -93,7 +93,7 @@
                 }
             },
             findPwd() {
-                this.$router.push('/password')
+                // this.$router.push('/password')
             },
             login(userName, pwd) {
                 let obj = {
