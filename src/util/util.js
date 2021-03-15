@@ -83,11 +83,11 @@ export const setI18nLang = () => {
     }
 };
 export const clearManagerSession = (_this) => {
-    _this.$store.commit('managerList', '');
-    _this.$store.commit('userLimit', '');
-    _this.$store.commit('token', '');
-    _this.$store.commit('loginInfo', '');
-    _this.$store.commit('pwdIsChanged', '');
+    _this.$store.commit('setManagerList', '');
+    _this.$store.commit('setUserLimit', '');
+    _this.$store.commit('setCorpToken', '');
+    _this.$store.commit('setLoginInfo', '');
+    _this.$store.commit('setPwdIsChanged', '');
     sessionStorage.removeItem('managerList');
     sessionStorage.removeItem('userLimit');
     sessionStorage.removeItem('token');

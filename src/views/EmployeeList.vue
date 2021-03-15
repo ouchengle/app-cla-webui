@@ -110,7 +110,7 @@
         </el-tabs>
         <corpReLoginDialog :message="corpReLoginMsg" :dialogVisible="corpReLoginDialogVisible"></corpReLoginDialog>
         <reTryDialog :message="corpReLoginMsg" :dialogVisible="corpReTryDialogVisible"></reTryDialog>
-        <DeleteDialog :deleteVisible="deleteUserVisible" @delete="submitDeleteEmployee"
+        <DeleteDialog :deleteMessage="deleteMessage" :deleteVisible="deleteUserVisible" @delete="submitDeleteEmployee"
                       @cancel="cancelDeleteEmployee"></DeleteDialog>
     </div>
 </template>
@@ -148,6 +148,9 @@
             }
         },
         computed: {
+            deleteMessage(){
+                return this.$t('corp.deleteTips')
+            },
             orgValue() {
                 return this.$store.state.loginInfo.orgValue
             },

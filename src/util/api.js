@@ -11,6 +11,7 @@ export const unLinkRepository = '/v1/link';                                     
 export const individual_signing = '/v1/individual-signing';                         //个人签署协议 方式post 参数/cla_org_id,  name,email,info
 export const corporation_signing = '/v1/corporation-signing';                       //企业签署协议 方式post 参数  link_id,email,info
 export const getCorporationSigning = '/v1/corporation-signing';                     //拉取已签署的企业列表 method:get params  /:link_id
+export const getDeletedCorpInfo = '/v1/corporation-signing/deleted';                //拉取已删除的企业列表 method:get params  /:link_id
 export const employee_signing = '/v1/employee-signing';                             //企业个人签署协议 方式post 参数 /cla_org_id,  name,email,info,verification_code
 export const deleteCon = '/v1/deleteContributor';                                   //删除企业白名单
 export const changeActive = '/v1/changeActive';                                     //修改企业白名单人员状态
@@ -34,4 +35,7 @@ export const corporationPdf = '/v1/corporation-pdf';                            
 export const resend_pdf = '/v1/corporation-signing';                                //重发企业签名pdf      方式post  参数：/link_id/email
 export const getBlankSignature = 'v1/org-signature/blank';                          //下载空白签名页       方式get  参数：/:language
 export const addCla = 'v1/cla';                                                     //增加其他语言的CLA     方式post  参数：/:link_id/:apply_to
+export const findPwdSendCode = 'v1/findPwdSendCode';                                //忘记密码发送验证码     方式  参数：
+export const submitVerifyCode = 'v1/submitVerifyCode';                              //忘记密码比对验证码     方式  参数：
+export const submitNewPassword = 'v1/submitNewPassword';                            //提交新密码        方式  参数：
 

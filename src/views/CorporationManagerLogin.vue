@@ -21,10 +21,8 @@
                             </button>
                         </el-form-item>
                     </el-form>
-
                 </div>
             </div>
-
             <reTryDialog :message="corpReLoginMsg" :dialogVisible="corpReTryDialogVisible"></reTryDialog>
         </el-col>
     </el-row>
@@ -36,6 +34,7 @@
     import {mapActions} from 'vuex'
     import * as util from '../util/util'
     import reTryDialog from '../components/ReTryDialog'
+
     export default {
         name: "RepoSelect",
         components: {
@@ -94,6 +93,7 @@
                 }
             },
             findPwd() {
+                // this.$router.push('/password')
             },
             login(userName, pwd) {
                 let obj = {
@@ -208,7 +208,7 @@
                 });
             },
         },
-        created(){
+        created() {
             util.clearManagerSession(this);
         },
         mounted() {
@@ -219,6 +219,7 @@
 
 <style lang="less">
     @import "../assets/font/css/Roboto-Regular.css";
+
     #corpManagerLogin {
         .formBack_Box {
             width: 100%;

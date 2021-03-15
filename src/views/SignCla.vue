@@ -406,7 +406,7 @@
                 } else {
                     myHttp = axios
                 }
-                if (reg.test(email)) {
+                if (email && reg.test(email)) {
                     myHttp({
                         url: `${url.sendVerifyCode}/${this.link_id}/${this.myForm.email}`,
                         method: 'post',

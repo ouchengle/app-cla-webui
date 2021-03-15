@@ -7,7 +7,7 @@
                 :show-close="false"
                 :visible.sync="deleteVisible">
             <el-row align="center">
-                {{$t('corp.deleteTips')}}
+                {{deleteMessage}}
             </el-row>
             <el-row align="center" class="margin-top-1rem">
                 <button class="deleteBt" @click="submit">{{$t('corp.yes')}}</button>
@@ -20,7 +20,7 @@
 <script>
     export default {
         name: "DeleteDialog",
-        props:['deleteVisible'],
+        props:['deleteVisible','deleteMessage'],
         methods:{
             submit(){
                 this.$emit('delete')

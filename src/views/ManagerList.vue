@@ -63,7 +63,7 @@
             </el-row>
             <corpReLoginDialog :message="corpReLoginMsg" :dialogVisible="corpReLoginDialogVisible"></corpReLoginDialog>
             <reTryDialog :message="corpReLoginMsg" :dialogVisible="corpReTryDialogVisible"></reTryDialog>
-            <DeleteDialog :deleteVisible="deleteUserVisible" @delete="submitDeleteManager"
+            <DeleteDialog :deleteMessage="deleteMessage" :deleteVisible="deleteUserVisible" @delete="submitDeleteManager"
                           @cancel="cancelDeleteManager"></DeleteDialog>
         </el-col>
     </el-row>
@@ -82,6 +82,9 @@
     export default {
         name: "UserList",
         computed: {
+            deleteMessage(){
+                return this.$t('corp.deleteTips')
+            },
             orgValue() {
                 return this.$store.state.loginInfo.orgValue
             },

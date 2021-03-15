@@ -259,7 +259,7 @@
                                         dialogMessage: this.$t('tips.not_same_corp'),
                                     });
                                     break;
-                                case 'cla.invalid_parameter':
+                                case 'cla.admin_as_manager':
                                     this.$store.commit('errorCodeSet', {
                                         dialogVisible: true,
                                         dialogMessage: this.$t('corp.manager_email_same_with_admin'),

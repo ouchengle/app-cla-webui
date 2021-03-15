@@ -2,79 +2,245 @@
     <div id="corporationList">
         <el-tabs v-model="activeName" @tab-click="tabsHandleClick">
             <el-tab-pane :label="$t('org.signed_corporation')" name="first" class="margin-top-1rem">
-                <div class="tableStyle">
-                    <el-table
-                            :empty-text="$t('corp.no_data')"
-                            :data="tableData"
-                            align="center"
-                            :row-class-name="createdAdmin"
-                            class="tableClass"
-                            style="width: 100%;">
-                        <el-table-column
-                                min-width="30"
-                                prop="corporation_name"
-                                :label="$t('org.corporation_name')">
-                        </el-table-column>
-                        <el-table-column
-                                min-width="20"
-                                prop="admin_name"
-                                :label="$t('org.config_cla_field_corp_default_title1')">
-                        </el-table-column>
-                        <el-table-column
-                                min-width="30"
-                                prop="admin_email"
-                                :label="$t('org.to_email')">
-                        </el-table-column>
-                        <el-table-column
-                                min-width="10">
-                            <template slot="header" slot-scope="scope">
-                                <el-tooltip effect="dark" :content="$t('org.corp_signed_pdf')" placement="top">
-                                    <span>PDF</span>
-                                </el-tooltip>
-                            </template>
-                            <template slot-scope="scope">
-                                <el-popover
-                                        width="80"
-                                        trigger="hover"
-                                        placement="right">
-                                    <div class="menuBT">
-                                        <el-button @click="uploadClaFile(scope.row)" size="mini">
-                                            {{$t('org.upload')}}
-                                        </el-button>
-                                        <el-button v-if="scope.row.pdf_uploaded" @click="downloadClaFile(scope.row)"
-                                                   size="mini">{{$t('org.download')}}
-                                        </el-button>
-                                        <el-button v-if="scope.row.pdf_uploaded" @click="previewClaFile(scope.row)"
-                                                   type="" size="mini">{{$t('org.preview')}}
-                                        </el-button>
-                                    </div>
-                                    <svg-icon slot="reference" class="pointer" icon-class="pdf" @click=""/>
-                                </el-popover>
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                                min-width="10"
-                                :label="$t('org.operation')">
-                            <template slot-scope="scope">
-                                <el-dropdown placement="bottom-start" trigger="hover" @command="menuCommand">
+                <el-tabs v-model="corpActiveName" @tab-click="corpTabsHandleClick">
+                    <el-tab-pane :label="$t('org.not_complete')" name="first" class="margin-top-1rem">
+                        <div class="tableStyle">
+                            <el-table
+                                    :empty-text="$t('corp.no_data')"
+                                    :data="signedNotCompleted"
+                                    align="center"
+                                    :row-class-name="createdAdmin"
+                                    class="tableClass"
+                                    style="width: 100%;">
+                                <el-table-column
+                                        min-width="20"
+                                        prop="corporation_name"
+                                        :label="$t('org.corporation_name')">
+                                </el-table-column>
+                                <el-table-column
+                                        min-width="15"
+                                        prop="admin_name"
+                                        :label="$t('org.config_cla_field_corp_default_title1')">
+                                </el-table-column>
+                                <el-table-column
+                                        min-width="15"
+                                        prop="admin_email"
+                                        :label="$t('org.to_email')">
+                                </el-table-column>
+                                <el-table-column
+                                        min-width="15"
+                                        prop="cla_language"
+                                        :label="$t('org.cla_language')">
+                                </el-table-column>
+                                <el-table-column
+                                        min-width="15"
+                                        prop="date"
+                                        :label="$t('org.date')">
+                                </el-table-column>
+                                <el-table-column
+                                        min-width="10">
+                                    <template slot="header" slot-scope="scope">
+                                        <el-tooltip effect="dark" :content="$t('org.corp_signed_pdf')" placement="top">
+                                            <span>PDF</span>
+                                        </el-tooltip>
+                                    </template>
+                                    <template slot-scope="scope">
+                                        <el-popover
+                                                width="80"
+                                                trigger="hover"
+                                                placement="right">
+                                            <div class="menuBT">
+                                                <el-button @click="uploadClaFile(scope.row)" size="mini">
+                                                    {{$t('org.upload')}}
+                                                </el-button>
+                                                <el-button v-if="scope.row.pdf_uploaded"
+                                                           @click="downloadClaFile(scope.row)"
+                                                           size="mini">{{$t('org.download')}}
+                                                </el-button>
+                                                <el-button v-if="scope.row.pdf_uploaded"
+                                                           @click="previewClaFile(scope.row)"
+                                                           type="" size="mini">{{$t('org.preview')}}
+                                                </el-button>
+                                            </div>
+                                            <svg-icon slot="reference" class="pointer" icon-class="pdf" @click=""/>
+                                        </el-popover>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column
+                                        min-width="10"
+                                        :label="$t('org.operation')">
+                                    <template slot-scope="scope">
+                                        <el-dropdown placement="bottom-start" trigger="hover" @command="menuCommand">
                                     <span class="el-dropdown-link">
                                         <svg-icon icon-class="operation"></svg-icon>
                                     </span>
-                                    <el-dropdown-menu slot="dropdown">
-                                        <el-dropdown-item :disabled="scope.row.admin_added"
-                                                          :command="{command:'a',row:scope.row}">
-                                            {{$t('org.create_administrator')}}
-                                        </el-dropdown-item>
-                                        <el-dropdown-item :disabled="scope.row.pdf_uploaded"
-                                                          :command="{command:'b',row:scope.row}">
-                                            {{$t('org.resend_email')}}
-                                        </el-dropdown-item>
-                                    </el-dropdown-menu>
-                                </el-dropdown>
-                            </template>
-                        </el-table-column>
-                    </el-table>
-                </div>
+                                            <el-dropdown-menu slot="dropdown">
+                                                <el-dropdown-item :disabled="scope.row.admin_added"
+                                                                  :command="{command:'a',row:scope.row}">
+                                                    {{$t('org.create_administrator')}}
+                                                </el-dropdown-item>
+                                                <el-dropdown-item :disabled="scope.row.pdf_uploaded"
+                                                                  :command="{command:'b',row:scope.row}">
+                                                    {{$t('org.resend_email')}}
+                                                </el-dropdown-item>
+                                                <el-dropdown-item :disabled="scope.row.admin_added"
+                                                                  :command="{command:'c',row:scope.row}">
+                                                    {{$t('corp.delete')}}
+                                                </el-dropdown-item>
+                                            </el-dropdown-menu>
+                                        </el-dropdown>
+                                    </template>
+                                </el-table-column>
+                            </el-table>
+                        </div>
+                    </el-tab-pane>
+                    <el-tab-pane :label="$t('org.complete')" name="second" class="margin-top-1rem">
+                        <div class="tableStyle">
+                            <el-table
+                                    :empty-text="$t('corp.no_data')"
+                                    :data="signedCompleted"
+                                    class="tableClass"
+                                    :row-class-name="createdAdmin"
+                                    align="center"
+                                    style="width: 100%;">
+                                <el-table-column
+                                        min-width="20"
+                                        prop="corporation_name"
+                                        :label="$t('org.corporation_name')">
+                                </el-table-column>
+                                <el-table-column
+                                        min-width="10"
+                                        prop="admin_name"
+                                        :label="$t('org.config_cla_field_corp_default_title1')">
+                                </el-table-column>
+                                <el-table-column
+                                        min-width="20"
+                                        prop="admin_email"
+                                        :label="$t('org.to_email')">
+                                </el-table-column>
+                                <el-table-column
+                                        min-width="15"
+                                        prop="cla_language"
+                                        :label="$t('org.cla_language')">
+                                </el-table-column>
+                                <el-table-column
+                                        min-width="15"
+                                        prop="date"
+                                        :label="$t('org.date')">
+                                </el-table-column>
+                                <el-table-column
+                                        min-width="10">
+                                    <template slot="header" slot-scope="scope">
+                                        <el-tooltip effect="dark" :content="$t('org.corp_signed_pdf')" placement="top">
+                                            <span>PDF</span>
+                                        </el-tooltip>
+                                    </template>
+                                    <template slot-scope="scope">
+                                        <el-popover
+                                                width="80"
+                                                trigger="hover"
+                                                placement="right">
+                                            <div class="menuBT">
+                                                <el-button @click="uploadClaFile(scope.row)" size="mini">
+                                                    {{$t('org.upload')}}
+                                                </el-button>
+                                                <el-button v-if="scope.row.pdf_uploaded"
+                                                           @click="downloadClaFile(scope.row)"
+                                                           size="mini">{{$t('org.download')}}
+                                                </el-button>
+                                                <el-button v-if="scope.row.pdf_uploaded"
+                                                           @click="previewClaFile(scope.row)"
+                                                           type="" size="mini">{{$t('org.preview')}}
+                                                </el-button>
+                                            </div>
+                                            <svg-icon slot="reference" class="pointer" icon-class="pdf" @click=""/>
+                                        </el-popover>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column
+                                        min-width="10"
+                                        :label="$t('org.operation')">
+                                    <template slot-scope="scope">
+                                        <el-dropdown placement="bottom-start" trigger="hover" @command="menuCommand">
+                                    <span class="el-dropdown-link">
+                                        <svg-icon icon-class="operation"></svg-icon>
+                                    </span>
+                                            <el-dropdown-menu slot="dropdown">
+                                                <el-dropdown-item :disabled="scope.row.admin_added"
+                                                                  :command="{command:'a',row:scope.row}">
+                                                    {{$t('org.create_administrator')}}
+                                                </el-dropdown-item>
+                                                <el-dropdown-item :disabled="scope.row.pdf_uploaded"
+                                                                  :command="{command:'b',row:scope.row}">
+                                                    {{$t('org.resend_email')}}
+                                                </el-dropdown-item>
+                                                <el-dropdown-item :disabled="scope.row.admin_added"
+                                                                  :command="{command:'c',row:scope.row}">
+                                                    {{$t('corp.delete')}}
+                                                </el-dropdown-item>
+                                            </el-dropdown-menu>
+                                        </el-dropdown>
+                                    </template>
+                                </el-table-column>
+                            </el-table>
+                        </div>
+                    </el-tab-pane>
+                    <el-tab-pane :label="$t('org.invalidSignature')" name="third" class="margin-top-1rem">
+                        <div class="tableStyle">
+                            <el-table
+                                    :empty-text="$t('corp.no_data')"
+                                    :data="deletedCorpInfo"
+                                    align="center"
+                                    class="tableClass"
+                                    style="width: 100%;">
+                                <el-table-column
+                                        min-width="20"
+                                        prop="corporation_name"
+                                        :label="$t('org.corporation_name')">
+                                </el-table-column>
+                                <el-table-column
+                                        min-width="10"
+                                        prop="admin_name"
+                                        :label="$t('org.config_cla_field_corp_default_title1')">
+                                </el-table-column>
+                                <el-table-column
+                                        min-width="20"
+                                        prop="admin_email"
+                                        :label="$t('org.to_email')">
+                                </el-table-column>
+                                <el-table-column
+                                        min-width="15"
+                                        prop="cla_language"
+                                        :label="$t('org.cla_language')">
+                                </el-table-column>
+                                <el-table-column
+                                        min-width="15"
+                                        prop="date"
+                                        :label="$t('org.date')">
+                                </el-table-column>
+                                <el-table-column
+                                        min-width="10"
+                                        :label="$t('org.operation')">
+                                    <template slot-scope="scope">
+                                        <el-dropdown placement="bottom-start" trigger="hover" @command="menuCommand">
+                                    <span class="el-dropdown-link">
+                                        <svg-icon icon-class="operation"></svg-icon>
+                                    </span>
+                                            <el-dropdown-menu slot="dropdown">
+                                                <el-dropdown-item disabled="" :command="{command:'d',row:scope.row}">
+                                                    {{$t('org.reduction')}}
+                                                </el-dropdown-item>
+                                                <el-dropdown-item disabled="" :command="{command:'e',row:scope.row}">
+                                                    {{$t('org.deleteCompletely')}}
+                                                </el-dropdown-item>
+                                            </el-dropdown-menu>
+                                        </el-dropdown>
+                                    </template>
+                                </el-table-column>
+                            </el-table>
+                        </div>
+                    </el-tab-pane>
+                </el-tabs>
             </el-tab-pane>
             <el-tab-pane :label="$t('org.individual_cla')" name="second" class="margin-top-1rem">
                 <div class="tableStyle">
@@ -256,7 +422,13 @@
                 </div>
             </div>
         </el-dialog>
-        <DeleteDialog :deleteVisible="deleteVisible" @delete="submitDeleteCla" @cancel="cancelDeleteCla"></DeleteDialog>
+        <DeleteDialog :deleteMessage="deleteMessage" :deleteVisible="deleteCorpVisible" @delete="submitDeleteCorp"
+                      @cancel="cancelDeleteCorp"></DeleteDialog>
+        <DeleteDialog :deleteMessage="deleteMessage" :deleteVisible="deleteVisible" @delete="submitDeleteCla"
+                      @cancel="cancelDeleteCla"></DeleteDialog>
+        <DeleteDialog :deleteMessage="completeDeleteMessage" :deleteVisible="deleteCompleteVisible"
+                      @delete="submitDeleteCorpComplete"
+                      @cancel="cancelDeleteCorpComplete"></DeleteDialog>
         <ReTryDialog :dialogVisible="reTryDialogVisible" :message="reLoginMsg"></ReTryDialog>
         <ReLoginDialog :dialogVisible="reLoginDialogVisible" :message="reLoginMsg"></ReLoginDialog>
     </div>
@@ -280,6 +452,12 @@
             DeleteDialog,
         },
         computed: {
+            completeDeleteMessage() {
+                return this.$t('corp.completeDeleteTips')
+            },
+            deleteMessage() {
+                return this.$t('corp.deleteTips')
+            },
             platform() {
                 return this.$store.state.platform.toLowerCase()
             },
@@ -295,6 +473,14 @@
         },
         data() {
             return {
+                signedCompleted: [],
+                signedNotCompleted: [],
+                deletedCorpInfo: [],
+                corpActiveName: 'first',
+                deleteCompleteVisible: false,
+                invalidSignatureData: [],
+                deleteCorpVisible: false,
+                deleteCorpEmail: '',
                 delete_apply: '',
                 deleteRow: '',
                 deleteVisible: false,
@@ -330,6 +516,94 @@
         },
         inject: ['setClientHeight'],
         methods: {
+            sortDate(dataArr) {
+                dataArr.forEach(item => {
+                    let dateNum = parseInt(item.date.replace(/-/g, ''));
+                    Object.assign(item, {dateNum: dateNum})
+                })
+                for (let i = 0; i < dataArr.length; i++) {
+                    for (let j = i + 1; j < dataArr.length; j++) {
+                        if (dataArr[i].dateNum < dataArr[j].dateNum) {
+                            let data = dataArr[i]
+                            dataArr[i] = dataArr[j]
+                            dataArr[j] = data
+                        }
+                    }
+                }
+            },
+            submitDeleteCorpComplete() {
+                this.deleteCompleteVisible = false;
+                // http({
+                //     url: `${url.corporationManager}/${this.$store.state.corpItem.link_id}/${email}`,
+                //     method: 'patch',
+                // }).then(res => {
+                //     util.successMessage(this);
+                //     this.getCorporationInfo()
+                // }).catch(err => {
+                //     if (err.data && err.data.hasOwnProperty('data')) {
+                //         switch (err.data.data.error_code) {
+                //             case 'cla.invalid_token':
+                //                 this.$store.commit('errorSet', {
+                //                     dialogVisible: true,
+                //                     dialogMessage: this.$t('tips.invalid_token'),
+                //                 });
+                //                 break;
+                //             case 'cla.missing_token':
+                //                 this.$store.commit('errorSet', {
+                //                     dialogVisible: true,
+                //                     dialogMessage: this.$t('tips.missing_token'),
+                //                 });
+                //                 break;
+                //             case 'cla.unknown_token':
+                //                 this.$store.commit('errorSet', {
+                //                     dialogVisible: true,
+                //                     dialogMessage: this.$t('tips.unknown_token'),
+                //                 });
+                //                 break;
+                //             case 'cla.no_pdf_of_corp':
+                //                 this.$store.commit('errorCodeSet', {
+                //                     dialogVisible: true,
+                //                     dialogMessage: this.$t('tips.no_pdf_of_corp'),
+                //                 });
+                //                 break;
+                //             case 'cla.unuploaded':
+                //                 this.$store.commit('errorCodeSet', {
+                //                     dialogVisible: true,
+                //                     dialogMessage: this.$t('tips.no_pdf_of_corp'),
+                //                 });
+                //                 break;
+                //
+                //             case 'cla.system_error':
+                //                 this.$store.commit('errorCodeSet', {
+                //                     dialogVisible: true,
+                //                     dialogMessage: this.$t('tips.system_error'),
+                //                 });
+                //                 break;
+                //             default :
+                //                 this.$store.commit('errorCodeSet', {
+                //                     dialogVisible: true,
+                //                     dialogMessage: this.$t('tips.unknown_error'),
+                //                 });
+                //                 break;
+                //         }
+                //     } else {
+                //         this.$store.commit('errorCodeSet', {
+                //             dialogVisible: true,
+                //             dialogMessage: this.$t('tips.system_error'),
+                //         })
+                //     }
+                // })
+            },
+            cancelDeleteCorpComplete() {
+                this.deleteCompleteVisible = false;
+            },
+            submitDeleteCorp() {
+                this.deleteCorpVisible = false;
+                this.deleteCorp(this.deleteCorpEmail)
+            },
+            cancelDeleteCorp() {
+                this.deleteCorpVisible = false;
+            },
             submitDeleteCla() {
                 this.deleteVisible = false;
                 this.deleteCla(this.deleteRow)
@@ -359,7 +633,7 @@
                                 });
                                 break;
                             case 'cla.expired_token':
-                                this.$store.commit('setSignReLogin', {
+                                this.$store.commit('errorSet', {
                                     dialogVisible: true,
                                     dialogMessage: this.$t('tips.invalid_token'),
                                 });
@@ -494,7 +768,7 @@
                                 });
                                 break;
                             case 'cla.expired_token':
-                                this.$store.commit('setSignReLogin', {
+                                this.$store.commit('errorSet', {
                                     dialogVisible: true,
                                     dialogMessage: this.$t('tips.invalid_token'),
                                 });
@@ -556,6 +830,12 @@
                                     dialogMessage: this.$t('tips.invalid_token'),
                                 });
                                 break;
+                            case 'cla.expired_token':
+                                this.$store.commit('errorSet', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.invalid_token'),
+                                });
+                                break;
                             case 'cla.missing_token':
                                 this.$store.commit('errorSet', {
                                     dialogVisible: true,
@@ -590,6 +870,13 @@
                     }
                 })
             },
+            corpTabsHandleClick(tab, event) {
+                if (tab.index === '0') {
+                } else if (tab.index === '1') {
+                } else if (tab.index === '2') {
+                    this.getDeletedCorpInfo();
+                }
+            },
             tabsHandleClick(tab, event) {
                 if (tab.index === '0') {
                     this.getCorporationInfo()
@@ -597,6 +884,8 @@
                     this.getIndividualClaInfo()
                 } else if (tab.index === '2') {
                     this.getCorpClaInfo();
+                } else if (tab.index === '3') {
+                    this.getDeletedCorpInfo();
                 }
             },
             getCorpClaInfo() {
@@ -720,6 +1009,71 @@
                     url: `${url.getCorporationSigning}/${this.$store.state.corpItem.link_id}`,
                 }).then(resp => {
                     this.tableData = resp.data.data;
+                    this.signedCompleted = [];
+                    this.signedNotCompleted = [];
+                    this.tableData.forEach(item => {
+                        if (item.admin_added) {
+                            this.signedCompleted.push(item)
+                        } else {
+                            this.signedNotCompleted.push(item)
+                        }
+                    })
+                    this.sortDate(this.signedCompleted)
+                    this.sortDate(this.signedNotCompleted)
+                }).catch(err => {
+                    if (err.data && err.data.hasOwnProperty('data')) {
+                        switch (err.data.data.error_code) {
+                            case 'cla.invalid_token':
+                                this.$store.commit('errorSet', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.invalid_token'),
+                                });
+                                break;
+                            case 'cla.expired_token':
+                                this.$store.commit('errorSet', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.invalid_token'),
+                                });
+                                break;
+                            case 'cla.missing_token':
+                                this.$store.commit('errorSet', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.missing_token'),
+                                });
+                                break;
+                            case 'cla.unknown_token':
+                                this.$store.commit('errorSet', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.unknown_token'),
+                                });
+                                break;
+                            case 'cla.system_error':
+                                this.$store.commit('errorCodeSet', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.system_error'),
+                                });
+                                break;
+                            default :
+                                this.$store.commit('errorCodeSet', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.unknown_error'),
+                                });
+                                break;
+                        }
+                    } else {
+                        this.$store.commit('errorCodeSet', {
+                            dialogVisible: true,
+                            dialogMessage: this.$t('tips.system_error'),
+                        })
+                    }
+                })
+            },
+            getDeletedCorpInfo() {
+                http({
+                    url: `${url.getDeletedCorpInfo}/${this.$store.state.corpItem.link_id}`,
+                }).then(resp => {
+                    this.deletedCorpInfo = resp.data.data;
+                    this.sortDate(this.deletedCorpInfo)
                 }).catch(err => {
                     if (err.data && err.data.hasOwnProperty('data')) {
                         switch (err.data.data.error_code) {
@@ -768,6 +1122,7 @@
                         })
                     }
                 })
+
             },
             previewClaFile(row) {
                 http({
@@ -792,6 +1147,12 @@
                                 this.$store.commit('errorSet', {
                                     dialogVisible: true,
                                     dialogMessage: this.$t('tips.missing_token'),
+                                });
+                                break;
+                            case 'cla.expired_token':
+                                this.$store.commit('errorSet', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.invalid_token'),
                                 });
                                 break;
                             case 'cla.unknown_token':
@@ -840,6 +1201,12 @@
                     if (err.data && err.data.hasOwnProperty('data')) {
                         switch (err.data.data.error_code) {
                             case 'cla.invalid_token':
+                                this.$store.commit('errorSet', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.invalid_token'),
+                                });
+                                break;
+                            case 'cla.expired_token':
                                 this.$store.commit('errorSet', {
                                     dialogVisible: true,
                                     dialogMessage: this.$t('tips.invalid_token'),
@@ -903,6 +1270,12 @@
                     if (err.data && err.data.hasOwnProperty('data')) {
                         switch (err.data.data.error_code) {
                             case 'cla.invalid_token':
+                                this.$store.commit('errorSet', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.invalid_token'),
+                                });
+                                break;
+                            case 'cla.expired_token':
                                 this.$store.commit('errorSet', {
                                     dialogVisible: true,
                                     dialogMessage: this.$t('tips.invalid_token'),
@@ -1010,6 +1383,10 @@
                 this.resendEmail = email;
                 this.resendEmailDialogVisible = true;
             },
+            openDeleteCorp(email) {
+                this.deleteCorpEmail = email;
+                this.deleteCorpVisible = true;
+            },
             resendPDF() {
                 let email = this.resendEmail;
                 let resend_url = '';
@@ -1024,6 +1401,12 @@
                     if (err.data && err.data.hasOwnProperty('data')) {
                         switch (err.data.data.error_code) {
                             case 'cla.invalid_token':
+                                this.$store.commit('errorSet', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.invalid_token'),
+                                });
+                                break;
+                            case 'cla.expired_token':
                                 this.$store.commit('errorSet', {
                                     dialogVisible: true,
                                     dialogMessage: this.$t('tips.invalid_token'),
@@ -1071,7 +1454,221 @@
                     case 'b':
                         this.openResendPdf(command.row.admin_email);
                         break;
+                    case 'c':
+                        console.log(command.row);
+                        this.openDeleteCorp(command.row.admin_email);
+                        break;
+                    case 'd':
+                        console.log(command.row);
+                        this.reductionCorp(command.row.admin_email);
+                        break;
+                    case 'e':
+                        console.log(command.row);
+                        this.deleteCompletely(command.row.admin_email);
+                        break;
                 }
+            },
+            deleteCompletely(email) {
+                console.log('deleteCompletely');
+                this.deleteCompleteVisible = true;
+                // http({
+                //     url: `${url.corporationManager}/${this.$store.state.corpItem.link_id}/${email}`,
+                //     method: 'patch',
+                // }).then(res => {
+                //     util.successMessage(this);
+                //     this.getCorporationInfo()
+                // }).catch(err => {
+                //     if (err.data && err.data.hasOwnProperty('data')) {
+                //         switch (err.data.data.error_code) {
+                //             case 'cla.invalid_token':
+                //                 this.$store.commit('errorSet', {
+                //                     dialogVisible: true,
+                //                     dialogMessage: this.$t('tips.invalid_token'),
+                //                 });
+                //                 break;
+                //             case 'cla.missing_token':
+                //                 this.$store.commit('errorSet', {
+                //                     dialogVisible: true,
+                //                     dialogMessage: this.$t('tips.missing_token'),
+                //                 });
+                //                 break;
+                //             case 'cla.unknown_token':
+                //                 this.$store.commit('errorSet', {
+                //                     dialogVisible: true,
+                //                     dialogMessage: this.$t('tips.unknown_token'),
+                //                 });
+                //                 break;
+                //             case 'cla.no_pdf_of_corp':
+                //                 this.$store.commit('errorCodeSet', {
+                //                     dialogVisible: true,
+                //                     dialogMessage: this.$t('tips.no_pdf_of_corp'),
+                //                 });
+                //                 break;
+                //             case 'cla.unuploaded':
+                //                 this.$store.commit('errorCodeSet', {
+                //                     dialogVisible: true,
+                //                     dialogMessage: this.$t('tips.no_pdf_of_corp'),
+                //                 });
+                //                 break;
+                //
+                //             case 'cla.system_error':
+                //                 this.$store.commit('errorCodeSet', {
+                //                     dialogVisible: true,
+                //                     dialogMessage: this.$t('tips.system_error'),
+                //                 });
+                //                 break;
+                //             default :
+                //                 this.$store.commit('errorCodeSet', {
+                //                     dialogVisible: true,
+                //                     dialogMessage: this.$t('tips.unknown_error'),
+                //                 });
+                //                 break;
+                //         }
+                //     } else {
+                //         this.$store.commit('errorCodeSet', {
+                //             dialogVisible: true,
+                //             dialogMessage: this.$t('tips.system_error'),
+                //         })
+                //     }
+                // })
+            },
+            reductionCorp(email) {
+                console.log(email);
+                http({
+                    url: `${url.corporationManager}/${this.$store.state.corpItem.link_id}/${email}`,
+                    method: 'patch',
+                }).then(res => {
+                    util.successMessage(this);
+                    this.getCorporationInfo()
+                }).catch(err => {
+                    if (err.data && err.data.hasOwnProperty('data')) {
+                        switch (err.data.data.error_code) {
+                            case 'cla.invalid_token':
+                                this.$store.commit('errorSet', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.invalid_token'),
+                                });
+                                break;
+                            case 'cla.missing_token':
+                                this.$store.commit('errorSet', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.missing_token'),
+                                });
+                                break;
+                            case 'cla.expired_token':
+                                this.$store.commit('errorSet', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.invalid_token'),
+                                });
+                                break;
+                            case 'cla.unknown_token':
+                                this.$store.commit('errorSet', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.unknown_token'),
+                                });
+                                break;
+                            case 'cla.no_pdf_of_corp':
+                                this.$store.commit('errorCodeSet', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.no_pdf_of_corp'),
+                                });
+                                break;
+                            case 'cla.unuploaded':
+                                this.$store.commit('errorCodeSet', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.no_pdf_of_corp'),
+                                });
+                                break;
+
+                            case 'cla.system_error':
+                                this.$store.commit('errorCodeSet', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.system_error'),
+                                });
+                                break;
+                            default :
+                                this.$store.commit('errorCodeSet', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.unknown_error'),
+                                });
+                                break;
+                        }
+                    } else {
+                        this.$store.commit('errorCodeSet', {
+                            dialogVisible: true,
+                            dialogMessage: this.$t('tips.system_error'),
+                        })
+                    }
+                })
+            },
+            deleteCorp(email) {
+                this.deleteCorpVisible = false;
+                http({
+                    url: `${url.corporation_signing}/${this.$store.state.corpItem.link_id}/${email}`,
+                    method: 'delete',
+                }).then(res => {
+                    util.successMessage(this);
+                    this.getCorporationInfo()
+                }).catch(err => {
+                    if (err.data && err.data.hasOwnProperty('data')) {
+                        switch (err.data.data.error_code) {
+                            case 'cla.invalid_token':
+                                this.$store.commit('errorSet', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.invalid_token'),
+                                });
+                                break;
+                            case 'cla.expired_token':
+                                this.$store.commit('errorSet', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.invalid_token'),
+                                });
+                                break;
+                            case 'cla.missing_token':
+                                this.$store.commit('errorSet', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.missing_token'),
+                                });
+                                break;
+                            case 'cla.unknown_token':
+                                this.$store.commit('errorSet', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.unknown_token'),
+                                });
+                                break;
+                            case 'cla.no_pdf_of_corp':
+                                this.$store.commit('errorCodeSet', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.no_pdf_of_corp'),
+                                });
+                                break;
+                            case 'cla.unuploaded':
+                                this.$store.commit('errorCodeSet', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.no_pdf_of_corp'),
+                                });
+                                break;
+
+                            case 'cla.system_error':
+                                this.$store.commit('errorCodeSet', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.system_error'),
+                                });
+                                break;
+                            default :
+                                this.$store.commit('errorCodeSet', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.unknown_error'),
+                                });
+                                break;
+                        }
+                    } else {
+                        this.$store.commit('errorCodeSet', {
+                            dialogVisible: true,
+                            dialogMessage: this.$t('tips.system_error'),
+                        })
+                    }
+                })
             },
             createRoot(email) {
                 http({
@@ -1084,6 +1681,12 @@
                     if (err.data && err.data.hasOwnProperty('data')) {
                         switch (err.data.data.error_code) {
                             case 'cla.invalid_token':
+                                this.$store.commit('errorSet', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.invalid_token'),
+                                });
+                                break;
+                            case 'cla.expired_token':
                                 this.$store.commit('errorSet', {
                                     dialogVisible: true,
                                     dialogMessage: this.$t('tips.invalid_token'),
