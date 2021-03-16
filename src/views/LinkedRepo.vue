@@ -226,7 +226,6 @@
             }).then(res => {
                 this.getLinkedRepoList();
             })
-
         },
         updated() {
             this.setClientHeight();
