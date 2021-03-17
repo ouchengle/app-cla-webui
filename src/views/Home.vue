@@ -49,9 +49,7 @@
         updated() {
             this.setClientHeight();
         },
-
     };
-
 </script>
 
 <style lang="less">
