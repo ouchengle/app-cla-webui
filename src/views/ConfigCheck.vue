@@ -240,7 +240,6 @@
                 return this.$store.state.chooseOrg
             },
             orgAlias() {
-                console.log(this.$store.state.orgAlias);
                 if (this.$store.state.orgAlias) {
                     return this.$store.state.orgAlias
                 } else {

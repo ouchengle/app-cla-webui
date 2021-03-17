@@ -725,7 +725,7 @@
             setCheckInfo() {
                 this.$store.commit('setBindType', 'add-bind');
                 this.$store.commit('setChooseOrg', this.$store.state.corpItem.org_id);
-                this.$store.commit('setChooseRepo', this.$store.state.corpItem.repo_id);
+                this.$store.commit('setRepo', this.$store.state.corpItem.repo_id);
                 this.$store.commit('setOrgAlias', this.$store.state.corpItem.org_alias);
                 this.$store.commit('setEmail', this.$store.state.corpItem.org_email);
             },
@@ -874,7 +874,9 @@
             },
             corpTabsHandleClick(tab, event) {
                 if (tab.index === '0') {
+                    this.getCorporationInfo()
                 } else if (tab.index === '1') {
+                    this.getCorporationInfo()
                 } else if (tab.index === '2') {
                     this.getDeletedCorpInfo();
                 }
@@ -1459,21 +1461,17 @@
                         this.openResendPdf(command.row.admin_email);
                         break;
                     case 'c':
-                        console.log(command.row);
                         this.openDeleteCorp(command.row.admin_email);
                         break;
                     case 'd':
-                        console.log(command.row);
                         this.reductionCorp(command.row.admin_email);
                         break;
                     case 'e':
-                        console.log(command.row);
                         this.deleteCompletely(command.row.admin_email);
                         break;
                 }
             },
             deleteCompletely(email) {
-                console.log('deleteCompletely');
                 this.deleteCompleteVisible = true;
                 // http({
                 //     url: `${url.corporationManager}/${this.$store.state.corpItem.link_id}/${email}`,
@@ -1537,7 +1535,6 @@
                 // })
             },
             reductionCorp(email) {
-                console.log(email);
                 http({
                     url: `${url.corporationManager}/${this.$store.state.corpItem.link_id}/${email}`,
                     method: 'patch',
