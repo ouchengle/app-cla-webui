@@ -184,7 +184,7 @@
             return {
                 max_size: SIGNATURE_PAGE_MAX_SIZE,
                 corp_pdf_name: '',
-                languageOptions: [{value: 'english', label: 'English'}, {value: 'chinese', label: '中文'}],
+                languageOptions: LANGUAGE_ARR
             }
         },
         inject: ['setClientHeight'],
@@ -225,6 +225,12 @@
                         if (err.data && err.data.hasOwnProperty('data')) {
                             switch (err.data.data.error_code) {
                                 case 'cla.invalid_token':
+                                    this.$store.commit('setOrgReLogin', {
+                                        dialogVisible: true,
+                                        dialogMessage: this.$t('tips.invalid_token'),
+                                    });
+                                    break;
+                                case 'cla.expired_token':
                                     this.$store.commit('setOrgReLogin', {
                                         dialogVisible: true,
                                         dialogMessage: this.$t('tips.invalid_token'),
@@ -386,12 +392,6 @@
         .delete-icon {
             cursor: pointer;
             margin-left: .5rem;
-        }
-
-        .downloadText {
-            text-decoration: underline;
-            cursor: pointer;
-            color: #319E55;
         }
 
         .inputFile {

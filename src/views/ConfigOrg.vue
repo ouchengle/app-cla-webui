@@ -1,6 +1,10 @@
 <template>
     <el-row id="configOne">
         <div class="itemBox">
+            <div class="margin-bottom-1rem">
+                {{$t('org.config_cla_first_tips')}}<span @click="downloadPageVisible = true" class="downloadText"> {{$t('org.config_cla_corp_file_download')}}</span>
+                {{$t('org.blank_signature')}} {{$t('org.complete_information')}}
+            </div>
             <div class="stepTitle">
                 ① {{$t('org.config_cla_select_org_tile')}}
             </div>
@@ -46,6 +50,39 @@
         <div class="orgStepBtBox">
             <button class="step_button" @click="toConfigClaLink">{{$t('org.next_step')}}</button>
         </div>
+        <el-dialog
+                title=""
+                :visible.sync="downloadPageVisible"
+                :close-on-press-escape="false"
+                :show-close="false"
+                :close-on-click-modal="false"
+                :width="dialogWidth">
+            <el-row>
+                <el-col align="center">
+                    <p class="font-size-1rem margin-bottom-2rem">{{$t('org.config_cla_language_title')}}</p>
+                    <el-select
+                            class="margin-bottom-3rem"
+                            :placeholder="$t('org.config_cla_language_select_placeholder')"
+                            filterable
+                            v-model="language">
+                        <el-option
+                                v-for="item in languageArr"
+                                :key="item.value"
+                                :value="item.value"
+                                :label="item.label">
+                        </el-option>
+                    </el-select>
+                    <el-row>
+                        <el-col align="center" :span="12">
+                            <button class="cancelBt" @click="downloadPageVisible=false">{{$t('corp.cancel')}}</button>
+                        </el-col>
+                        <el-col align="center" :span="12">
+                            <button class="button_submit" @click="downloadFile">{{$t('tips.dialogBt')}}</button>
+                        </el-col>
+                    </el-row>
+                </el-col>
+            </el-row>
+        </el-dialog>
         <ReTryDialog :message="reTryMsg" :dialogVisible="reTryVisible"></ReTryDialog>
         <ReLoginDialog :message="reTryMsg" :dialogVisible="orgReLoginVisible"></ReLoginDialog>
         <CustomDialog :message="reTryMsg" :dialogVisible="customVisible"></CustomDialog>
@@ -58,7 +95,10 @@
     import CustomDialog from '../components/CustomDialog'
     import * as url from '../util/api'
     import _axios from '../util/_axios'
+    import http from '../util/http'
+    import * as util from '../util/util'
     import platform_http from '../util/platform_http'
+    import download from 'downloadjs'
 
     export default {
         name: "ConfigOne",
@@ -68,6 +108,13 @@
             CustomDialog,
         },
         computed: {
+            dialogWidth() {
+                if (this.IS_MOBILE) {
+                    return '80%'
+                } else {
+                    return '30%'
+                }
+            },
             reTryMsg() {
                 return this.$store.state.dialogMessage
             },
@@ -134,12 +181,78 @@
         },
         data() {
             return {
+                language: '',
+                languageArr: LANGUAGE_ARR,
+                downloadPageVisible: false,
                 org_id: '',
                 org: this.$store.state.chooseOrg,
             }
         },
         inject: ['setClientHeight'],
         methods: {
+            downloadFile() {
+                if (this.language) {
+                    http({
+                        url: `${url.getBlankSignature}/${this.language}`,
+                        responseType: "blob",
+                    }).then(res => {
+                        if (res.data) {
+                            let time = util.getNowDateToTime();
+                            download((new Blob([res.data])), `${this.language}_blank_signature${time}.pdf`, 'application/pdf');
+                        }
+                        this.downloadPageVisible = false
+                    }).catch(err => {
+                        if (err.data && err.data.hasOwnProperty('data')) {
+                            switch (err.data.data.error_code) {
+                                case 'cla.invalid_token':
+                                    this.$store.commit('setOrgReLogin', {
+                                        dialogVisible: true,
+                                        dialogMessage: this.$t('tips.invalid_token'),
+                                    });
+                                    break;
+                                case 'cla.expired_token':
+                                    this.$store.commit('setOrgReLogin', {
+                                        dialogVisible: true,
+                                        dialogMessage: this.$t('tips.invalid_token'),
+                                    });
+                                    break;
+                                case 'cla.missing_token':
+                                    this.$store.commit('setOrgReLogin', {
+                                        dialogVisible: true,
+                                        dialogMessage: this.$t('tips.missing_token'),
+                                    });
+                                    break;
+                                case 'cla.unknown_token':
+                                    this.$store.commit('setOrgReLogin', {
+                                        dialogVisible: true,
+                                        dialogMessage: this.$t('tips.unknown_token'),
+                                    });
+                                    break;
+                                case 'cla.system_error':
+                                    this.$store.commit('errorCodeSet', {
+                                        dialogVisible: true,
+                                        dialogMessage: this.$t('tips.system_error'),
+                                    });
+                                    break;
+                                default :
+                                    this.$store.commit('errorCodeSet', {
+                                        dialogVisible: true,
+                                        dialogMessage: this.$t('tips.unknown_error'),
+                                    });
+                                    break;
+                            }
+                        } else {
+                            this.$store.commit('errorCodeSet', {
+                                dialogVisible: true,
+                                dialogMessage: this.$t('tips.system_error'),
+                            })
+                        }
+                    })
+                } else {
+                    this.$message.closeAll();
+                    this.$message.error(this.$t('org.config_cla_download_empty_signature_tips'));
+                }
+            },
             checkRepo(org, repo) {
                 let _url = '';
                 let obj = {};
