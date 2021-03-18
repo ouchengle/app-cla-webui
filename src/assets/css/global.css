@@ -334,3 +334,12 @@
     border-top-left-radius: 1rem;
     border-top-right-radius: 1rem;
 }
+
+.downloadText {
+    text-decoration: underline;
+    cursor: pointer;
+    color: #319E55;
+}
+.font-size-1rem{
+    font-size: 1rem;
+}
