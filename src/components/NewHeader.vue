@@ -101,7 +101,7 @@
 
         methods: {
             toIndex() {
-                if (this.$route.path === '/corporationManagerLogin' || this.$route.path === '/platformSelect') {
+                if (this.$route.path === '/corporationManagerLogin' || this.$route.path === '/platformSelect' || this.$route.name === 'SignType') {
                     this.$router.push('/')
                 } else if (this.$route.path === '/corporationList' || this.$route.path === '/addCorpUrl' || this.$route.path === '/config-check'
                     || this.$route.path === '/addIndividualUrl' || this.$route.path === '/config-org' || this.$route.path === '/config-email'

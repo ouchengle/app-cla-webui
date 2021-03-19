@@ -9,7 +9,7 @@
                         <div>
                             <el-tooltip :content="$t('index.org_bt_tip')" placement="top" effect="light"
                                         popper-class="my_tooltip">
-                                <button class="button" @click="submit('orgManager')">
+                                <button class="manager-button" @click="submit('orgManager')">
                                     {{$t('index.org_login')}}
                                 </button>
                             </el-tooltip>
@@ -18,7 +18,7 @@
                         <div>
                             <el-tooltip :content="$t('index.corp_bt_tip')" placement="bottom" effect="light"
                                         popper-class="my_tooltip">
-                                <button class="button" @click="submit('corporationManager')">
+                                <button class="manager-button" @click="submit('corporationManager')">
                                     {{$t('index.corp_login')}}
                                 </button>
                             </el-tooltip>
@@ -58,7 +58,7 @@
             clearSessionStorage() {
                 let showHeaderMenu = sessionStorage.getItem('showHeaderMenu');
                 sessionStorage.clear();
-                sessionStorage.setItem('showHeaderMenu',showHeaderMenu);
+                sessionStorage.setItem('showHeaderMenu', showHeaderMenu);
                 this.setDomain();
             },
         },
@@ -72,8 +72,35 @@
 </script>
 <style scoped lang="less">
     @import "../assets/font/css/Roboto-Bold.css";
+
     .loginTypeSelect {
         font-family: Roboto-Bold, sans-serif;
+
+        .buttonBox {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .codeBox .el-input__inner {
+            border-radius: 4px 0 0 4px;
+        }
+
+        .manager-button {
+            width: 22rem;
+            height: 4rem;
+            border-radius: 2rem;
+            border: none;
+            color: white;
+            font-size: 1.3rem;
+            cursor: pointer;
+            background: linear-gradient(to right, #97DB30, #319E55);
+            margin: 1.2rem 0;
+        }
+
+        .manager-button:focus {
+            outline: none;
+        }
 
         & > div {
             display: flex;
@@ -82,29 +109,5 @@
         }
     }
 
-    .buttonBox {
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-    }
 
-    .codeBox .el-input__inner {
-        border-radius: 4px 0 0 4px;
-    }
-
-    .button {
-        width: 22rem;
-        height: 4rem;
-        border-radius: 2rem;
-        border: none;
-        color: white;
-        font-size: 1.3rem;
-        cursor: pointer;
-        background: linear-gradient(to right, #97DB30, #319E55);
-        margin: 1.2rem 0;
-    }
-
-    .button:focus {
-        outline: none;
-    }
 </style>
