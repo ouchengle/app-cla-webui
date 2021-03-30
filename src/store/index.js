@@ -26,7 +26,6 @@ export default new Vuex.Store({
         tableData: sessionStorage.getItem('tableData') || undefined,
         ready: Boolean(sessionStorage.getItem('ready') || undefined),
         platform: sessionStorage.getItem('platform') || undefined,
-        domain: sessionStorage.getItem('domain') || undefined,
         access_token: sessionStorage.getItem('token') || undefined,
         refresh_token: sessionStorage.getItem('refresh_token') || undefined,
         platform_token: sessionStorage.getItem('platform_token') || undefined,
@@ -71,14 +70,14 @@ export default new Vuex.Store({
         bindType: sessionStorage.getItem('bindType') || undefined,
         addLang: sessionStorage.getItem('addLang') || undefined,
         add_bind_first: sessionStorage.getItem('add_bind_first') || undefined,
-        findPwdEmail:sessionStorage.getItem('findPwdEmail') || undefined,
+        findPwdEmail: sessionStorage.getItem('findPwdEmail') || undefined,
     },
     mutations: {
-        setFindPwdEmail(state, data){
+        setFindPwdEmail(state, data) {
             state.findPwdEmail = data;
             sessionStorage.setItem('findPwdEmail', data);
         },
-        setAddBindFirst(state, data){
+        setAddBindFirst(state, data) {
             state.add_bind_first = data;
             sessionStorage.setItem('add_bind_first', data);
         },
@@ -319,12 +318,6 @@ export default new Vuex.Store({
             state.access_token = token;
             sessionStorage.setItem('token', token);
         },
-        setDomain(state, domain) {
-            state.domain = domain;
-            sessionStorage.setItem('domain', domain)
-        },
-
-
     },
     actions: {
         setCorpTokenAct({commit}, token) {

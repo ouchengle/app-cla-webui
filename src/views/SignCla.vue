@@ -259,7 +259,6 @@
                 second: '',
                 sendBtText: this.$t('signPage.sendCode'),
                 signRouter: this.$store.state.signRouter,
-                domain: this.$store.state.domain,
                 tipsTitle: '',
                 tipsMessage: this.$t('tips.individual_sign'),
                 tipsDialogVisible: false,
@@ -498,14 +497,12 @@
             getCookieData(resolve) {
                 if (document.cookie) {
                     let cookieArr = document.cookie.split(';');
-                    let access_token, refresh_token, platform_token, _mark, error_code = '';
+                    let access_token, refresh_token, platform_token, error_code = '';
                     cookieArr.forEach((item) => {
                         let arr = item.split('=');
                         let name = arr[0].trim();
                         let value = arr[1].trim();
-                        if (name === '_mark') {
-                            _mark = value
-                        } else if (name === 'refresh_token') {
+                        if (name === 'refresh_token') {
                             refresh_token = value;
                         } else if (name === 'platform_token') {
                             platform_token = value;
@@ -1081,6 +1078,7 @@
             },
         },
         created() {
+            console.log('signcla-create');
             new Promise((resolve, reject) => {
                 this.getCookieData(resolve);
             }).then(res => {

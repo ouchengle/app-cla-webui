@@ -42,12 +42,6 @@
         },
         methods: {
             ...mapActions(['setLoginTypeAct']),
-            setDomain() {
-                console.log('logintypeselect----',window.location.host);
-                console.log('logintypeselect----',document.domain);
-                console.log('logintypeselect----',window.location.href.split('/index')[0]);
-                this.$store.commit('setDomain', window.location.href.split('/index')[0])
-            },
             submit(loginType) {
                 this.setLoginTypeAct(loginType);
                 if (loginType === 'orgManager') {
@@ -62,7 +56,6 @@
                 let showHeaderMenu = sessionStorage.getItem('showHeaderMenu');
                 sessionStorage.clear();
                 sessionStorage.setItem('showHeaderMenu',showHeaderMenu);
-                this.setDomain();
             },
         },
         created() {

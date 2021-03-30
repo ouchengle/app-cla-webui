@@ -185,9 +185,6 @@
             reLoginMsg() {
                 return this.$store.state.dialogMessage
             },
-            address() {
-                return this.$store.state.domain
-            },
         },
         data() {
             return {
@@ -219,7 +216,6 @@
             }
         },
         created() {
-            this.setDomain();
             this.clearConfigSession();
             new Promise((resolve, reject) => {
                 this.getCookieData(resolve)
@@ -431,7 +427,8 @@
                     params = `${row.platform.toLowerCase()}/${row.org_id}`
                 }
                 let base64Params = util.strToBase64(params)
-                let url = `${this.address}${this.signRouter}/${base64Params}`
+                let address = window.location.href.split('/linkedRepo')[0];
+                let url = `${address}${this.signRouter}/${base64Params}`
                 let copyInput = document.createElement("input");
                 copyInput.value = url;
                 document.body.appendChild(copyInput);
@@ -449,7 +446,8 @@
                     params = `${row.platform.toLowerCase()}/${row.org_id}`
                 }
                 let base64Params = util.strToBase64(params)
-                let url = `${this.address}${this.signRouter}/${base64Params}`
+                let address = window.location.href.split('/linkedRepo')[0];
+                let url = `${address}${this.signRouter}/${base64Params}`
                 window.open(url)
             },
             submitUpload() {
@@ -560,13 +558,6 @@
                 })
             },
             changePage(page) {
-            },
-            setDomain() {
-                let domain = window.location.href.split('/linkedRepo')[0];
-                if (domain === window.location.href) {
-                    domain = window.location.href.split('/home')[0]
-                }
-                this.$store.commit('setDomain', domain)
             },
         },
     }
