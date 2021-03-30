@@ -400,14 +400,13 @@
                                                 <div>
                                                     <el-tooltip :content="empBtTooltip" placement="top" effect="light"
                                                                 popper-class="my_tooltip">
-                                                        <div>
+                                                        <div class="display-inline-block">
                                                             <button :disabled="!isBindCorpCLA"
                                                                     class="button"
                                                                     @click="submit('employee')">
                                                                 {{ $t('signType.empBt') }}
                                                             </button>
                                                         </div>
-
                                                     </el-tooltip>
                                                 </div>
                                                 <el-tooltip :content="individualBtTooltip" placement="top"
