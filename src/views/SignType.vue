@@ -388,7 +388,7 @@
                                                 <div>
                                                     <el-tooltip :content="corpBtTooltip" placement="top" effect="light"
                                                                 popper-class="my_tooltip">
-                                                        <div>
+                                                        <div class="display-inline-block">
                                                             <button :disabled="!isBindCorpCLA" class="button"
                                                                     @click="submit('corporation')">
                                                                 {{ $t('signType.corpBt') }}
@@ -412,7 +412,7 @@
                                                 <el-tooltip :content="individualBtTooltip" placement="top"
                                                             effect="light"
                                                             popper-class="my_tooltip">
-                                                    <div>
+                                                    <div class="display-inline-block">
                                                         <button class="button"
                                                                 @click="submit('individual')">
                                                             {{ $t('signType.individualBt') }}
