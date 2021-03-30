@@ -55,7 +55,7 @@
             clearSessionStorage() {
                 let showHeaderMenu = sessionStorage.getItem('showHeaderMenu');
                 sessionStorage.clear();
-                sessionStorage.setItem('showHeaderMenu',showHeaderMenu);
+                sessionStorage.setItem('showHeaderMenu', showHeaderMenu);
             },
         },
         created() {
@@ -68,6 +68,7 @@
 </script>
 <style scoped lang="less">
     @import "../assets/font/css/Roboto-Bold.css";
+
     .loginTypeSelect {
         font-family: Roboto-Bold, sans-serif;
 
