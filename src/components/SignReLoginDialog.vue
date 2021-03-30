@@ -42,6 +42,11 @@
                     return 'dialogMessage'
                 }
             },
+            domain(){
+                console.log('signrelogin----',window.location.host);
+                console.log('signrelogin----',document.domain);
+                return document.domain
+            },
         },
         data() {
             return {

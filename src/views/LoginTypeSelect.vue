@@ -43,6 +43,9 @@
         methods: {
             ...mapActions(['setLoginTypeAct']),
             setDomain() {
+                console.log('logintypeselect----',window.location.host);
+                console.log('logintypeselect----',document.domain);
+                console.log('logintypeselect----',window.location.href.split('/index')[0]);
                 this.$store.commit('setDomain', window.location.href.split('/index')[0])
             },
             submit(loginType) {
