@@ -1196,7 +1196,7 @@
             downloadClaFile(row) {
                 http({
                     url: `${url.corporationPdf}/${this.$store.state.corpItem.link_id}/${row.admin_email}`,
-                    responseType: 'blob',
+                    responseType: 'arraybuffer',
                 }).then(res => {
                     if (res.data) {
                         let time = util.getNowDateToTime();
