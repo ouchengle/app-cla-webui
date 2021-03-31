@@ -515,7 +515,7 @@
                         } else if (name === 'error_code') {
                             error_code = value;
                         }
-                        cookie.remove(name, {path: '/'});
+                        // cookie.remove(name, {path: '/'});
                     });
                     let data = {access_token, refresh_token, platform_token, resolve};
                     this.$store.commit('setSignToken', data);
