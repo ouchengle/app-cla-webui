@@ -5,8 +5,11 @@
                 <div class="box" @click="join">
                     <svg-icon icon-class="github" class="footerIcon"></svg-icon>
                 </div>
-                <div class="box" @click="viewPrivacy">
-                    <span class="copyright">{{this.copyright}}</span>
+                <div class="box">
+                    <div class="copyright">
+                        <span>{{copyright}}</span>
+                        <span @click="checkIcp"> {{icp}}</span>
+                    </div>
                 </div>
             </el-col>
         </el-row>
@@ -21,10 +24,15 @@
         data() {
             return {
                 copyright: COPYRIGHT,
+                icp: ICP,
+                icpLink: ICPLINK,
             }
         },
         methods: {
             ...mapActions(['viewPrivacy']),
+            checkIcp(){
+                open(this.icpLink)
+            },
             join() {
                 window.open('https://github.com/opensourceways/app-cla-server')
             },
@@ -84,7 +92,7 @@
         }
 
         .copyright {
-            font-size: .5rem;
+            font-size: .8rem;
             /*font-family: HuaweiSans-Light,sans-serif;*/
         }
 
