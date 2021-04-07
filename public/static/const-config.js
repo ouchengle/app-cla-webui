@@ -5,6 +5,8 @@ const ORG_SIGNATURE_FILE = 'org_signature_file';
 const COPYRIGHT = 'MIT Licensed | Copyright © opensourceways infrastructure |';
 const ICP = '蜀ICP备20009468号-1';
 const ICPLINK = 'https://icp.chinaz.com/home/info?host=osinfra.cn';
+const POLICERECORD = '粤公网安备 44030702003822号';
+const POLICERECORDLINK = 'http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=44030702003822';
 const INDIVIDUALMETADATAARR_EN = [
     {
         title: `${sessionStorage.getItem('platform')}-ID`,
