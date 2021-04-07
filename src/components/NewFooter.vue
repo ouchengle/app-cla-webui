@@ -9,6 +9,7 @@
                     <div class="copyright">
                         <span>{{copyright}}</span>
                         <span @click="checkIcp"> {{icp}}</span>
+                        <span @click="checkPoliceRecord"> {{policeRecord}}</span>
                     </div>
                 </div>
             </el-col>
@@ -26,12 +27,17 @@
                 copyright: COPYRIGHT,
                 icp: ICP,
                 icpLink: ICPLINK,
+                policeRecord: POLICERECORD,
+                policeRecordLink: POLICERECORDLINK,
             }
         },
         methods: {
             ...mapActions(['viewPrivacy']),
-            checkIcp(){
+            checkIcp() {
                 open(this.icpLink)
+            },
+            checkPoliceRecord(){
+                open(this.policeRecordLink)
             },
             join() {
                 window.open('https://github.com/opensourceways/app-cla-server')
