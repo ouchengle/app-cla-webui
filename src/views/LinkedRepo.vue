@@ -497,7 +497,7 @@
                         } else if (name === 'access_token') {
                             access_token = value;
                         }
-                        _cookie.remove(name, {path: '/'});
+                        // _cookie.remove(name, {path: '/'});
                     });
                     let data = {access_token, refresh_token, platform_token, resolve};
                     this.setTokenAct(data);
