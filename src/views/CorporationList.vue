@@ -1340,8 +1340,6 @@
                     this.$message.error('Please select file first')
                 }
             },
-            beforeUpload(file) {
-            },
             handleChange(file, fileList) {
                 let max_size = this.file_size * 1024 * 1024;
                 if (/.(PDF|pdf)$/.test(file.name)) {
@@ -1376,9 +1374,6 @@
                     this.fileList.splice(0, 1);
                     i--;
                 }
-            },
-            handlePreview(file) {
-
             },
             handleExceed(files, fileList) {
                 this.$message.warning(this.$t('org.file_limit_tips'));

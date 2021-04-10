@@ -185,9 +185,6 @@
             reLoginMsg() {
                 return this.$store.state.dialogMessage
             },
-            address() {
-                return this.$store.state.domain
-            },
         },
         data() {
             return {
@@ -219,7 +216,6 @@
             }
         },
         created() {
-            this.setDomain();
             this.clearConfigSession();
             new Promise((resolve, reject) => {
                 this.getCookieData(resolve)
@@ -313,6 +309,12 @@
                                     dialogMessage: this.$t('tips.invalid_token'),
                                 });
                                 break;
+                            case 'cla.unauthorized_token':
+                                this.$store.commit('setOrgReLogin', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.unauthorized_token'),
+                                });
+                                break;
                             case 'cla.missing_token':
                                 this.$store.commit('setOrgReLogin', {
                                     dialogVisible: true,
@@ -368,6 +370,12 @@
                                     this.$store.commit('setOrgReLogin', {
                                         dialogVisible: true,
                                         dialogMessage: this.$t('tips.invalid_token'),
+                                    });
+                                    break;
+                                case 'cla.unauthorized_token':
+                                    this.$store.commit('setOrgReLogin', {
+                                        dialogVisible: true,
+                                        dialogMessage: this.$t('tips.unauthorized_token'),
                                     });
                                     break;
                                 case 'cla.missing_token':
@@ -431,7 +439,8 @@
                     params = `${row.platform.toLowerCase()}/${row.org_id}`
                 }
                 let base64Params = util.strToBase64(params)
-                let url = `${this.address}${this.signRouter}/${base64Params}`
+                let address = window.location.href.split('/linkedRepo')[0];
+                let url = `${address}${this.signRouter}/${base64Params}`
                 let copyInput = document.createElement("input");
                 copyInput.value = url;
                 document.body.appendChild(copyInput);
@@ -449,7 +458,8 @@
                     params = `${row.platform.toLowerCase()}/${row.org_id}`
                 }
                 let base64Params = util.strToBase64(params)
-                let url = `${this.address}${this.signRouter}/${base64Params}`
+                let address = window.location.href.split('/linkedRepo')[0];
+                let url = `${address}${this.signRouter}/${base64Params}`
                 window.open(url)
             },
             submitUpload() {
@@ -487,7 +497,7 @@
                         } else if (name === 'access_token') {
                             access_token = value;
                         }
-                        _cookie.remove(name, {path: '/'});
+                        // _cookie.remove(name, {path: '/'});
                     });
                     let data = {access_token, refresh_token, platform_token, resolve};
                     this.setTokenAct(data);
@@ -526,6 +536,12 @@
                                     dialogMessage: this.$t('tips.invalid_token'),
                                 });
                                 break;
+                            case 'cla.unauthorized_token':
+                                this.$store.commit('setOrgReLogin', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.unauthorized_token'),
+                                });
+                                break;
                             case 'cla.missing_token':
                                 this.$store.commit('setOrgReLogin', {
                                     dialogVisible: true,
@@ -560,13 +576,6 @@
                 })
             },
             changePage(page) {
-            },
-            setDomain() {
-                let domain = window.location.href.split('/linkedRepo')[0];
-                if (domain === window.location.href) {
-                    domain = window.location.href.split('/home')[0]
-                }
-                this.$store.commit('setDomain', domain)
             },
         },
     }

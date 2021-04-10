@@ -45,7 +45,6 @@
         },
         data() {
             return {
-                domain: this.$store.state.domain,
                 signRouter: this.$store.state.signRouter,
             }
         },
@@ -55,24 +54,10 @@
                     dialogVisible: false,
                     dialogMessage: '',
                 });
-                if (sessionStorage.getItem('orgAddress')) {
-                    window.location.href = sessionStorage.getItem('orgAddress')
-                } else {
-                    let date = new Date();
-                    date.setTime(date.getTime() - 10000);
-                    document.cookie = `_mark=; expire=${date.toUTCString()}; Domain=${this.domain}; path=/`;
-                    let repoInfo = this.$store.state.repoInfo
-                    let params = repoInfo.repo_id ? `${repoInfo.platform}/${repoInfo.org_id}/${repoInfo.repo_id}` : `${repoInfo.platform}/${repoInfo.org_id}`
-                    let path = '';
-                    if (sessionStorage.getItem('orgAddress')) {
-                        path = `${this.signRouter}/${util.strToBase64(params)}/${sessionStorage.getItem('orgAddress')}`
-                    } else {
-                        path = `${this.signRouter}/${util.strToBase64(params)}`
-                    }
-                    this.$router.replace(path)
-                }
-
-
+                let repoInfo = this.$store.state.repoInfo
+                let params = repoInfo.repo_id ? `${repoInfo.platform}/${repoInfo.org_id}/${repoInfo.repo_id}` : `${repoInfo.platform}/${repoInfo.org_id}`
+                let path = `${this.signRouter}/${util.strToBase64(params)}`;
+                this.$router.replace(path)
             },
         },
     }

@@ -42,9 +42,6 @@
         },
         methods: {
             ...mapActions(['setLoginTypeAct']),
-            setDomain() {
-                this.$store.commit('setDomain', window.location.href.split('/index')[0])
-            },
             submit(loginType) {
                 this.setLoginTypeAct(loginType);
                 if (loginType === 'orgManager') {
@@ -58,8 +55,7 @@
             clearSessionStorage() {
                 let showHeaderMenu = sessionStorage.getItem('showHeaderMenu');
                 sessionStorage.clear();
-                sessionStorage.setItem('showHeaderMenu',showHeaderMenu);
-                this.setDomain();
+                sessionStorage.setItem('showHeaderMenu', showHeaderMenu);
             },
         },
         created() {
@@ -72,6 +68,7 @@
 </script>
 <style scoped lang="less">
     @import "../assets/font/css/Roboto-Bold.css";
+
     .loginTypeSelect {
         font-family: Roboto-Bold, sans-serif;
 

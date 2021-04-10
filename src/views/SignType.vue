@@ -388,7 +388,7 @@
                                                 <div>
                                                     <el-tooltip :content="corpBtTooltip" placement="top" effect="light"
                                                                 popper-class="my_tooltip">
-                                                        <div>
+                                                        <div class="display-inline-block">
                                                             <button :disabled="!isBindCorpCLA" class="button"
                                                                     @click="submit('corporation')">
                                                                 {{ $t('signType.corpBt') }}
@@ -400,20 +400,19 @@
                                                 <div>
                                                     <el-tooltip :content="empBtTooltip" placement="top" effect="light"
                                                                 popper-class="my_tooltip">
-                                                        <div>
+                                                        <div class="display-inline-block">
                                                             <button :disabled="!isBindCorpCLA"
                                                                     class="button"
                                                                     @click="submit('employee')">
                                                                 {{ $t('signType.empBt') }}
                                                             </button>
                                                         </div>
-
                                                     </el-tooltip>
                                                 </div>
                                                 <el-tooltip :content="individualBtTooltip" placement="top"
                                                             effect="light"
                                                             popper-class="my_tooltip">
-                                                    <div>
+                                                    <div class="display-inline-block">
                                                         <button class="button"
                                                                 @click="submit('individual')">
                                                             {{ $t('signType.individualBt') }}
@@ -811,13 +810,11 @@
             reLoginMsg() {
                 return this.$store.state.dialogMessage
             },
-            domain() {
-                return this.$store.state.domain
-            },
         },
         data() {
             return {
                 isBindCorpCLA: false,
+                isBindIndividualCLA: false,
                 corpGuideIsOpen: false,
                 individualGuideIsOpen: false,
                 employeeGuideIsOpen: false,
@@ -917,19 +914,10 @@
                     let base64Params = util.strToBase64(params);
                     this.$router.replace(`${this.$store.state.signRouter}/${base64Params}`);
                 } else {
-                    let repoInfoParams = '';
-                    if (params.indexOf('/') !== -1) {
-                        repoInfoParams = params.substring(0, params.indexOf('/'));
-                        let orgAddress = params.substring(params.indexOf('/') + 1);
-                        sessionStorage.setItem('orgAddress', orgAddress)
-                    } else {
-                        sessionStorage.removeItem('orgAddress');
-                        repoInfoParams = params
-                    }
-                    let arg = util.base64ToStr(repoInfoParams);
+                    let arg = util.base64ToStr(params);
                     if (arg) {
                         let args = arg.split('/');
-                        if (args.length < 2) {
+                        if (args.length < 2 || args.length > 3) {
                             this.$router.push({name: 'ErrorPath'})
                         } else {
                             this.platform = args[0];
@@ -940,14 +928,12 @@
                                 this.repo = ''
                             }
                             this.setRepoInfoAct({platform: this.platform, org_id: this.org, repo_id: this.repo});
-                            this.getSignPage(this.platform, this.org, this.repo, 'corporation')
                         }
                     } else {
                         this.$router.push({name: 'ErrorPath'})
                     }
-
                 }
-
+                this.getSignPage(this.platform, this.org, this.repo, 'corporation')
             },
             getSignPage(platform, org_id, repo_id, applyTo) {
                 let _url = '';
@@ -990,12 +976,7 @@
                                 case 'cla.invalid_parameter':
                                     let repoInfo = this.$store.state.repoInfo;
                                     let params = repoInfo.repo_id ? `${repoInfo.platform}/${repoInfo.org_id}/${repoInfo.repo_id}` : `${repoInfo.platform}/${repoInfo.org_id}`
-                                    let path = '';
-                                    if (sessionStorage.getItem('orgAddress')) {
-                                        path = `${this.signRouter}/${util.strToBase64(params)}/${sessionStorage.getItem('orgAddress')}`
-                                    } else {
-                                        path = `${this.signRouter}/${util.strToBase64(params)}`
-                                    }
+                                    let path = `${this.signRouter}/${util.strToBase64(params)}`;
                                     this.$router.replace(path)
                                     break;
                                 case 'cla.invalid_token':
@@ -1053,9 +1034,6 @@
                     }
                 })
             },
-            setDomain() {
-                this.$store.commit('setDomain', window.location.href.split('/sign')[0])
-            },
             clearSignPageSession() {
                 this.$store.commit('setSignEmail', '');
                 this.$store.commit('setSignUser', '');
@@ -1065,7 +1043,6 @@
         },
         created() {
             this.clearSignPageSession();
-            this.setDomain();
             this.getRepoInfo();
         },
         mounted() {

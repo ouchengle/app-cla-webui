@@ -52,8 +52,8 @@
                                 </div>
                                 <div class="margin-top-1rem fontSize12">
                                     <el-checkbox v-model="isRead"><span>{{$t('signPage.checkBoxText1')}}<span
-                                            class="privacy" @click="">{{$t('signPage.privacy')}}</span>{{$t('signPage.checkBoxText2')}}<span
-                                            class="privacy" @click="toIndex()">{{$t('signPage.claSignPlatform')}}</span>{{$t('signPage.checkBoxText3')}}</span>
+                                            class="privacy" @click="">{{$t('signPage.privacy')}}</span>{{$t('signPage.checkBoxText2')}}
+                                        <span>{{$t('signPage.claSignPlatform')}}</span>{{$t('signPage.checkBoxText3')}}</span>
                                     </el-checkbox>
                                 </div>
                                 <el-form-item label-width="0" class="margin-top-1rem signBtBox">
@@ -101,8 +101,8 @@
                                 </div>
                                 <div class="margin-top-1rem fontSize12">
                                     <el-checkbox v-model="isRead"><span>{{$t('signPage.checkBoxText1')}}<span
-                                            class="privacy" @click="">{{$t('signPage.privacy')}}</span>{{$t('signPage.checkBoxText2')}}<span
-                                            class="privacy" @click="toIndex()">{{$t('signPage.claSignPlatform')}}</span>{{$t('signPage.checkBoxText3')}}</span>
+                                            class="privacy" @click="">{{$t('signPage.privacy')}}</span>{{$t('signPage.checkBoxText2')}}
+                                        <span>{{$t('signPage.claSignPlatform')}}</span>{{$t('signPage.checkBoxText3')}}</span>
                                     </el-checkbox>
                                 </div>
                                 <el-form-item label-width="0" class="margin-top-1rem signBtBox">
@@ -259,7 +259,6 @@
                 second: '',
                 sendBtText: this.$t('signPage.sendCode'),
                 signRouter: this.$store.state.signRouter,
-                domain: this.$store.state.domain,
                 tipsTitle: '',
                 tipsMessage: this.$t('tips.individual_sign'),
                 tipsDialogVisible: false,
@@ -293,20 +292,6 @@
         },
         methods: {
             ...mapActions(['setTokenAct', 'setRepoInfoAct', 'viewPrivacy']),
-            toIndex() {
-                let date = new Date();
-                date.setTime(date.getTime() - 10000);
-                document.cookie = `_mark=; expire=${date.toUTCString()}; Domain=${this.domain}; path=/`;
-                let repoInfo = this.$store.state.repoInfo;
-                let params = repoInfo.repo_id ? `${repoInfo.platform}/${repoInfo.org_id}/${repoInfo.repo_id}` : `${repoInfo.platform}/${repoInfo.org_id}`;
-                let path = '';
-                if (sessionStorage.getItem('orgAddress')) {
-                    path = `${this.signRouter}/${util.strToBase64(params)}/${sessionStorage.getItem('orgAddress')}`
-                } else {
-                    path = `${this.signRouter}/${util.strToBase64(params)}`
-                }
-                window.open(`${this.domain}${path}`)
-            },
             async requireVerifyTel(rule, value, callback) {
                 if (value) {
                     let reg = /^1[3456789]\d{9}$/;
@@ -512,14 +497,12 @@
             getCookieData(resolve) {
                 if (document.cookie) {
                     let cookieArr = document.cookie.split(';');
-                    let access_token, refresh_token, platform_token, _mark, error_code = '';
+                    let access_token, refresh_token, platform_token, error_code = '';
                     cookieArr.forEach((item) => {
                         let arr = item.split('=');
                         let name = arr[0].trim();
                         let value = arr[1].trim();
-                        if (name === '_mark') {
-                            _mark = value
-                        } else if (name === 'refresh_token') {
+                        if (name === 'refresh_token') {
                             refresh_token = value;
                         } else if (name === 'platform_token') {
                             platform_token = value;
@@ -532,7 +515,7 @@
                         } else if (name === 'error_code') {
                             error_code = value;
                         }
-                        cookie.remove(name, {path: '/'});
+                        // cookie.remove(name, {path: '/'});
                     });
                     let data = {access_token, refresh_token, platform_token, resolve};
                     this.$store.commit('setSignToken', data);
