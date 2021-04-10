@@ -340,8 +340,9 @@
     cursor: pointer;
     color: #319E55;
 }
-.font-size-1rem{
+.font-size-1rem {
     font-size: 1rem;
+}
 .display-inline-block{
     display: inline-block;
 }
