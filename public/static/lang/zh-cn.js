@@ -61,7 +61,7 @@ module.exports = {
         no_corp_manager: '该公司尚未添加任何管理员。你无法签署',
         has_not_signed: '该公司尚未签署',
         invalid_token: 'Token已过期，请重新登录',
-        missing_token: 'Token无效，请重新登陆',
+        missing_token: 'Token缺失，请重新登陆',
         unknown_token: 'Token无效，请重新登陆',
         unauthorized_token: 'Token权限不匹配，请重新授权登陆',
         uncompleted_signing: '该公司的签署流程还未完成',
@@ -134,6 +134,8 @@ module.exports = {
         checkRepoMessage: '您输入的仓库不属于该组织或者该仓库为私有仓库或者该仓库不存在，是否继续？',
         cla_is_used: '该CLA已经被使用',
         go_to_sign_employee_cla: '你所在的公司已经签署企业CLA，所以你只能签署员工CLA',
+        quitLogin:'已退出',
+        quitLoginTip:'你的{platform}账户已经授权登陆了社区管理，请退出后再继续',
     },
     header: {
         home: '首页',

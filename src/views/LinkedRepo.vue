@@ -217,11 +217,7 @@
         },
         created() {
             this.clearConfigSession();
-            new Promise((resolve, reject) => {
-                this.getCookieData(resolve)
-            }).then(res => {
-                this.getLinkedRepoList();
-            })
+            this.getLinkedRepoList();
         },
         updated() {
             this.setClientHeight();
@@ -372,6 +368,12 @@
                                         dialogMessage: this.$t('tips.invalid_token'),
                                     });
                                     break;
+                                case 'cla.expired_token':
+                                    this.$store.commit('setOrgReLogin', {
+                                        dialogVisible: true,
+                                        dialogMessage: this.$t('tips.invalid_token'),
+                                    });
+                                    break;
                                 case 'cla.unauthorized_token':
                                     this.$store.commit('setOrgReLogin', {
                                         dialogVisible: true,
@@ -482,30 +484,6 @@
             beforeRemove(file, fileList) {
                 return this.$confirm(`Are you sure you want to remove ${file.name}？`);
             },
-            getCookieData(resolve) {
-                if (document.cookie) {
-                    let cookieArr = document.cookie.split(';')
-                    let access_token, refresh_token, platform_token = '';
-                    cookieArr.forEach((item, index) => {
-                        let arr = item.split('=');
-                        let name = arr[0].trim();
-                        let value = arr[1].trim();
-                        if (name === 'refresh_token') {
-                            refresh_token = value;
-                        } else if (name === 'platform_token') {
-                            platform_token = value;
-                        } else if (name === 'access_token') {
-                            access_token = value;
-                        }
-                        // _cookie.remove(name, {path: '/'});
-                    });
-                    let data = {access_token, refresh_token, platform_token, resolve};
-                    this.setTokenAct(data);
-
-                } else {
-                    resolve('complete');
-                }
-            },
             unlinkHandleClick(scope) {
                 this.unlinkId = scope.row.link_id;
                 this.unLinkDialogVisible = true
@@ -515,9 +493,6 @@
                 sessionStorage.removeItem('corpItem');
                 this.$store.commit('setCorpItem', item);
                 this.$router.push('/corporationList')
-            },
-            newWindow(repo) {
-                window.open(`https://gitee.com/${repo}`)
             },
             unLinkRepositoryFun() {
                 http({
@@ -531,6 +506,12 @@
                     if (err.data && err.data.hasOwnProperty('data')) {
                         switch (err.data.data.error_code) {
                             case 'cla.invalid_token':
+                                this.$store.commit('setOrgReLogin', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.invalid_token'),
+                                });
+                                break;
+                            case 'cla.expired_token':
                                 this.$store.commit('setOrgReLogin', {
                                     dialogVisible: true,
                                     dialogMessage: this.$t('tips.invalid_token'),
