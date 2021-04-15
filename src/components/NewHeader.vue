@@ -229,16 +229,6 @@
                 if (this.loginRole === 'corp') {
                     this.$router.push('/corporationManagerLogin')
                 } else {
-                    if (document.cookie) {
-                        let cookieArr = document.cookie.split(';');
-                        cookieArr.forEach((item) => {
-                            let arr = item.split('=');
-                            let name = arr[0].trim();
-                            if (name === 'action') {
-                                cookie.remove(name, {path: '/'});
-                            }
-                        });
-                    }
                     this.$router.push('/')
                 }
             },

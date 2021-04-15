@@ -501,18 +501,6 @@
                 }
             },
             getActionFromCookie() {
-                if (document.cookie) {
-                    this.action = '';
-                    let cookieArr = document.cookie.split(';');
-                    cookieArr.forEach((item) => {
-                        let arr = item.split('=');
-                        let name = arr[0].trim();
-                        let value = arr[1].trim();
-                        if (name === 'action') {
-                            this.action = value;
-                        }
-                    });
-                }
             },
             getCookieData(resolve) {
                 if (document.cookie) {
