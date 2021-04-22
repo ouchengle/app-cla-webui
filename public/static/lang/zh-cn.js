@@ -120,7 +120,7 @@ module.exports = {
         upload_signature_file: '请上传代表社区的签名的PDF文件',
         not_upload_file: '暂未上传文件，请上传后再试',
         no_file_can_download: '暂无可用文件',
-        no_lang: '暂不支持{language}，请在右上角切换语言后再试',
+        no_lang: '社区管理员暂未绑定{language}贡献者协议，请在右上角切换语言后再试',
         no_pdf_of_corp: '暂未上传企业签署得PDF文件，请上传后再试',
         not_pdf: '上传的文件必须是 PDF!',
         file_too_large: '上传的文件太大了!',

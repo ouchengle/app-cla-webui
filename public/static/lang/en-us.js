@@ -120,7 +120,7 @@ module.exports = {
         upload_signature_file: 'Please upload a PDF file with the signature of the community',
         not_upload_file: 'No file has been uploaded. Please upload and try again',
         no_file_can_download: 'No files available',
-        no_lang: '{language} is not supported at the moment，please switch languages in the upper right corner and try again',
+        no_lang: 'The community administrator has not bound the {language} CLA，please switch languages in the upper right corner and try again',
         no_pdf_of_corp: 'PDF corporation signed has not been uploaded,please upload and try again',
         not_pdf: 'Upload file must be PDF!',
         file_too_large: 'The uploaded file is too large!',
