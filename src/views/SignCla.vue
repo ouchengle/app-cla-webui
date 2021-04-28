@@ -115,8 +115,6 @@
         <ReTryDialog :dialogVisible="reTryDialogVisible" :message="reLoginMsg"></ReTryDialog>
         <SignSuccessDialog :dialogVisible="signSuccessDialogVisible" :message="reLoginMsg"></SignSuccessDialog>
         <SignReLoginDialog :dialogVisible="signReLoginDialogVisible" :message="reLoginMsg"></SignReLoginDialog>
-        <TokenErrorDialog @checkAction="checkTokenType" :dialogVisible="tokenErrorDialogVisible"
-                          :message="reLoginMsg"></TokenErrorDialog>
     </el-row>
 </template>
 
@@ -133,7 +131,6 @@
     import ReTryDialog from '../components/ReTryDialog'
     import SignSuccessDialog from '../components/SignSuccessDialog'
     import SignReLoginDialog from '../components/SignReLoginDialog'
-    import TokenErrorDialog from '../components/TokenErrorDialog'
 
     export default {
 
@@ -173,9 +170,6 @@
             },
             signReLoginDialogVisible() {
                 return this.$store.state.signReLoginDialogVisible
-            },
-            tokenErrorDialogVisible() {
-                return this.$store.state.tokenErrorDialogVisible
             },
             sendBtTextFromLang: {
                 get: function () {
@@ -235,7 +229,6 @@
             ReTryDialog,
             SignSuccessDialog,
             SignReLoginDialog,
-            TokenErrorDialog,
         },
         data() {
             return {
@@ -475,8 +468,6 @@
                         break;
                     }
                 }
-            },
-            getActionFromCookie() {
             },
             setData(res, resolve) {
                 if (res && res.data.data) {
@@ -995,15 +986,6 @@
                         document.getElementById("signCla").style.minHeight = document.getElementById('signCla').offsetHeight + 'px'
                     }
                 })
-            },
-            checkTokenType() {
-                this.getActionFromCookie()
-                if (this.action === 'login') {
-                    this.$store.commit('setTokenErrorReLogin', {
-                        dialogVisible: true,
-                        dialogMessage: this.$t('tips.quitLoginTip', {platform: this.$store.state.platform}),
-                    });
-                }
             },
         },
         created() {
