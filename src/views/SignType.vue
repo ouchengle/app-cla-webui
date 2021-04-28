@@ -916,6 +916,7 @@
             },
             clickSignTypeGuide(type) {
                 this.signType = type;
+                this.setClientHeight()
             },
             setClientHeight() {
                 this.$nextTick(() => {
