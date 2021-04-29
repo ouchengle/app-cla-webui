@@ -1329,6 +1329,8 @@
                     util.successMessage(this);
                     this.getCorporationInfo()
                 }).catch(err => {
+                    this.uploadLoading.close();
+                    this.uploadDialogVisible = false;
                     if (err.data && err.data.hasOwnProperty('data')) {
                         switch (err.data.data.error_code) {
                             case 'cla.invalid_token':
