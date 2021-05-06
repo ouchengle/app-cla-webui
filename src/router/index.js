@@ -225,21 +225,33 @@ const routes = [
         component: () => import('../views/SignType.vue')
     },
     {
-        path: '/privacy',
-        name: 'Privacy',
+        path: '/sign-page',
+        name: 'SignPage',
         meta: {
-            title: 'privacy',
+            title: 'sign-page',
         },
-        component: () => import('../views/Privacy.vue')
-    },
-
-    {
-        path: '/sign-cla',
-        name: 'SignCla',
-        meta: {
-            title: 'sign-cla',
-        },
-        component: () => import('../views/SignCla.vue')
+        component: () => import('../views/SignPage.vue'),
+        children: [
+            {
+                path: '/',
+                redirect: '/sign-cla'
+            },
+            {
+                path: '/sign-cla',
+                name: 'SignCla',
+                meta: {
+                    title: 'sign-cla',
+                },
+                component: () => import('../views/SignCla.vue'),
+            },
+            {
+                path: '/privacy',
+                name: 'Privacy',
+                meta: {
+                    title: 'privacy',
+                },
+                component: () => import('../views/Privacy.vue')
+            },]
     },
     {
         path: '/password',
@@ -313,7 +325,7 @@ router.beforeEach((to, from, next) => {
     }
     if (to.name === 'SignType' || to.name === 'SignType_back' || to.path === '/sign-cla' || to.path === '/index'
         || to.path === '/platformSelect' || to.path === '/corporationManagerLogin' || to.path === '/orgSelect'
-        || to.path === '/verify-email' || to.path === '/reset-password') {
+        || to.path === '/verify-email' || to.path === '/reset-password' || to.path === '/privacy') {
         sessionStorage.setItem('showHeaderMenu', 'false')
     } else if (to.path === '/home' || to.path === '/linkedRepo' || to.path === '/corporationList' || to.path === '/bind-cla'
         || to.path === '/config-org' || to.path === '/config-cla-link' || to.path === '/config-fields'

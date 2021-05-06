@@ -1,6 +1,5 @@
 <template>
     <el-row id="signCla">
-        <Header></Header>
         <div id="singCla_section">
             <el-row class="content">
                 <el-col>
@@ -47,7 +46,7 @@
                                 </div>
                                 <div class="margin-top-1rem fontSize12">
                                     <el-checkbox v-model="isRead"><span>{{$t('signPage.checkBoxText1')}}<span
-                                            class="privacy" @click="">{{$t('signPage.privacy')}}</span>{{$t('signPage.checkBoxText2')}}
+                                            class="privacy" @click="previewPrivacy()">{{$t('signPage.privacy')}}</span>{{$t('signPage.checkBoxText2')}}
                                         <span>{{$t('signPage.claSignPlatform')}}</span>{{$t('signPage.checkBoxText3')}}</span>
                                     </el-checkbox>
                                 </div>
@@ -95,7 +94,7 @@
                                 </div>
                                 <div class="margin-top-1rem fontSize12">
                                     <el-checkbox v-model="isRead"><span>{{$t('signPage.checkBoxText1')}}<span
-                                            class="privacy" @click="">{{$t('signPage.privacy')}}</span>{{$t('signPage.checkBoxText2')}}
+                                            class="privacy" @click="previewPrivacy()">{{$t('signPage.privacy')}}</span>{{$t('signPage.checkBoxText2')}}
                                         <span>{{$t('signPage.claSignPlatform')}}</span>{{$t('signPage.checkBoxText3')}}</span>
                                     </el-checkbox>
                                 </div>
@@ -110,7 +109,6 @@
                 </el-col>
             </el-row>
         </div>
-        <Footer></Footer>
         <ReLoginDialog :dialogVisible="reLoginDialogVisible" :message="reLoginMsg"></ReLoginDialog>
         <ReTryDialog :dialogVisible="reTryDialogVisible" :message="reLoginMsg"></ReTryDialog>
         <SignSuccessDialog :dialogVisible="signSuccessDialogVisible" :message="reLoginMsg"></SignSuccessDialog>
@@ -119,21 +117,17 @@
 </template>
 
 <script>
-    import Header from '@components/NewHeader'
-    import Footer from '@components/NewFooter'
     import * as util from '../util/util'
     import * as url from '../util/api'
     import {mapActions} from 'vuex'
     import http from '../util/sign_http'
     import axios from '../util/_axios'
-    import cookie from 'js-cookie'
     import ReLoginDialog from '../components/ReLoginDialog'
     import ReTryDialog from '../components/ReTryDialog'
     import SignSuccessDialog from '../components/SignSuccessDialog'
     import SignReLoginDialog from '../components/SignReLoginDialog'
 
     export default {
-
         name: "SignCla",
         computed: {
             loginType() {
@@ -223,13 +217,12 @@
             },
         },
         components: {
-            Header,
-            Footer,
             ReLoginDialog,
             ReTryDialog,
             SignSuccessDialog,
             SignReLoginDialog,
         },
+        inject:['setClientHeight'],
         data() {
             return {
                 action: '',
@@ -987,6 +980,9 @@
                     }
                 })
             },
+            previewPrivacy(){
+                this.$router.push('/privacy')
+            },
         },
         created() {
             new Promise((resolve, reject) => {
@@ -996,15 +992,7 @@
             })
         },
         mounted() {
-            this.setClientHeight();
-            window.onresize = () => {
-                if (util.getClientHeight() > document.getElementById('signCla').offsetHeight) {
-                    document.getElementById("signCla").style.minHeight = util.getClientHeight() + 'px'
-                }
-            }
-        },
-        destroyed() {
-            window.onresize = null;
+            this.setClientHeight()
         }
     }
 </script>
@@ -1264,8 +1252,6 @@
             & > .content {
                 padding: 1rem 0;
                 text-align: left;
-
-
             }
         }
 

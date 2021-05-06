@@ -70,6 +70,7 @@
     }
 
     .parentBox {
+        box-sizing: border-box;
         width: 100%;
         border-top: 2px solid #F2F2F2;
     }
