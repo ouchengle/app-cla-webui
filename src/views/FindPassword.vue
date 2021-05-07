@@ -4,12 +4,12 @@
         <el-form class="findPwdBox" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0">
             <el-form-item prop="newPassword">
                 <el-input :placeholder="$t('corp.input_new_pwd')" clearable=""
-                          type="password"
+                          show-password
                           v-model="ruleForm.newPassword"></el-input>
             </el-form-item>
             <el-form-item prop="newPasswordAgain">
                 <el-input :disabled="!haveNewPwd" :placeholder="$t('corp.input_new_pwd_again')" clearable=""
-                          type="password"
+                          show-password
                           v-model="ruleForm.newPasswordAgain"></el-input>
             </el-form-item>
             <el-form-item>

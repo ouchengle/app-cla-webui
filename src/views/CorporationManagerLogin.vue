@@ -3,13 +3,13 @@
         <el-col align="right" class="formBox">
             <div class="formBack_Box">
                 <div class="formBack">
-                    <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="0">
-                        <el-form-item :required="true" prop="userName">
-                            <el-input v-model="ruleForm.userName" autocomplete="off" :placeholder="$t('corp.id')"
-                                      @keydown.native="pressEnter"></el-input>
+                    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0">
+                        <el-form-item prop="userName">
+                            <el-input v-model="ruleForm.userName" :placeholder="$t('corp.id')"
+                                      @keydown.native="pressEnter" clearable></el-input>
                         </el-form-item>
-                        <el-form-item :required="true" label="" prop="pwd">
-                            <el-input type="password" v-model="ruleForm.pwd" autocomplete="off"
+                        <el-form-item prop="pwd">
+                            <el-input show-password clearable v-model="ruleForm.pwd"
                                       :placeholder="$t('corp.pwd')" @keydown.native="pressEnter"></el-input>
                         </el-form-item>
                         <el-form-item style="text-align: right">
@@ -66,7 +66,6 @@
 
             };
             return {
-
                 myStyle: {
                     height: '',
                 },
@@ -81,6 +80,7 @@
                 ruleForm: {
                     userName: '',
                     pwd: '',
+                    test:'',
                 },
             };
         },
@@ -93,7 +93,7 @@
                 }
             },
             findPwd() {
-                // this.$router.push('/password')
+                this.$router.push('/password')
             },
             login(userName, pwd) {
                 let obj = {
@@ -143,7 +143,6 @@
                         })
                     }
                 }).catch(err => {
-                    console.log(err);
                     if (err.data && err.data.hasOwnProperty('data')) {
                         switch (err.data.data.error_code) {
                             case 'cla.invalid_token':
