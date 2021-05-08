@@ -3,6 +3,7 @@ module.exports = {
         corp: "Corporation",
         emp: "Employee",
         individual: "Individual",
+        checkSignStatus: "Individual Sign Check",
         corpBt: " Sign Corporation CLA ",
         empBt: " Sign Employee CLA ",
         individualBt: " Sign Individual CLA ",
@@ -27,7 +28,11 @@ module.exports = {
         admin_platform: ' Administrator platform ',
         not_support_corp: 'Corporation signing is not supported at the moment',
         not_support_emp: 'Employee signing is not supported at the moment',
-        not_support_individual: 'Individual signing is not supported at the moment'
+        not_support_individual: 'Individual signing is not supported at the moment',
+        emailHolder:'Please input email',
+        signed: 'The email has been signed',
+        notSigned: 'The email is not signed',
+        individualSignCheckTitle: 'Individual Sign Check'
     },
     signPage: {
         claTitle: "Contributor License Agreement",

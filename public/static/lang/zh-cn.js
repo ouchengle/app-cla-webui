@@ -3,6 +3,7 @@ module.exports = {
         corp: "企业",
         emp: "员工",
         individual: "个人",
+        checkSignStatus: "查询个人签署状态",
         corpBt: "签署企业CLA",
         empBt: "签署员工CLA",
         individualBt: "签署个人CLA",
@@ -27,7 +28,11 @@ module.exports = {
         admin_platform: '超级管理员后台',
         not_support_corp: '暂不支持企业签署',
         not_support_emp: '暂不支持员工签署',
-        not_support_individual: '暂不支持个人签署'
+        not_support_individual: '暂不支持个人签署',
+        emailHolder: '请输入邮箱',
+        signed: '该邮箱已签署',
+        notSigned: '该邮箱未签署',
+        individualSignCheckTitle: '个人签署查询'
     },
     signPage: {
         claTitle: "贡献者许可协议",

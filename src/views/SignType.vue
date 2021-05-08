@@ -382,9 +382,17 @@
                         <el-col :span="10" style="height: 100%;">
                             <el-row class="signType" style="height: 100%">
                                 <div id="sign">
-                                    <el-row style="height: 50%">
+                                    <el-row style="height: 75%">
                                         <el-col align="right" class="buttonBox">
                                             <div id="btBox">
+                                                <div>
+                                                    <div class="display-inline-block">
+                                                        <button class="button"
+                                                                @click="checkSignStatus()">
+                                                            {{ $t('signType.checkSignStatus') }}
+                                                        </button>
+                                                    </div>
+                                                </div>
                                                 <div>
                                                     <el-tooltip :content="corpBtTooltip" placement="top" effect="light"
                                                                 popper-class="my_tooltip">
@@ -832,6 +840,9 @@
         },
         methods: {
             ...mapActions(['setLoginTypeAct', 'setRepoInfoAct']),
+            checkSignStatus(){
+                this.$router.push('/check-sign-status')
+            },
             clickIndividualGuide() {
                 this.individualGuideIsOpen = !this.individualGuideIsOpen;
             },

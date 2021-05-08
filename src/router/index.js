@@ -251,6 +251,14 @@ const routes = [
                     title: 'privacy',
                 },
                 component: () => import('../views/Privacy.vue')
+            },
+            {
+                path: '/check-sign-status',
+                name: 'CheckSignStatus',
+                meta: {
+                    title: 'check-sign-status',
+                },
+                component: () => import('../views/CheckSignStatus.vue')
             },]
     },
     {
@@ -325,7 +333,7 @@ router.beforeEach((to, from, next) => {
     }
     if (to.name === 'SignType' || to.name === 'SignType_back' || to.path === '/sign-cla' || to.path === '/index'
         || to.path === '/platformSelect' || to.path === '/corporationManagerLogin' || to.path === '/orgSelect'
-        || to.path === '/verify-email' || to.path === '/reset-password' || to.path === '/privacy') {
+        || to.path === '/verify-email' || to.path === '/reset-password' || to.path === '/privacy' || to.path === '/check-sign-status') {
         sessionStorage.setItem('showHeaderMenu', 'false')
     } else if (to.path === '/home' || to.path === '/linkedRepo' || to.path === '/corporationList' || to.path === '/bind-cla'
         || to.path === '/config-org' || to.path === '/config-cla-link' || to.path === '/config-fields'
