@@ -192,6 +192,7 @@ module.exports = {
         find_pwd_step3: 'Done',
         resetSuccess: 'Reset successfully',
         goToLogin: 'Go to login',
+        search: 'Search',
     },
     index: {
         org_login: 'Opensource Community Manager',

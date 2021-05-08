@@ -192,6 +192,7 @@ module.exports = {
         find_pwd_step3: '完成',
         resetSuccess: '重置成功',
         goToLogin: '去登陆',
+        search: '查询',
     },
     index: {
         org_login: '开源社区管理员',
