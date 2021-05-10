@@ -3,6 +3,21 @@
         <el-col>
             <p id="tabName">{{$t('header.createManager')}}</p>
             <el-row class="createUserBack">
+                <el-row type="flex" align="middle" class="emailRow" gutter="20">
+                    <el-col align="left" :span="6">
+                        <span class="requireText">{{$t('corp.managerName')}}</span>
+                    </el-col>
+                    <el-col align="left" :span="8">
+                        <span class="requireText">{{$t('corp.managerEmail')}}</span>
+                    </el-col>
+                    <el-col align="left" :span="6">
+                        <span class="requireText">{{$t('corp.managerId')}}</span>
+                        <el-tooltip effect="light" :content="$t('corp.managerIdDesc')"
+                                    placement="right">
+                            <svg-icon class="pointer" icon-class="bangzhu"/>
+                        </el-tooltip>
+                    </el-col>
+                </el-row>
                 <el-row type="flex" align="middle" class="emailRow" gutter="20" v-for="(item,index) in data">
                     <el-col :span="6">
                         <el-input
@@ -136,7 +151,6 @@
                                 break;
                             }
                         }
-
                     }
                 }
                 if (isCreate) {
@@ -227,10 +241,16 @@
                                         dialogMessage: this.$t('tips.unknown_token'),
                                     });
                                     break;
-                                case 'cla.invalid_email':
+                                case 'cla.not_an_email':
                                     this.$store.commit('errorCodeSet', {
                                         dialogVisible: true,
                                         dialogMessage: this.$t('tips.invalid_email'),
+                                    });
+                                    break;
+                                case 'cla.many_employee_managers':
+                                    this.$store.commit('errorCodeSet', {
+                                        dialogVisible: true,
+                                        dialogMessage: this.$t('tips.many_employee_managers'),
                                     });
                                     break;
 
@@ -299,6 +319,17 @@
 
     #createUser {
         padding: 2rem 0;
+
+        .requireText {
+            font-family: Roboto-Regular, sans-serif;
+        }
+
+        .requireText:before {
+            content: '*';
+            color: #f56c6c;
+            margin-right: 4px;
+        }
+
 
         & .el-dialog {
             border-radius: 1rem;
