@@ -518,7 +518,7 @@
         methods: {
             sortDate(dataArr) {
                 if (!(dataArr && dataArr.length)) {
-                    return
+                    return []
                 }
                 dataArr.forEach(item => {
                     let dateNum = parseInt(item.date.replace(/-/g, ''));
@@ -533,6 +533,7 @@
                         }
                     }
                 }
+                return dataArr;
             },
             submitDeleteCorpComplete() {
                 this.deleteCompleteVisible = false;
@@ -627,7 +628,7 @@
                     util.successMessage(this);
                     if (this.delete_apply === 'corporation') {
                         this.getCorpClaInfo()
-                    }else{
+                    } else {
                         this.getIndividualClaInfo()
                     }
                 }).catch(err => {
@@ -1046,17 +1047,17 @@
                 }).then(resp => {
                     if (resp.data.data && resp.data.data.length) {
                         let tableData = resp.data.data;
-                        this.signedCompleted = [];
-                        this.signedNotCompleted = [];
+                        let signedCompletedData = [];
+                        let signedNotCompletedData = [];
                         tableData.forEach(item => {
                             if (item.admin_added) {
-                                this.signedCompleted.push(item)
+                                signedCompletedData.push(item)
                             } else {
-                                this.signedNotCompleted.push(item)
+                                signedNotCompletedData.push(item)
                             }
                         });
-                        this.sortDate(this.signedCompleted);
-                        this.sortDate(this.signedNotCompleted)
+                        this.signedCompleted = this.sortDate(signedCompletedData);
+                        this.signedNotCompleted = this.sortDate(signedNotCompletedData)
                     }
                     this.notCompleteCount = this.signedNotCompleted.length;
                     this.completeCount = this.signedCompleted.length
@@ -1719,6 +1720,12 @@
                                     dialogMessage: this.$t('tips.no_pdf_of_corp'),
                                 });
                                 break;
+                            case 'cla.corp_manager_exists':
+                                this.$store.commit('errorCodeSet', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.can_not_delete_corp'),
+                                });
+                                break;
                             case 'cla.unuploaded':
                                 this.$store.commit('errorCodeSet', {
                                     dialogVisible: true,
@@ -1791,6 +1798,12 @@
                                 this.$store.commit('errorCodeSet', {
                                     dialogVisible: true,
                                     dialogMessage: this.$t('tips.no_pdf_of_corp'),
+                                });
+                                break;
+                            case 'cla.corp_manager_exists':
+                                this.$store.commit('errorCodeSet', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.corp_root_exists'),
                                 });
                                 break;
                             case 'cla.unuploaded':
