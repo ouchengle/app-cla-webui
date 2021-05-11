@@ -231,7 +231,42 @@
                     </el-tab-pane>
                 </el-tabs>
             </el-tab-pane>
-            <el-tab-pane :label="$t('org.individual_cla')" name="second" class="margin-top-1rem">
+            <el-tab-pane :label="individualDataLabel" name="second" class="margin-top-1rem">
+                <div class="tableStyle">
+                    <el-table
+                            :empty-text="$t('corp.no_data')"
+                            :data="signedIndividualData"
+                            align="center"
+                            class="tableClass"
+                            style="width: 100%;">
+                        <el-table-column
+                                min-width="5"
+                                type="index">
+                        </el-table-column>
+                        <el-table-column
+                                min-width="15"
+                                prop="name"
+                                :label="$t('org.config_cla_field_individual_default_title1')">
+                        </el-table-column>
+                        <el-table-column
+                                min-width="20"
+                                prop="email"
+                                :label="$t('org.to_email')">
+                        </el-table-column>
+                        <el-table-column
+                                min-width="10"
+                                prop="cla_language"
+                                :label="$t('org.cla_language')">
+                        </el-table-column>
+                        <el-table-column
+                                min-width="10"
+                                prop="date"
+                                :label="$t('org.date')">
+                        </el-table-column>
+                    </el-table>
+                </div>
+            </el-tab-pane>
+            <el-tab-pane :label="$t('org.individual_cla')" name="third" class="margin-top-1rem">
                 <div class="tableStyle">
                     <el-table
                             v-if="individualClaData.length"
@@ -278,7 +313,7 @@
                     <el-button v-else @click="createIndividualCla">{{$t('org.addIndividualCla')}}</el-button>
                 </div>
             </el-tab-pane>
-            <el-tab-pane :label="$t('org.corporation_cla')" name="third" class="margin-top-1rem">
+            <el-tab-pane :label="$t('org.corporation_cla')" name="fourth" class="margin-top-1rem">
                 <div class="tableStyle">
                     <el-table
                             v-if="corpClaData.length"
@@ -441,6 +476,9 @@
             DeleteDialog,
         },
         computed: {
+            individualDataLabel() {
+                return `${this.$t('org.signed_individual')}[${this.signedIndividualCount}]`
+            },
             notCompleteLabel() {
                 return `${this.$t('org.not_complete')}[${this.notCompleteCount}]`
             },
@@ -471,12 +509,14 @@
         },
         data() {
             return {
+                signedIndividualCount: '',
                 notCompleteCount: '',
                 completeCount: '',
                 deletedCount: '',
                 signedCompleted: [],
                 signedNotCompleted: [],
                 deletedCorpInfo: [],
+                signedIndividualData: [],
                 corpActiveName: 'first',
                 deleteCompleteVisible: false,
                 invalidSignatureData: [],
@@ -908,11 +948,11 @@
                 if (tab.index === '0') {
                     this.getCorporationInfo();
                 } else if (tab.index === '1') {
-                    this.getIndividualClaInfo()
+                    this.getIndividualSign();
                 } else if (tab.index === '2') {
-                    this.getCorpClaInfo();
+                    this.getIndividualClaInfo()
                 } else if (tab.index === '3') {
-                    this.getDeletedCorpInfo();
+                    this.getCorpClaInfo();
                 }
             },
             getCorpClaInfo() {
@@ -1040,6 +1080,69 @@
                         })
                     }
                 });
+            },
+            getIndividualSign() {
+                http({
+                    url: `${url.individual_signing}/${this.$store.state.corpItem.link_id}`,
+                }).then(resp => {
+                    if (resp.data.data && resp.data.data.length) {
+                        let tableData = resp.data.data;
+                        this.signedIndividualData = this.sortDate(tableData);
+                    }
+                    this.signedIndividualCount = this.signedIndividualData.length;
+                }).catch(err => {
+                    if (err.data && err.data.hasOwnProperty('data')) {
+                        switch (err.data.data.error_code) {
+                            case 'cla.invalid_token':
+                                this.$store.commit('errorSet', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.invalid_token'),
+                                });
+                                break;
+                            case 'cla.expired_token':
+                                this.$store.commit('errorSet', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.invalid_token'),
+                                });
+                                break;
+                            case 'cla.missing_token':
+                                this.$store.commit('errorSet', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.missing_token'),
+                                });
+                                break;
+                            case 'cla.unknown_token':
+                                this.$store.commit('errorSet', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.unknown_token'),
+                                });
+                                break;
+                            case 'cla.unauthorized_token':
+                                this.$store.commit('errorSet', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.unauthorized_token'),
+                                });
+                                break;
+                            case 'cla.system_error':
+                                this.$store.commit('errorCodeSet', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.system_error'),
+                                });
+                                break;
+                            default :
+                                this.$store.commit('errorCodeSet', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.unknown_error'),
+                                });
+                                break;
+                        }
+                    } else {
+                        this.$store.commit('errorCodeSet', {
+                            dialogVisible: true,
+                            dialogMessage: this.$t('tips.system_error'),
+                        })
+                    }
+                })
             },
             getCorporationInfo() {
                 http({
@@ -1839,6 +1942,7 @@
             util.clearSession(this);
             this.getCorporationInfo();
             this.getDeletedCorpInfo();
+            this.getIndividualSign();
         },
         mounted() {
             this.setClientHeight();
@@ -1851,7 +1955,7 @@
 
 <style lang="less">
     #corporationList {
-        padding-top: 3rem;
+        padding: 3rem 0;
 
         .margin-top-1rem {
             margin-top: 1rem;
