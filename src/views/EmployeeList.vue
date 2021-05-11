@@ -644,7 +644,7 @@
 
         .searchButton {
             width: 100%;
-            border-radius: 1rem;
+            border-radius: 50%;
             border: none;
             color: white;
             font-size: 1rem;

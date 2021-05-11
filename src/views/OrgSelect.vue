@@ -85,26 +85,27 @@
 </script>
 
 <style lang="less">
-    .el-select-dropdown__item.selected {
-        color: #319E55;
-    }
-
-    .el-select .el-input.is-focus .el-input__inner {
-        border-color: #319E55
-    }
-
-    .el-select .el-input__inner:focus {
-        border-color: #319E55
-    }
-
-    .el-input--suffix .el-input__inner {
-        padding-right: 2rem;
-        height: 3rem;
-        width: 100%;
-        border-radius: 1.5rem;
-    }
 
     #orgSelect {
+        .el-select-dropdown__item.selected {
+            color: #319E55;
+        }
+
+        .el-select .el-input.is-focus .el-input__inner {
+            border-color: #319E55
+        }
+
+        .el-select .el-input__inner:focus {
+            border-color: #319E55
+        }
+
+        .el-input--suffix .el-input__inner {
+            padding-right: 2rem;
+            height: 3rem;
+            width: 100%;
+            border-radius: 1.5rem;
+        }
+
         .select {
             width: 100%;
         }
