@@ -652,7 +652,7 @@
             searchEmail(searchVal, pageData, dataType) {
                 let searchData = [];
                 let searchValue = searchVal.trim()
-                let filter = (email) => {
+                function filterFunc(email) {
                     return email === searchValue
                 }
                 switch (dataType) {
@@ -660,7 +660,7 @@
                         if (searchValue === '') {
                             this.getIndividualSign();
                         } else {
-                            searchData = pageData.filter(filter)
+                            searchData = pageData.filter(filterFunc)
                             this.signedIndividualData = searchData
                         }
                         break;
