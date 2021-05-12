@@ -3,12 +3,11 @@
         <el-tabs v-model="activeName" type="border-card" @tab-click="tabsHandleClick">
             <el-tab-pane :label="$t('org.signed_corporation')" name="first" class="margin-top-1rem">
                 <el-tabs v-model="corpActiveName" @tab-click="corpTabsHandleClick">
-                    <el-tab-pane :label="notCompleteLabel" name="first"
-                                 class="margin-top-1rem">
+                    <el-tab-pane :label="notCompleteLabel" name="first" class="margin-top-1rem">
                         <div class="tableStyle">
                             <el-table
                                     :empty-text="$t('corp.no_data')"
-                                    :data="signedNotCompleted"
+                                    :data="signedNotCompletedCurrentData"
                                     align="center"
                                     :row-class-name="createdAdmin"
                                     class="tableClass"
@@ -97,13 +96,25 @@
                                     </template>
                                 </el-table-column>
                             </el-table>
+                            <div class="paginationClass margin-top-1rem">
+                                <el-pagination
+                                        background
+                                        :page-size="pageSize"
+                                        :pager-count="pagerCount"
+                                        :hide-on-single-page="true"
+                                        :current-page="notCompleteCurrentPage"
+                                        @current-change="notCompleteChangePage"
+                                        layout="prev, pager, next"
+                                        :total="notCompleteCount">
+                                </el-pagination>
+                            </div>
                         </div>
                     </el-tab-pane>
                     <el-tab-pane :label="completeLabel" name="second" class="margin-top-1rem">
                         <div class="tableStyle">
                             <el-table
                                     :empty-text="$t('corp.no_data')"
-                                    :data="signedCompleted"
+                                    :data="signedCompletedCurrentData"
                                     class="tableClass"
                                     :row-class-name="createdAdmin"
                                     align="center"
@@ -167,14 +178,25 @@
                                     </template>
                                 </el-table-column>
                             </el-table>
+                            <div class="paginationClass margin-top-1rem">
+                                <el-pagination
+                                        background
+                                        :page-size="pageSize"
+                                        :pager-count="pagerCount"
+                                        :hide-on-single-page="true"
+                                        :current-page="completeCurrentPage"
+                                        @current-change="completeChangePage"
+                                        layout="prev, pager, next"
+                                        :total="completeCount">
+                                </el-pagination>
+                            </div>
                         </div>
                     </el-tab-pane>
-                    <el-tab-pane :label="deletedLabel" name="third"
-                                 class="margin-top-1rem">
+                    <el-tab-pane :label="deletedLabel" name="third" class="margin-top-1rem">
                         <div class="tableStyle">
                             <el-table
                                     :empty-text="$t('corp.no_data')"
-                                    :data="deletedCorpInfo"
+                                    :data="deletedCorpInfoCurrentData"
                                     align="center"
                                     class="tableClass"
                                     style="width: 100%;">
@@ -227,6 +249,18 @@
                                     </template>
                                 </el-table-column>
                             </el-table>
+                            <div class="paginationClass margin-top-1rem">
+                                <el-pagination
+                                        background
+                                        :page-size="pageSize"
+                                        :pager-count="pagerCount"
+                                        :hide-on-single-page="true"
+                                        :current-page="deletedCurrentPage"
+                                        @current-change="deletedChangePage"
+                                        layout="prev, pager, next"
+                                        :total="deletedCount">
+                                </el-pagination>
+                            </div>
                         </div>
                     </el-tab-pane>
                 </el-tabs>
@@ -394,18 +428,6 @@
                 </div>
             </el-tab-pane>
         </el-tabs>
-        <!--<div class="paginationClass margin-top-1rem">-->
-        <!--<el-pagination-->
-        <!--background-->
-        <!--:page-size="10"-->
-        <!--:pager-count="10"-->
-        <!--:hide-on-single-page="true"-->
-        <!--:current-page="currentPage"-->
-        <!--@current-change="changePage"-->
-        <!--layout="prev, pager, next"-->
-        <!--:total="tableTotal">-->
-        <!--</el-pagination>-->
-        <!--</div>-->
         <el-dialog
                 :title="$t('org.upload_file')"
                 top="5vh"
@@ -488,6 +510,9 @@
             DeleteDialog,
         },
         computed: {
+            signedNotCompletedCurrentData(){
+                return this.getCurrentData(this.signedNotCompleted,this.notCompleteCurrentPage)
+            },
             individualDataLabel() {
                 return `${this.$t('org.signed_individual')}[${this.signedIndividualCount}]`
             },
@@ -521,17 +546,20 @@
         },
         data() {
             return {
-                pageSize: 2,
+                pageSize: 1,
                 pagerCount: 5,
                 signedIndividualCount: 0,
-                notCompleteCount: '',
-                completeCount: '',
-                deletedCount: '',
+                notCompleteCount: 0,
+                completeCount: 0,
+                deletedCount: 0,
                 signedCompleted: [],
                 signedNotCompleted: [],
                 deletedCorpInfo: [],
-                signedIndividualPageData: [],
                 signedIndividualData: [],
+                signedIndividualPageData: [],
+                signedCompletedCurrentData: [],
+                // signedNotCompletedCurrentData: [],
+                deletedCorpInfoCurrentData: [],
                 corpActiveName: 'first',
                 deleteCompleteVisible: false,
                 invalidSignatureData: [],
@@ -565,17 +593,31 @@
                 fileList: [],
                 uploadDialogVisible: false,
                 item: '',
-                currentPage: 1,
                 individualCurrentPage: 1,
-                tableTotal: 0,
+                notCompleteCurrentPage: 1,
+                completeCurrentPage: 1,
+                deletedCurrentPage: 1,
             }
         },
         inject: ['setClientHeight'],
         methods: {
+            notCompleteChangePage(val) {
+                this.notCompleteCurrentPage = val;
+            },
+            getCurrentData(data, currentPage) {
+                return this.data.slice((currentPage - 1) * this.pageSize, currentPage * this.pageSize)
+            },
+            completeChangePage(val) {
+                this.completeCurrentPage = val;
+                this.signedCompletedCurrentData = this.getCurrentData(this.signedCompleted,this.completeCurrentPage)
+            },
+            deletedChangePage(val) {
+                this.deletedCurrentPage = val;
+                this.deletedCorpInfoCurrentData = this.getCurrentData(this.deletedCorpInfo,this.deletedCurrentPage)
+            },
             individualChangePage(val) {
-                console.log(val);
                 this.individualCurrentPage = val;
-                this.signedIndividualPageData = this.signedIndividualData.slice((val - 1) * this.pageSize, val * this.pageSize)
+                this.signedIndividualPageData = this.getCurrentData(this.signedIndividualData,this.individualCurrentPage)
             },
             sortDate(dataArr) {
                 if (!(dataArr && dataArr.length)) {
@@ -1111,7 +1153,7 @@
                         this.signedIndividualData = this.sortDate(tableData);
                     }
                     this.signedIndividualCount = this.signedIndividualData.length;
-                    this.signedIndividualPageData = this.signedIndividualData.slice((this.individualCurrentPage - 1) * this.pageSize, this.individualCurrentPage * this.pageSize)
+                    this.signedIndividualPageData = this.getCurrentData(this.signedIndividualData,this.individualCurrentPage)
                 }).catch(err => {
                     if (err.data && err.data.hasOwnProperty('data')) {
                         switch (err.data.data.error_code) {
@@ -1183,6 +1225,8 @@
                         });
                         this.signedCompleted = this.sortDate(signedCompletedData);
                         this.signedNotCompleted = this.sortDate(signedNotCompletedData)
+                        this.signedCompletedCurrentData = this.getCurrentData(this.signedCompleted,this.completeCurrentPage)
+                        this.signedNotCompletedCurrentData = this.getCurrentData(this.signedNotCompleted,this.notCompleteCurrentPage)
                     }
                     this.notCompleteCount = this.signedNotCompleted.length;
                     this.completeCount = this.signedCompleted.length
@@ -1247,6 +1291,7 @@
                     this.deletedCorpInfo = resp.data.data;
                     this.sortDate(this.deletedCorpInfo)
                     this.deletedCount = this.deletedCorpInfo.length
+                    this.deletedCorpInfoCurrentData = this.getCurrentData(this.deletedCorpInfo,this.deletedCurrentPage)
                 }).catch(err => {
                     if (err.data && err.data.hasOwnProperty('data')) {
                         switch (err.data.data.error_code) {
