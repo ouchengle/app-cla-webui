@@ -574,6 +574,7 @@
         methods: {
             individualChangePage(val) {
                 console.log(val);
+                this.individualCurrentPage = val;
                 this.signedIndividualPageData = this.signedIndividualData.slice((val - 1) * this.pageSize, val * this.pageSize)
             },
             sortDate(dataArr) {
@@ -1110,6 +1111,7 @@
                         this.signedIndividualData = this.sortDate(tableData);
                     }
                     this.signedIndividualCount = this.signedIndividualData.length;
+                    this.signedIndividualPageData = this.signedIndividualData.slice((this.individualCurrentPage - 1) * this.pageSize, this.individualCurrentPage * this.pageSize)
                 }).catch(err => {
                     if (err.data && err.data.hasOwnProperty('data')) {
                         switch (err.data.data.error_code) {
