@@ -9,14 +9,14 @@
                                 <el-col :offset="15" :span="6">
                                     <el-input
                                             clearable
-                                            @keydown.native="pressEnter(notCompleteSearchValue,signedNotCompleted)"
+                                            @keydown.native="pressEnter(notCompleteSearchValue,signedNotCompleted,'signedNotCompleted')"
                                             :placeholder="$t('corp.email_input_holder')"
                                             v-model="notCompleteSearchValue">
                                         <i slot="prefix" class="el-input__icon el-icon-search"></i>
                                     </el-input>
                                 </el-col>
                                 <el-col :span="3">
-                                    <el-button @click="searchEmail(inactiveSearchValue,inactiveData)"
+                                    <el-button @click="searchEmail(notCompleteSearchValue,signedNotCompleted,'signedNotCompleted')"
                                                class="searchButton">
                                         {{$t('corp.search')}}
                                     </el-button>
@@ -284,6 +284,23 @@
             </el-tab-pane>
             <el-tab-pane :label="individualDataLabel" name="second" class="margin-top-1rem">
                 <div class="tableStyle">
+                    <el-row :gutter="10">
+                        <el-col :offset="15" :span="6">
+                            <el-input
+                                    clearable
+                                    @keydown.native="pressEnter(signedIndividualSearchValue,signedIndividualData,'signedIndividual')"
+                                    :placeholder="$t('corp.email_input_holder')"
+                                    v-model="signedIndividualSearchValue">
+                                <i slot="prefix" class="el-input__icon el-icon-search"></i>
+                            </el-input>
+                        </el-col>
+                        <el-col :span="3">
+                            <el-button @click="searchEmail(signedIndividualSearchValue,signedIndividualData,'signedIndividual')"
+                                       class="searchButton">
+                                {{$t('corp.search')}}
+                            </el-button>
+                        </el-col>
+                    </el-row>
                     <el-table
                             :empty-text="$t('corp.no_data')"
                             :data="signedIndividualPageData"
@@ -644,6 +661,14 @@
                         } else {
                             searchData = pageData.filter(filter)
                             this.signedIndividualData = searchData
+                        }
+                        break;
+                    case 'signedNotCompleted':
+                        if (searchValue.trim() === '') {
+                            this.getCorporationInfo();
+                        } else {
+                            searchData = pageData.filter(filter)
+                            this.signedNotCompleted = searchData
                         }
                         break;
                 }
@@ -2065,7 +2090,17 @@
 <style lang="less">
     #corporationList {
         padding: 3rem 0;
-
+        .searchButton {
+            width: 100%;
+            border-radius: 999999px;
+            border: none;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            background: linear-gradient(to right, #97DB30, #319E55);
+            margin-bottom: 1rem;
+            user-select: none;
+        }
         .margin-top-1rem {
             margin-top: 1rem;
         }
