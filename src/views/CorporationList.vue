@@ -16,8 +16,9 @@
                                     </el-input>
                                 </el-col>
                                 <el-col :span="3">
-                                    <el-button @click="searchEmail(notCompleteSearchValue,signedNotCompleted,'signedNotCompleted')"
-                                               class="searchButton">
+                                    <el-button
+                                            @click="searchEmail(notCompleteSearchValue,signedNotCompleted,'signedNotCompleted')"
+                                            class="searchButton">
                                         {{$t('corp.search')}}
                                     </el-button>
                                 </el-col>
@@ -295,8 +296,9 @@
                             </el-input>
                         </el-col>
                         <el-col :span="3">
-                            <el-button @click="searchEmail(signedIndividualSearchValue,signedIndividualData,'signedIndividual')"
-                                       class="searchButton">
+                            <el-button
+                                    @click="searchEmail(signedIndividualSearchValue,signedIndividualData,'signedIndividual')"
+                                    class="searchButton">
                                 {{$t('corp.search')}}
                             </el-button>
                         </el-col>
@@ -652,9 +654,8 @@
             searchEmail(searchVal, pageData, dataType) {
                 let searchData = [];
                 let searchValue = searchVal.trim()
-                function filterFunc(email) {
-                    console.log(email);
-                    return email === searchValue
+                let filterFunc = (item) => {
+                    return item.email === searchValue
                 }
                 switch (dataType) {
                     case 'signedIndividual':
@@ -2092,6 +2093,7 @@
 <style lang="less">
     #corporationList {
         padding: 3rem 0;
+
         .searchButton {
             width: 100%;
             border-radius: 999999px;
@@ -2103,6 +2105,7 @@
             margin-bottom: 1rem;
             user-select: none;
         }
+
         .margin-top-1rem {
             margin-top: 1rem;
         }
