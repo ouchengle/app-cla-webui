@@ -50,7 +50,7 @@
     background-color: #3EA650;
 }
 
-.el-pagination.is-background .el-pager li:not(.disabled):hover {
+.el-pagination.is-background .el-pager li.disabled:hover {
     color: #3EA650;
 }
 
