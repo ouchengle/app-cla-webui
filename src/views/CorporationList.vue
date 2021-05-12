@@ -521,7 +521,7 @@
         },
         data() {
             return {
-                pageSize: 10,
+                pageSize: 1,
                 pagerCount: 5,
                 signedIndividualCount: 0,
                 notCompleteCount: '',
