@@ -605,7 +605,7 @@
                 this.notCompleteCurrentPage = val;
             },
             getCurrentData(data, currentPage) {
-                return this.data.slice((currentPage - 1) * this.pageSize, currentPage * this.pageSize)
+                return data.slice((currentPage - 1) * this.pageSize, currentPage * this.pageSize)
             },
             completeChangePage(val) {
                 this.completeCurrentPage = val;
