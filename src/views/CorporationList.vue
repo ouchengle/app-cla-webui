@@ -653,6 +653,7 @@
                 let searchData = [];
                 let searchValue = searchVal.trim()
                 function filterFunc(email) {
+                    console.log(email);
                     return email === searchValue
                 }
                 switch (dataType) {
