@@ -26,6 +26,14 @@
                                         <el-col align="center" class="buttonBox">
                                             <div id="mobile_btBox">
                                                 <div>
+                                                    <div>
+                                                        <button class="mobile_button"
+                                                                @click="checkSignStatus()">
+                                                            {{ $t('signType.checkSignStatus') }}
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div>
                                                     <button :disabled="!isBindCorpCLA" class="mobile_button"
                                                             @click="submit('corporation')">
                                                         {{ $t('signType.corpBt') }}
@@ -386,7 +394,7 @@
                                         <el-col align="right" class="buttonBox">
                                             <div id="btBox">
                                                 <div>
-                                                    <div class="display-inline-block">
+                                                    <div class="display-inline-block margin-1D2rem">
                                                         <button class="button"
                                                                 @click="checkSignStatus()">
                                                             {{ $t('signType.checkSignStatus') }}
@@ -396,7 +404,7 @@
                                                 <div>
                                                     <el-tooltip :content="corpBtTooltip" placement="top" effect="light"
                                                                 popper-class="my_tooltip">
-                                                        <div class="display-inline-block">
+                                                        <div class="display-inline-block margin-1D2rem border-radius-2rem">
                                                             <button :disabled="!isBindCorpCLA" class="button"
                                                                     @click="submit('corporation')">
                                                                 {{ $t('signType.corpBt') }}
@@ -407,7 +415,7 @@
                                                 <div>
                                                     <el-tooltip :content="empBtTooltip" placement="top" effect="light"
                                                                 popper-class="my_tooltip">
-                                                        <div class="display-inline-block">
+                                                        <div class="display-inline-block margin-1D2rem border-radius-2rem">
                                                             <button :disabled="!isBindCorpCLA"
                                                                     class="button"
                                                                     @click="submit('employee')">
@@ -419,7 +427,7 @@
                                                 <el-tooltip :content="individualBtTooltip" placement="top"
                                                             effect="light"
                                                             popper-class="my_tooltip">
-                                                    <div class="display-inline-block">
+                                                    <div class="display-inline-block margin-1D2rem border-radius-2rem">
                                                         <button class="button"
                                                                 @click="submit('individual')">
                                                             {{ $t('signType.individualBt') }}
@@ -1110,7 +1118,6 @@
             font-size: 1.5rem;
             cursor: pointer;
             background: linear-gradient(to right, #97DB30, #319E55);
-            margin: 1.2rem 0;
         }
 
         .guideBox {
