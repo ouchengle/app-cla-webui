@@ -46,6 +46,9 @@
     font-size: 1.2rem;
 }
 
+.el-pagination.is-background .el-pager li:not(.disabled).active{
+    background-color: #3EA650;
+}
 .el-checkbox__input.is-checked .el-checkbox__inner, .el-checkbox__input.is-indeterminate .el-checkbox__inner {
     background-color: #3EA650;
     border-color: #3EA650;

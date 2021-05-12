@@ -264,7 +264,7 @@
                                 :label="$t('org.date')">
                         </el-table-column>
                     </el-table>
-                    <div class="paginationClass">
+                    <div class="paginationClass margin-top-1rem">
                         <el-pagination
                                 background
                                 :page-size="pageSize"
@@ -394,7 +394,7 @@
                 </div>
             </el-tab-pane>
         </el-tabs>
-        <!--<div class="paginationClass">-->
+        <!--<div class="paginationClass margin-top-1rem">-->
         <!--<el-pagination-->
         <!--background-->
         <!--:page-size="10"-->
@@ -2058,7 +2058,6 @@
 
         .paginationClass {
             text-align: center;
-            margin-bottom: 1rem;
         }
 
         .el-dropdown-link {
