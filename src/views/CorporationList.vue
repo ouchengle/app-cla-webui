@@ -235,7 +235,7 @@
                 <div class="tableStyle">
                     <el-table
                             :empty-text="$t('corp.no_data')"
-                            :data="signedIndividualData"
+                            :data="signedIndividualPageData"
                             align="center"
                             class="tableClass"
                             style="width: 100%;">
@@ -264,6 +264,18 @@
                                 :label="$t('org.date')">
                         </el-table-column>
                     </el-table>
+                    <div class="paginationClass">
+                        <el-pagination
+                                background
+                                :page-size="pageSize"
+                                :pager-count="pagerCount"
+                                :hide-on-single-page="true"
+                                :current-page="individualCurrentPage"
+                                @current-change="individualChangePage"
+                                layout="prev, pager, next"
+                                :total="signedIndividualCount">
+                        </el-pagination>
+                    </div>
                 </div>
             </el-tab-pane>
             <el-tab-pane :label="$t('org.individual_cla')" name="third" class="margin-top-1rem">
@@ -385,8 +397,8 @@
         <!--<div class="paginationClass">-->
         <!--<el-pagination-->
         <!--background-->
-        <!--:page-size="5"-->
-        <!--:pager-count="5"-->
+        <!--:page-size="10"-->
+        <!--:pager-count="10"-->
         <!--:hide-on-single-page="true"-->
         <!--:current-page="currentPage"-->
         <!--@current-change="changePage"-->
@@ -509,13 +521,16 @@
         },
         data() {
             return {
-                signedIndividualCount: '',
+                pageSize: 10,
+                pagerCount: 5,
+                signedIndividualCount: 0,
                 notCompleteCount: '',
                 completeCount: '',
                 deletedCount: '',
                 signedCompleted: [],
                 signedNotCompleted: [],
                 deletedCorpInfo: [],
+                signedIndividualPageData: [],
                 signedIndividualData: [],
                 corpActiveName: 'first',
                 deleteCompleteVisible: false,
@@ -551,11 +566,16 @@
                 uploadDialogVisible: false,
                 item: '',
                 currentPage: 1,
+                individualCurrentPage: 1,
                 tableTotal: 0,
             }
         },
         inject: ['setClientHeight'],
         methods: {
+            individualChangePage(val) {
+                console.log(val);
+                this.signedIndividualPageData = this.signedIndividualData.slice((val - 1) * this.pageSize, val * this.pageSize)
+            },
             sortDate(dataArr) {
                 if (!(dataArr && dataArr.length)) {
                     return []
