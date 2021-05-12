@@ -46,9 +46,14 @@
     font-size: 1.2rem;
 }
 
-.el-pagination.is-background .el-pager li:not(.disabled).active{
+.el-pagination.is-background .el-pager li:not(.disabled).active {
     background-color: #3EA650;
 }
+
+.el-pagination.is-background .el-pager li:not(.disabled):hover {
+    color: #3EA650;
+}
+
 .el-checkbox__input.is-checked .el-checkbox__inner, .el-checkbox__input.is-indeterminate .el-checkbox__inner {
     background-color: #3EA650;
     border-color: #3EA650;
@@ -279,12 +284,15 @@
 .margin-bottom-3rem {
     margin-bottom: 3rem;
 }
+
 .padding-3rem {
     padding: 3rem;
 }
+
 .padding-5rem {
     padding: 5rem;
 }
+
 .align_left {
     text-align: left;
 }
@@ -348,9 +356,11 @@
     cursor: pointer;
     color: #319E55;
 }
+
 .font-size-1rem {
     font-size: 1rem;
 }
-.display-inline-block{
+
+.display-inline-block {
     display: inline-block;
 }
