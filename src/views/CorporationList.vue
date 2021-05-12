@@ -5,6 +5,23 @@
                 <el-tabs v-model="corpActiveName" @tab-click="corpTabsHandleClick">
                     <el-tab-pane :label="notCompleteLabel" name="first" class="margin-top-1rem">
                         <div class="tableStyle">
+                            <el-row :gutter="10">
+                                <el-col :offset="15" :span="6">
+                                    <el-input
+                                            clearable
+                                            @keydown.native="pressEnter(notCompleteSearchValue,signedNotCompleted)"
+                                            :placeholder="$t('corp.email_input_holder')"
+                                            v-model="notCompleteSearchValue">
+                                        <i slot="prefix" class="el-input__icon el-icon-search"></i>
+                                    </el-input>
+                                </el-col>
+                                <el-col :span="3">
+                                    <el-button @click="searchEmail(inactiveSearchValue,inactiveData)"
+                                               class="searchButton">
+                                        {{$t('corp.search')}}
+                                    </el-button>
+                                </el-col>
+                            </el-row>
                             <el-table
                                     :empty-text="$t('corp.no_data')"
                                     :data="signedNotCompletedCurrentData"
@@ -510,8 +527,17 @@
             DeleteDialog,
         },
         computed: {
-            signedNotCompletedCurrentData(){
-                return this.getCurrentData(this.signedNotCompleted,this.notCompleteCurrentPage)
+            signedIndividualPageData() {
+                return this.getCurrentData(this.signedIndividualData, this.individualCurrentPage)
+            },
+            deletedCorpInfoCurrentData() {
+                return this.getCurrentData(this.deletedCorpInfo, this.deletedCurrentPage)
+            },
+            signedCompletedCurrentData() {
+                return this.getCurrentData(this.signedCompleted, this.completeCurrentPage)
+            },
+            signedNotCompletedCurrentData() {
+                return this.getCurrentData(this.signedNotCompleted, this.notCompleteCurrentPage)
             },
             individualDataLabel() {
                 return `${this.$t('org.signed_individual')}[${this.signedIndividualCount}]`
@@ -546,6 +572,10 @@
         },
         data() {
             return {
+                notCompleteSearchValue: '',
+                completeSearchValue: '',
+                deletedSearchValue: '',
+                signedIndividualSearchValue: '',
                 pageSize: 1,
                 pagerCount: 5,
                 signedIndividualCount: 0,
@@ -556,10 +586,6 @@
                 signedNotCompleted: [],
                 deletedCorpInfo: [],
                 signedIndividualData: [],
-                signedIndividualPageData: [],
-                signedCompletedCurrentData: [],
-                // signedNotCompletedCurrentData: [],
-                deletedCorpInfoCurrentData: [],
                 corpActiveName: 'first',
                 deleteCompleteVisible: false,
                 invalidSignatureData: [],
@@ -601,23 +627,41 @@
         },
         inject: ['setClientHeight'],
         methods: {
-            notCompleteChangePage(val) {
-                this.notCompleteCurrentPage = val;
+            pressEnter(searchValue, pageData, dataType) {
+                if (event.keyCode === 13) {
+                    this.searchEmail(searchValue, pageData, dataType)
+                }
+            },
+            searchEmail(searchValue, pageData, dataType) {
+                let searchData = [];
+                let filter = (email) => {
+                    return email === searchValue
+                }
+                switch (dataType) {
+                    case 'signedIndividual':
+                        if (searchValue.trim() === '') {
+                            this.getIndividualSign();
+                        } else {
+                            searchData = pageData.filter(filter)
+                            this.signedIndividualData = searchData
+                        }
+                        break;
+                }
             },
             getCurrentData(data, currentPage) {
                 return data.slice((currentPage - 1) * this.pageSize, currentPage * this.pageSize)
             },
+            notCompleteChangePage(val) {
+                this.notCompleteCurrentPage = val;
+            },
             completeChangePage(val) {
                 this.completeCurrentPage = val;
-                this.signedCompletedCurrentData = this.getCurrentData(this.signedCompleted,this.completeCurrentPage)
             },
             deletedChangePage(val) {
                 this.deletedCurrentPage = val;
-                this.deletedCorpInfoCurrentData = this.getCurrentData(this.deletedCorpInfo,this.deletedCurrentPage)
             },
             individualChangePage(val) {
                 this.individualCurrentPage = val;
-                this.signedIndividualPageData = this.getCurrentData(this.signedIndividualData,this.individualCurrentPage)
             },
             sortDate(dataArr) {
                 if (!(dataArr && dataArr.length)) {
@@ -1153,7 +1197,7 @@
                         this.signedIndividualData = this.sortDate(tableData);
                     }
                     this.signedIndividualCount = this.signedIndividualData.length;
-                    this.signedIndividualPageData = this.getCurrentData(this.signedIndividualData,this.individualCurrentPage)
+                    this.signedIndividualPageData = this.getCurrentData(this.signedIndividualData, this.individualCurrentPage)
                 }).catch(err => {
                     if (err.data && err.data.hasOwnProperty('data')) {
                         switch (err.data.data.error_code) {
@@ -1225,8 +1269,6 @@
                         });
                         this.signedCompleted = this.sortDate(signedCompletedData);
                         this.signedNotCompleted = this.sortDate(signedNotCompletedData)
-                        this.signedCompletedCurrentData = this.getCurrentData(this.signedCompleted,this.completeCurrentPage)
-                        this.signedNotCompletedCurrentData = this.getCurrentData(this.signedNotCompleted,this.notCompleteCurrentPage)
                     }
                     this.notCompleteCount = this.signedNotCompleted.length;
                     this.completeCount = this.signedCompleted.length
@@ -1291,7 +1333,7 @@
                     this.deletedCorpInfo = resp.data.data;
                     this.sortDate(this.deletedCorpInfo)
                     this.deletedCount = this.deletedCorpInfo.length
-                    this.deletedCorpInfoCurrentData = this.getCurrentData(this.deletedCorpInfo,this.deletedCurrentPage)
+                    this.deletedCorpInfoCurrentData = this.getCurrentData(this.deletedCorpInfo, this.deletedCurrentPage)
                 }).catch(err => {
                     if (err.data && err.data.hasOwnProperty('data')) {
                         switch (err.data.data.error_code) {
