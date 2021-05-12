@@ -558,6 +558,18 @@
             signedNotCompletedCurrentData() {
                 return this.getCurrentData(this.signedNotCompleted, this.notCompleteCurrentPage)
             },
+            signedIndividualCount(){
+                return this.signedIndividualData.length;
+            },
+            notCompleteCount(){
+                return this.signedNotCompleted.length;
+            },
+            completeCount(){
+                return this.signedCompleted.length;
+            },
+            deletedCount(){
+                return this.deletedCorpInfo.length;
+            },
             individualDataLabel() {
                 return `${this.$t('org.signed_individual')}[${this.signedIndividualCount}]`
             },
@@ -597,10 +609,6 @@
                 signedIndividualSearchValue: '',
                 pageSize: 1,
                 pagerCount: 5,
-                signedIndividualCount: 0,
-                notCompleteCount: 0,
-                completeCount: 0,
-                deletedCount: 0,
                 signedCompleted: [],
                 signedNotCompleted: [],
                 deletedCorpInfo: [],
@@ -1224,8 +1232,6 @@
                         let tableData = resp.data.data;
                         this.signedIndividualData = this.sortDate(tableData);
                     }
-                    this.signedIndividualCount = this.signedIndividualData.length;
-                    this.signedIndividualPageData = this.getCurrentData(this.signedIndividualData, this.individualCurrentPage)
                 }).catch(err => {
                     if (err.data && err.data.hasOwnProperty('data')) {
                         switch (err.data.data.error_code) {
@@ -1298,8 +1304,6 @@
                         this.signedCompleted = this.sortDate(signedCompletedData);
                         this.signedNotCompleted = this.sortDate(signedNotCompletedData)
                     }
-                    this.notCompleteCount = this.signedNotCompleted.length;
-                    this.completeCount = this.signedCompleted.length
                 }).catch(err => {
                     if (err.data && err.data.hasOwnProperty('data')) {
                         switch (err.data.data.error_code) {
@@ -1360,8 +1364,6 @@
                 }).then(resp => {
                     this.deletedCorpInfo = resp.data.data;
                     this.sortDate(this.deletedCorpInfo)
-                    this.deletedCount = this.deletedCorpInfo.length
-                    this.deletedCorpInfoCurrentData = this.getCurrentData(this.deletedCorpInfo, this.deletedCurrentPage)
                 }).catch(err => {
                     if (err.data && err.data.hasOwnProperty('data')) {
                         switch (err.data.data.error_code) {

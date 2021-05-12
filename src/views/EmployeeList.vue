@@ -182,6 +182,7 @@
             }
         },
         computed: {
+
             deleteMessage() {
                 return this.$t('corp.deleteTips')
             },
