@@ -29,10 +29,10 @@
                 // platform:'github',
                 // owner:'opensourceways',
                 // repo:'app-cla-server',
-                platform:'gitee',
-                owner:'cla-test',
-                repo:'test1',
-                path:'CLA sign隐私政策-20210513.docx',
+                platform:'guthub',
+                owner:'ouchengle',
+                repo:'Test',
+                path:'README.md',
             }
         },
         methods: {
