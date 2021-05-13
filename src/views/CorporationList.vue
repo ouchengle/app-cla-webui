@@ -558,16 +558,16 @@
             signedNotCompletedCurrentData() {
                 return this.getCurrentData(this.signedNotCompleted, this.notCompleteCurrentPage)
             },
-            signedIndividualCount(){
+            signedIndividualCount() {
                 return this.signedIndividualData.length;
             },
-            notCompleteCount(){
+            notCompleteCount() {
                 return this.signedNotCompleted.length;
             },
-            completeCount(){
+            completeCount() {
                 return this.signedCompleted.length;
             },
-            deletedCount(){
+            deletedCount() {
                 return this.deletedCorpInfo.length;
             },
             individualDataLabel() {
@@ -667,6 +667,7 @@
                 }
                 switch (dataType) {
                     case 'signedIndividual':
+                        this.individualCurrentPage = 1;
                         if (searchValue === '') {
                             this.getIndividualSign();
                         } else {
@@ -675,6 +676,7 @@
                         }
                         break;
                     case 'signedNotCompleted':
+                        this.notCompleteCurrentPage = 1;
                         if (searchValue.trim() === '') {
                             this.getCorporationInfo();
                         } else {
