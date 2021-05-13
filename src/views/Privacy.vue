@@ -32,7 +32,7 @@
                 platform:'gitee',
                 owner:'cla-test',
                 repo:'test1',
-                path:'CLA sign隐私政策-20210513.md',
+                path:'CLA sign隐私政策-20210513.docx',
             }
         },
         methods: {
