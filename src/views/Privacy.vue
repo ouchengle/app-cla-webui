@@ -26,13 +26,10 @@
         data() {
             return {
                 privacyText: '',
-                // platform:'github',
-                // owner:'opensourceways',
-                // repo:'app-cla-server',
                 platform:'github',
-                owner:'ouchengle',
-                repo:'Test',
-                path:'README.md',
+                owner:'opensourceways',
+                repo:'app-cla-server',
+                path:'clasign_privacy_policy_20210513.md',
             }
         },
         methods: {
