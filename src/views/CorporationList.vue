@@ -643,7 +643,7 @@
                 completeSearchValue: '',
                 deletedSearchValue: '',
                 signedIndividualSearchValue: '',
-                pageSize: 1,
+                pageSize: 10,
                 pagerCount: 5,
                 signedCompleted: [],
                 signedNotCompleted: [],

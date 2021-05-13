@@ -168,12 +168,10 @@
                 activeSearchValue: '',
                 inactivePageData: [],
                 activePageData: [],
-                pageSize: 5,
+                pageSize: 10,
                 pagerPage: 5,
                 inactiveCurrentPage: 1,
                 activeCurrentPage: 1,
-                inactiveTotal: 0,
-                activeTotal: 0,
                 deleteUserVisible: false,
                 active: 'first',
                 inactiveData: [],
@@ -182,7 +180,12 @@
             }
         },
         computed: {
-
+            inactiveTotal(){
+                return this.inactiveData.length
+            },
+            activeTotal(){
+                return this.activeData.length
+            },
             deleteMessage() {
                 return this.$t('corp.deleteTips')
             },
@@ -209,6 +212,8 @@
                 }
             },
             searchEmail(searchValue,pageData) {
+                this.inactiveCurrentPage = 1
+                this.activeCurrentPage = 1
                 if (searchValue.trim() === '') {
                     this.getEmployee()
                 }else{
@@ -216,7 +221,6 @@
                     for (let i = 0; i < pageData.length; i++) {
                         if (pageData[i].email === searchValue) {
                             searchData.push(pageData[i]);
-                            break;
                         }
                     }
                     if (this.active === 'first') {
@@ -381,8 +385,6 @@
                     });
                     this.inactivePageData = this.getInactivePageData();
                     this.activePageData = this.getActivePageData();
-                    this.inactiveTotal = this.inactiveData.length;
-                    this.activeTotal = this.activeData.length
                 }).catch(err => {
                     if (err.data && err.data.hasOwnProperty('data')) {
                         switch (err.data.data.error_code) {
