@@ -26,19 +26,31 @@
         data() {
             return {
                 privacyText: '',
+                platform:'github',
+                owner:'opensourceways',
+                repo:'app-cla-server',
+                path:'clasign_privacy_policy_20210513.md',
             }
         },
         methods: {
-            getPrivacy() {
+            getPrivacy(platform, owner, repo, path) {
+                let _url = '';
+                if (platform === 'gitee') {
+                    _url = `https://gitee.com/api/v5/repos/${owner}/${repo}/contents/${path}`
+                }else if(platform === 'github') {
+                    _url =  `https://api.github.com/repos/${owner}/${repo}/contents/${path}`
+                }
                 axios({
-                    url: `https://gitee.com/api/v5/repos/cla-test/test1/contents/privacy.md`
+                    url: _url
                 }).then(res => {
+                    console.log(res.data.content);
                     let Base64 = require('js-base64').Base64;
                     this.privacyText = Base64.decode(res.data.content)
+                    console.log(this.privacyText);
                 })
             },
             init() {
-                this.getPrivacy();
+                this.getPrivacy(this.platform, this.owner, this.repo, this.path);
             },
         },
 
