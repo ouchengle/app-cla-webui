@@ -152,7 +152,7 @@
                     return this.$store.state.claLinkIndividual;
                 },
                 set(value) {
-                    this.$store.commit('setClaLinkIndividual', value)
+                    this.$store.commit('setClaLinkIndividual', value.trim())
                 },
             },
             cla_link_corporation: {
@@ -160,7 +160,7 @@
                     return this.$store.state.claLinkCorp;
                 },
                 set(value) {
-                    this.$store.commit('setClaLinkCorp', value)
+                    this.$store.commit('setClaLinkCorp', value.trim())
                 },
             },
             individualClaLanguageValue: {
