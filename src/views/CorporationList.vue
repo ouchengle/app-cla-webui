@@ -130,6 +130,24 @@
                     </el-tab-pane>
                     <el-tab-pane :label="completeLabel" name="second" class="margin-top-1rem">
                         <div class="tableStyle">
+                            <el-row :gutter="10">
+                                <el-col :offset="15" :span="6">
+                                    <el-input
+                                            clearable
+                                            @keydown.native="pressEnter(completeSearchValue,signedCompleted,'signedCompleted')"
+                                            :placeholder="$t('corp.email_input_holder')"
+                                            v-model="completeSearchValue">
+                                        <i slot="prefix" class="el-input__icon el-icon-search"></i>
+                                    </el-input>
+                                </el-col>
+                                <el-col :span="3">
+                                    <el-button
+                                            @click="searchEmail(completeSearchValue,signedCompleted,'signedCompleted')"
+                                            class="searchButton">
+                                        {{$t('corp.search')}}
+                                    </el-button>
+                                </el-col>
+                            </el-row>
                             <el-table
                                     :empty-text="$t('corp.no_data')"
                                     :data="signedCompletedCurrentData"
@@ -212,6 +230,24 @@
                     </el-tab-pane>
                     <el-tab-pane :label="deletedLabel" name="third" class="margin-top-1rem">
                         <div class="tableStyle">
+                            <el-row :gutter="10">
+                                <el-col :offset="15" :span="6">
+                                    <el-input
+                                            clearable
+                                            @keydown.native="pressEnter(deletedSearchValue,deletedCorpInfo,'deletedCorp')"
+                                            :placeholder="$t('corp.email_input_holder')"
+                                            v-model="deletedSearchValue">
+                                        <i slot="prefix" class="el-input__icon el-icon-search"></i>
+                                    </el-input>
+                                </el-col>
+                                <el-col :span="3">
+                                    <el-button
+                                            @click="searchEmail(deletedSearchValue,deletedCorpInfo,'deletedCorp')"
+                                            class="searchButton">
+                                        {{$t('corp.search')}}
+                                    </el-button>
+                                </el-col>
+                            </el-row>
                             <el-table
                                     :empty-text="$t('corp.no_data')"
                                     :data="deletedCorpInfoCurrentData"
@@ -680,8 +716,26 @@
                         if (searchValue.trim() === '') {
                             this.getCorporationInfo();
                         } else {
-                            searchData = pageData.filter(filter)
+                            searchData = pageData.filter(filterFunc)
                             this.signedNotCompleted = searchData
+                        }
+                        break;
+                    case 'signedCompleted':
+                        this.completeCurrentPage = 1;
+                        if (searchValue.trim() === '') {
+                            this.getCorporationInfo();
+                        } else {
+                            searchData = pageData.filter(filterFunc)
+                            this.signedCompleted = searchData
+                        }
+                        break;
+                    case 'deleteCorp':
+                        this.deletedCurrentPage = 1;
+                        if (searchValue.trim() === '') {
+                            this.getDeletedCorpInfo();
+                        } else {
+                            searchData = pageData.filter(filterFunc)
+                            this.deletedCorpInfo = searchData
                         }
                         break;
                 }
@@ -2183,7 +2237,7 @@
 
         .tableStyle {
             margin-bottom: 2rem;
-            padding: 3rem;
+            padding: 2rem;
             background-color: white;
         }
 

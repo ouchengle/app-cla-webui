@@ -664,7 +664,7 @@
 
         .tableStyle {
             margin-bottom: 2rem;
-            padding: 3rem;
+            padding: 2rem;
             background-color: white;
             border-radius: 1.5rem;
         }
