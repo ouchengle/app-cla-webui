@@ -46,8 +46,10 @@
                 axios({
                     url: _url
                 }).then(res => {
+                    console.log(res.data.content);
                     let Base64 = require('js-base64').Base64;
                     this.privacyText = Base64.decode(res.data.content)
+                    console.log(this.privacyText);
                 })
             },
             init() {
