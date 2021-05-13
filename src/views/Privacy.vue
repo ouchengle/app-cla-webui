@@ -29,7 +29,7 @@
                 // platform:'github',
                 // owner:'opensourceways',
                 // repo:'app-cla-server',
-                platform:'guthub',
+                platform:'github',
                 owner:'ouchengle',
                 repo:'Test',
                 path:'README.md',
