@@ -95,12 +95,6 @@
                         </el-col>
                     </el-row>
                 </div>
-                <div class="margin-top-1rem">
-                    {{$t('org.config_cla_check_file')}}
-                </div>
-                <div class="margin-top-half-rem">
-                    <el-input disabled="" v-model="corp_pdf_name"></el-input>
-                </div>
             </div>
 
         </div>
@@ -278,16 +272,12 @@
             corpClaLanguageValue() {
                 return this.$store.state.corpLanguage;
             },
-            corp_pdf_name() {
-                return this.$store.state.corpFDName
-            },
             platform() {
                 return this.$store.state.platform.toLowerCase()
             },
         },
         data() {
             return {
-                corpFileName: SIGNATURE_PAGE_NAME,
                 isVerify: false,
                 previewShow: false,
                 loginType: this.$store.state.loginType,
@@ -359,8 +349,6 @@
                         language: this.corpClaLanguageValue,
                         fields: this.editMetadata(this.corporationMetadata)
                     };
-                    let corp_pdf = this.dataURLtoFile(this.$store.state.corpFD, this.corpFileName);
-                    formData.append(ORG_SIGNATURE_FILE, corp_pdf);
                     _url = `${url.addCla}/${this.$store.state.corpItem.link_id}/corporation`;
                 } else {
                     obj = {
@@ -428,12 +416,7 @@
                 })
             },
             newBinding() {
-                let corp_pdf = {};
                 let formData = new FormData();
-                if (this.$store.state.corpFD) {
-                    corp_pdf = this.dataURLtoFile(this.$store.state.corpFD, this.corpFileName);
-                    formData.append(ORG_SIGNATURE_FILE, corp_pdf);
-                }
                 let obj = {};
                 let corpCla = {};
                 let individualCla = {
@@ -542,7 +525,6 @@
                         })
                     }
                 })
-
             },
         },
         updated() {
