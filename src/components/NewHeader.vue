@@ -309,6 +309,7 @@
     }
 
     .parentBox {
+        box-sizing: border-box;
         width: 100%;
         border-bottom: 2px solid #F2F2F2;
 
