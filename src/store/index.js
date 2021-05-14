@@ -60,10 +60,8 @@ export default new Vuex.Store({
         claLinkCorp: sessionStorage.getItem('claLinkCorp') || undefined,
         individualMetadata: JSON.parse(sessionStorage.getItem('individualMetadata')) || undefined,
         corporationMetadata: JSON.parse(sessionStorage.getItem('corporationMetadata')) || undefined,
-        corpFD: JSON.parse(sessionStorage.getItem('corpFD')) || undefined,
         individualLanguage: sessionStorage.getItem('individualLanguage') || undefined,
         corpLanguage: sessionStorage.getItem('corpLanguage') || undefined,
-        corpFDName: sessionStorage.getItem('corpFDName') || undefined,
         claData: JSON.parse(sessionStorage.getItem('claData')) || undefined,
         sign_email: sessionStorage.getItem('sign_email') || undefined,
         sign_user: sessionStorage.getItem('sign_user') || undefined,
@@ -120,14 +118,6 @@ export default new Vuex.Store({
         setIndividualLanguage(state, data) {
             state.individualLanguage = data;
             sessionStorage.setItem('individualLanguage', data);
-        },
-        setCorpFDName(state, data) {
-            state.corpFDName = data;
-            sessionStorage.setItem('corpFDName', data);
-        },
-        setCorpFD(state, data) {
-            state.corpFD = data;
-            sessionStorage.setItem('corpFD', JSON.stringify(data));
         },
         setEmail(state, data) {
             state.email = data;
