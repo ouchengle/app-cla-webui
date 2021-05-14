@@ -1,6 +1,5 @@
 <template>
     <el-row id="signCla">
-        <Header></Header>
         <div id="singCla_section">
             <el-row class="content">
                 <el-col>
@@ -52,7 +51,7 @@
                                 </div>
                                 <div class="margin-top-1rem fontSize12">
                                     <el-checkbox v-model="isRead"><span>{{$t('signPage.checkBoxText1')}}<span
-                                            class="privacy" @click="">{{$t('signPage.privacy')}}</span>{{$t('signPage.checkBoxText2')}}<span
+                                            class="privacy" @click="previewPrivacy()">{{$t('signPage.privacy')}}</span>{{$t('signPage.checkBoxText2')}}<span
                                             class="privacy" @click="toIndex()">{{$t('signPage.claSignPlatform')}}</span>{{$t('signPage.checkBoxText3')}}</span>
                                     </el-checkbox>
                                 </div>
@@ -101,7 +100,7 @@
                                 </div>
                                 <div class="margin-top-1rem fontSize12">
                                     <el-checkbox v-model="isRead"><span>{{$t('signPage.checkBoxText1')}}<span
-                                            class="privacy" @click="">{{$t('signPage.privacy')}}</span>{{$t('signPage.checkBoxText2')}}<span
+                                            class="privacy" @click="previewPrivacy()">{{$t('signPage.privacy')}}</span>{{$t('signPage.checkBoxText2')}}<span
                                             class="privacy" @click="toIndex()">{{$t('signPage.claSignPlatform')}}</span>{{$t('signPage.checkBoxText3')}}</span>
                                     </el-checkbox>
                                 </div>
@@ -116,7 +115,6 @@
                 </el-col>
             </el-row>
         </div>
-        <Footer></Footer>
         <ReLoginDialog :dialogVisible="reLoginDialogVisible" :message="reLoginMsg"></ReLoginDialog>
         <ReTryDialog :dialogVisible="reTryDialogVisible" :message="reLoginMsg"></ReTryDialog>
         <SignSuccessDialog :dialogVisible="signSuccessDialogVisible" :message="reLoginMsg"></SignSuccessDialog>
@@ -125,8 +123,6 @@
 </template>
 
 <script>
-    import Header from '@components/NewHeader'
-    import Footer from '@components/NewFooter'
     import * as util from '../util/util'
     import * as url from '../util/api'
     import {mapActions} from 'vuex'
@@ -244,9 +240,8 @@
 
             },
         },
+        inject: ['setClientHeight'],
         components: {
-            Header,
-            Footer,
             ReLoginDialog,
             ReTryDialog,
             SignSuccessDialog,
@@ -293,6 +288,9 @@
         },
         methods: {
             ...mapActions(['setTokenAct', 'setRepoInfoAct', 'viewPrivacy']),
+            previewPrivacy() {
+                this.$router.push('/privacy')
+            },
             toIndex() {
                 let date = new Date();
                 date.setTime(date.getTime() - 10000);
@@ -1108,14 +1106,6 @@
         ,
         mounted() {
             this.setClientHeight();
-            window.onresize = () => {
-                if (util.getClientHeight() > document.getElementById('signCla').offsetHeight) {
-                    document.getElementById("signCla").style.minHeight = util.getClientHeight() + 'px'
-                }
-            }
-        },
-        destroyed() {
-            window.onresize = null;
         }
     }
 </script>
