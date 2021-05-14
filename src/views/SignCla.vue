@@ -3,7 +3,6 @@
         <div id="singCla_section">
             <el-row class="content">
                 <el-col>
-                    <p class="contentTitle"><span>{{apply_to}}</span>{{ $t('signPage.claTitle') }}</p>
                     <el-row class="marginTop3rem" id="claBox">
                     </el-row>
                     <el-row v-if="cla_lang" class="marginTop3rem form">
@@ -149,15 +148,6 @@
             },
             refresh_token() {
                 return this.$store.state.sign_refresh_token
-            },
-            apply_to() {
-                if (this.$store.state.loginType === 'individual') {
-                    return this.$t('signPage.individual')
-                } else if (this.$store.state.loginType === 'corporation') {
-                    return this.$t('signPage.corp')
-                } else if (this.$store.state.loginType === 'employee') {
-                    return this.$t('signPage.emp')
-                }
             },
             org() {
                 let org = this.$store.state.repoInfo.org_id;
