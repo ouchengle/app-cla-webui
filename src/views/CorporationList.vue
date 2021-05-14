@@ -323,7 +323,7 @@
                             class="tableClass"
                             style="width: 100%;">
                         <el-table-column
-                                min-width="40"
+                                min-width="60"
                                 prop="url"
                                 label="Url">
                             <template slot-scope="scope">
@@ -337,26 +337,6 @@
                         </el-table-column>
                         <el-table-column
                                 min-width="20"
-                                :label="$t('org.signature')">
-                            <template slot-scope="scope">
-                                <el-popover
-                                        width="80"
-                                        trigger="hover"
-                                        placement="right">
-                                    <div class="menuBT">
-                                        <el-button @click="downloadOrgSignature(scope.row)" size="mini">
-                                            {{$t('org.download')}}
-                                        </el-button>
-                                        <el-button @click="previewOrgSignature(scope.row)" size="mini">
-                                            {{$t('org.preview')}}
-                                        </el-button>
-                                    </div>
-                                    <svg-icon slot="reference" class="pointer" icon-class="pdf" @click=""/>
-                                </el-popover>
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                                min-width="20"
                                 :label="$t('org.operation')">
                             <template slot-scope="scope">
                                 <el-dropdown placement="bottom-start" trigger="hover">
@@ -364,9 +344,6 @@
                                         <svg-icon icon-class="operation"></svg-icon>
                                     </span>
                                     <el-dropdown-menu slot="dropdown">
-                                        <!--<el-dropdown-item>-->
-                                        <!--{{$t('org.modify_field')}}-->
-                                        <!--</el-dropdown-item>-->
                                         <el-dropdown-item @click.native="clickDeleteCla(scope.row,'corporation')">
                                             {{$t('org.delete_cla')}}
                                         </el-dropdown-item>
@@ -382,18 +359,6 @@
                 </div>
             </el-tab-pane>
         </el-tabs>
-        <!--<div class="paginationClass">-->
-        <!--<el-pagination-->
-        <!--background-->
-        <!--:page-size="5"-->
-        <!--:pager-count="5"-->
-        <!--:hide-on-single-page="true"-->
-        <!--:current-page="currentPage"-->
-        <!--@current-change="changePage"-->
-        <!--layout="prev, pager, next"-->
-        <!--:total="tableTotal">-->
-        <!--</el-pagination>-->
-        <!--</div>-->
         <el-dialog
                 :title="$t('org.upload_file')"
                 top="5vh"
@@ -801,139 +766,6 @@
             },
             checkUrl(url) {
                 window.open(url)
-            },
-            previewOrgSignature(row) {
-                http({
-                    url: `${url.downloadSignature}/${this.$store.state.corpItem.link_id}/${row.language}`,
-                    responseType: 'blob',
-                }).then(res => {
-                    if (res && res.data) {
-                        let blob = new Blob([(res.data)], {type: 'application/pdf'});
-                        let url = window.URL.createObjectURL(blob);
-                        window.open(`../../static/pdf_source/web/viewer.html?file=${encodeURIComponent(url)}`)
-                    }
-                }).catch(err => {
-                    if (err.data && err.data.hasOwnProperty('data')) {
-                        switch (err.data.data.error_code) {
-                            case 'cla.invalid_token':
-                                this.$store.commit('errorSet', {
-                                    dialogVisible: true,
-                                    dialogMessage: this.$t('tips.invalid_token'),
-                                });
-                                break;
-                            case 'cla.expired_token':
-                                this.$store.commit('errorSet', {
-                                    dialogVisible: true,
-                                    dialogMessage: this.$t('tips.invalid_token'),
-                                });
-                                break;
-                            case 'cla.missing_token':
-                                this.$store.commit('errorSet', {
-                                    dialogVisible: true,
-                                    dialogMessage: this.$t('tips.missing_token'),
-                                });
-                                break;
-                            case 'cla.unknown_token':
-                                this.$store.commit('errorSet', {
-                                    dialogVisible: true,
-                                    dialogMessage: this.$t('tips.unknown_token'),
-                                });
-                                break;
-                            case 'cla.unauthorized_token':
-                                this.$store.commit('errorSet', {
-                                    dialogVisible: true,
-                                    dialogMessage: this.$t('tips.unauthorized_token'),
-                                });
-                                break;
-                            case 'cla.system_error':
-                                this.$store.commit('errorCodeSet', {
-                                    dialogVisible: true,
-                                    dialogMessage: this.$t('tips.system_error'),
-                                });
-                                break;
-                            default :
-                                this.$store.commit('errorCodeSet', {
-                                    dialogVisible: true,
-                                    dialogMessage: this.$t('tips.unknown_error'),
-                                });
-                                break;
-                        }
-                    } else {
-                        this.$store.commit('errorCodeSet', {
-                            dialogVisible: true,
-                            dialogMessage: this.$t('tips.system_error'),
-                        })
-                    }
-                })
-            },
-            downloadOrgSignature(row) {
-                http({
-                    url: `${url.downloadSignature}/${this.$store.state.corpItem.link_id}/${row.language}`,
-                    responseType: 'blob',
-                }).then(res => {
-                    if (res && res.data) {
-                        let time = util.getNowDateToTime();
-                        download((new Blob([res.data])), `${this.$store.state.corpItem.org_id}_${row.language}_signature${time}.pdf`, 'application/pdf');
-                    } else {
-                        this.$store.commit('errorCodeSet', {
-                            dialogVisible: true,
-                            dialogMessage: this.$t('tips.system_error'),
-                        })
-                    }
-                }).catch(err => {
-                    if (err.data && err.data.hasOwnProperty('data')) {
-                        switch (err.data.data.error_code) {
-                            case 'cla.invalid_token':
-                                this.$store.commit('errorSet', {
-                                    dialogVisible: true,
-                                    dialogMessage: this.$t('tips.invalid_token'),
-                                });
-                                break;
-                            case 'cla.expired_token':
-                                this.$store.commit('errorSet', {
-                                    dialogVisible: true,
-                                    dialogMessage: this.$t('tips.invalid_token'),
-                                });
-                                break;
-                            case 'cla.missing_token':
-                                this.$store.commit('errorSet', {
-                                    dialogVisible: true,
-                                    dialogMessage: this.$t('tips.missing_token'),
-                                });
-                                break;
-                            case 'cla.unauthorized_token':
-                                this.$store.commit('errorSet', {
-                                    dialogVisible: true,
-                                    dialogMessage: this.$t('tips.unauthorized_token'),
-                                });
-                                break;
-                            case 'cla.unknown_token':
-                                this.$store.commit('errorSet', {
-                                    dialogVisible: true,
-                                    dialogMessage: this.$t('tips.unknown_token'),
-                                });
-                                break;
-
-                            case 'cla.system_error':
-                                this.$store.commit('errorCodeSet', {
-                                    dialogVisible: true,
-                                    dialogMessage: this.$t('tips.system_error'),
-                                });
-                                break;
-                            default :
-                                this.$store.commit('errorCodeSet', {
-                                    dialogVisible: true,
-                                    dialogMessage: this.$t('tips.unknown_error'),
-                                });
-                                break;
-                        }
-                    } else {
-                        this.$store.commit('errorCodeSet', {
-                            dialogVisible: true,
-                            dialogMessage: this.$t('tips.system_error'),
-                        })
-                    }
-                })
             },
             corpTabsHandleClick(tab, event) {
                 if (tab.index === '0') {

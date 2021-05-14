@@ -1,12 +1,5 @@
-const SIGNATURE_PAGE_MAX_SIZE = 200;      //kb
 const SIGNATURE_FILE_MAX_SIZE = 5;        //M
-const SIGNATURE_PAGE_NAME = 'signature_page';
-const ORG_SIGNATURE_FILE = 'org_signature_file';
-const COPYRIGHT = 'MIT Licensed | Copyright © opensourceways infrastructure |';
-const ICP = '蜀ICP备20009468号-1';
-const ICPLINK = 'https://icp.chinaz.com/home/info?host=osinfra.cn';
-const POLICERECORD = '粤公网安备 44030702003822号';
-const POLICERECORDLINK = 'http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=44030702003822';
+const COPYRIGHT = 'Copyright ©2020 claSign';
 const INDIVIDUALMETADATAARR_EN = [
     {
         title: 'Name',
