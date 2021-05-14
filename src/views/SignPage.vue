@@ -14,9 +14,7 @@
     import Header from '@components/NewHeader'
     import Footer from '@components/NewFooter'
     import * as util from '../util/util'
-
     export default {
-
         name: "SignPage",
         components: {
             Header,
@@ -54,5 +52,4 @@
         }
     }
 </script>
-
 

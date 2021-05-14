@@ -46,8 +46,8 @@
                                 </div>
                                 <div class="margin-top-1rem fontSize12">
                                     <el-checkbox v-model="isRead"><span>{{$t('signPage.checkBoxText1')}}<span
-                                            class="privacy" @click="previewPrivacy()">{{$t('signPage.privacy')}}</span>{{$t('signPage.checkBoxText2')}}
-                                        <span>{{$t('signPage.claSignPlatform')}}</span>{{$t('signPage.checkBoxText3')}}</span>
+                                            class="privacy" @click="previewPrivacy()">{{$t('signPage.privacy')}}</span>{{$t('signPage.checkBoxText2')}}<span
+                                            class="privacy" @click="toIndex()">{{$t('signPage.claSignPlatform')}}</span>{{$t('signPage.checkBoxText3')}}</span>
                                     </el-checkbox>
                                 </div>
                                 <el-form-item label-width="0" class="margin-top-1rem signBtBox">
@@ -94,8 +94,8 @@
                                 </div>
                                 <div class="margin-top-1rem fontSize12">
                                     <el-checkbox v-model="isRead"><span>{{$t('signPage.checkBoxText1')}}<span
-                                            class="privacy" @click="previewPrivacy()">{{$t('signPage.privacy')}}</span>{{$t('signPage.checkBoxText2')}}
-                                        <span>{{$t('signPage.claSignPlatform')}}</span>{{$t('signPage.checkBoxText3')}}</span>
+                                            class="privacy" @click="previewPrivacy()">{{$t('signPage.privacy')}}</span>{{$t('signPage.checkBoxText2')}}<span
+                                            class="privacy" @click="toIndex()">{{$t('signPage.claSignPlatform')}}</span>{{$t('signPage.checkBoxText3')}}</span>
                                     </el-checkbox>
                                 </div>
                                 <el-form-item label-width="0" class="margin-top-1rem signBtBox">
@@ -216,6 +216,7 @@
 
             },
         },
+        inject: ['setClientHeight'],
         components: {
             ReLoginDialog,
             ReTryDialog,
@@ -265,6 +266,23 @@
         },
         methods: {
             ...mapActions(['setTokenAct', 'setRepoInfoAct', 'viewPrivacy']),
+            previewPrivacy() {
+                this.$router.push('/privacy')
+            },
+            toIndex() {
+                let date = new Date();
+                date.setTime(date.getTime() - 10000);
+                document.cookie = `_mark=; expire=${date.toUTCString()}; Domain=${this.domain}; path=/`;
+                let repoInfo = this.$store.state.repoInfo;
+                let params = repoInfo.repo_id ? `${repoInfo.platform}/${repoInfo.org_id}/${repoInfo.repo_id}` : `${repoInfo.platform}/${repoInfo.org_id}`;
+                let path = '';
+                if (sessionStorage.getItem('orgAddress')) {
+                    path = `${this.signRouter}/${util.strToBase64(params)}/${sessionStorage.getItem('orgAddress')}`
+                } else {
+                    path = `${this.signRouter}/${util.strToBase64(params)}`
+                }
+                window.open(`${this.domain}${path}`)
+            },
             async requireVerifyTel(rule, value, callback) {
                 if (value) {
                     let reg = /^1[3456789]\d{9}$/;
@@ -990,9 +1008,10 @@
             }).then(res => {
                 this.getNowDate()
             })
-        },
+        }
+        ,
         mounted() {
-            this.setClientHeight()
+            this.setClientHeight();
         }
     }
 </script>
