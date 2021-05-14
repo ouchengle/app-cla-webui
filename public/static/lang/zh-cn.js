@@ -35,7 +35,6 @@ module.exports = {
         individualSignCheckTitle: '个人签署查询'
     },
     signPage: {
-        claTitle: "贡献者许可协议",
         corp: "企业",
         emp: "员工",
         individual: "个人",

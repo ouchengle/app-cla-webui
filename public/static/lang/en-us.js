@@ -35,7 +35,6 @@ module.exports = {
         individualSignCheckTitle: 'Individual Sign Check'
     },
     signPage: {
-        claTitle: "Contributor License Agreement",
         corp: "Corporation ",
         emp: "Employee ",
         individual: "Individual ",
