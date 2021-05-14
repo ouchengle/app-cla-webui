@@ -382,13 +382,13 @@
                         <el-col :span="10" style="height: 100%;">
                             <el-row class="signType" style="height: 100%">
                                 <div id="sign">
-                                    <el-row style="height: 50%">
+                                    <el-row style="height: 60%">
                                         <el-col align="right" class="buttonBox">
                                             <div id="btBox">
                                                 <div>
                                                     <el-tooltip :content="corpBtTooltip" placement="top" effect="light"
-                                                                popper-class="my_tooltip">
-                                                        <div>
+                                                                popper-class="my_tooltip" :enterable="false">
+                                                        <div class="display-inline-block margin-1D2rem border-radius-2rem">
                                                             <button :disabled="!isBindCorpCLA" class="button"
                                                                     @click="submit('corporation')">
                                                                 {{ $t('signType.corpBt') }}
@@ -399,8 +399,8 @@
                                                 </div>
                                                 <div>
                                                     <el-tooltip :content="empBtTooltip" placement="top" effect="light"
-                                                                popper-class="my_tooltip">
-                                                        <div>
+                                                                popper-class="my_tooltip" :enterable="false">
+                                                        <div class="display-inline-block margin-1D2rem border-radius-2rem">
                                                             <button :disabled="!isBindCorpCLA"
                                                                     class="button"
                                                                     @click="submit('employee')">
@@ -411,9 +411,9 @@
                                                     </el-tooltip>
                                                 </div>
                                                 <el-tooltip :content="individualBtTooltip" placement="top"
-                                                            effect="light"
+                                                            effect="light" :enterable="false"
                                                             popper-class="my_tooltip">
-                                                    <div>
+                                                    <div class="display-inline-block margin-1D2rem border-radius-2rem">
                                                         <button class="button"
                                                                 @click="submit('individual')">
                                                             {{ $t('signType.individualBt') }}
@@ -1228,7 +1228,6 @@
             font-size: 1.5rem;
             cursor: pointer;
             background: linear-gradient(to right, #97DB30, #319E55);
-            margin: 1.2rem 0;
         }
 
         .guideBox {
