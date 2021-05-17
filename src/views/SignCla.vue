@@ -3,9 +3,12 @@
         <div id="singCla_section">
             <el-row class="content">
                 <el-col>
+                    <p class="contentTitle">{{ $t('signPage.claTitle') }}</p>
                     <el-row class="marginTop3rem" id="claBox">
+                        <iframe id="pdf_iframe" ref="pdf_iframe" class="iframeClass" :src="claTextUrl"
+                                frameborder="0"></iframe>
                     </el-row>
-                    <el-row v-if="cla_lang" class="marginTop3rem form">
+                    <el-row class="marginTop3rem form">
                         <el-col>
                             <el-form v-if="this.IS_MOBILE" :model="ruleForm" :rules="rules" ref="ruleForm"
                                      label-position="left"
@@ -134,7 +137,6 @@
     import SignReLoginDialog from '../components/SignReLoginDialog'
 
     export default {
-
         name: "SignCla",
         computed: {
             loginType() {
@@ -190,17 +192,18 @@
         watch: {
             '$i18n.locale'() {
                 this.cla_lang = '';
-                if (localStorage.getItem('lang') === '0') {
-                    this.lang = 'english'
-                } else if (localStorage.getItem('lang') === '1') {
-                    this.lang = 'chinese'
-                }
+                this.lang = this.signPageData[parseInt(localStorage.getItem('lang'))].language
                 this.signPageData.forEach((item, index) => {
                     if (item.language === this.lang) {
+                        document.getElementById('claBox').style.display = 'block';
                         this.cla_lang = item.language;
                         this.value = index;
                         this.cla_hash = item.cla_hash;
-                        this.setClaText(this.value);
+                        this.$refs.pdf_iframe.contentWindow.postMessage({
+                            link_id: this.link_id,
+                            lang: this.lang,
+                            hash: this.cla_hash
+                        }, this.claTextUrl)
                         this.fields = this.signPageData[this.value].fields;
                         if (Object.keys(this.rules).length === 0) {
                             this.setFieldsData();
@@ -208,15 +211,6 @@
                     }
                 });
                 this.getUserInfo();
-                if (!this.cla_lang) {
-                    document.getElementById('claBox').innerHTML = '';
-                    this.fields = [];
-                    this.$message.closeAll();
-                    this.$message.error({
-                        message: this.$t('tips.no_lang', {language: this.lang}),
-                        duration: 8000
-                    })
-                }
                 if (this.sendBtTextFromLang === 'send code' || this.sendBtTextFromLang === '发送验证码') {
                     this.sendBtTextFromLang = this.$t('signPage.sendCode')
                 } else {
@@ -239,6 +233,9 @@
         },
         data() {
             return {
+                claTextUrl: 'http://cla.osinfra.cn:60031/cla-pdf',
+                claText: '',
+                numPages: null,
                 lang: '',
                 cla_hash: '',
                 second: '',
@@ -265,14 +262,6 @@
                 rules: {},
                 isRead: false,
                 value: '',
-                languageOptions: [{
-                    value: 0,
-                    label: 'English'
-                }, {
-                    value: 1,
-                    label: 'Chinese'
-                },],
-                metadataArr: [],
                 cla_lang: '',
             }
         },
@@ -528,36 +517,48 @@
                     resolve('complete');
                 }
             },
+            upperFirstCase(word) {
+                let initials = word.substring(0, 1);
+                let upper = initials.toUpperCase();
+                let end = word.substring(1);
+                return upper + end
+            },
             setData(res, resolve) {
                 if (res && res.data.data) {
                     if (res.data.data.clas && res.data.data.clas.length) {
                         this.signPageData = res.data.data.clas;
-                        this.languageOptions = [];
                         this.link_id = res.data.data.link_id;
                         if (localStorage.getItem('lang') === '0') {
                             this.lang = 'english'
                         } else if (localStorage.getItem('lang') === '1') {
                             this.lang = 'chinese'
                         }
+                        let langOptions = [];
+                        let langLabel = '';
                         this.signPageData.forEach((item, index) => {
+                            langLabel = this.upperFirstCase(item.language)
+                            langOptions.push({value: index, label: langLabel});
+                            this.$emit('getLangOptions', langOptions)
                             if (item.language === this.lang) {
                                 this.cla_lang = item.language;
                                 this.value = index;
                                 this.cla_hash = item.cla_hash;
-                                this.setClaText(this.value);
+                                this.setClaText({link_id: this.link_id, lang: this.lang, hash: this.cla_hash});
                                 this.setFields(this.value);
                                 this.setFieldsData();
                                 resolve('complete')
                             }
-                            this.languageOptions.push({value: index, label: item.language})
                         });
                         if (!this.cla_lang) {
-                            this.$message.closeAll();
-                            this.$message.error({
-                                message: this.$t('tips.no_lang', {language: this.lang}),
-                                duration: 8000
-                            })
+                            this.lang = this.signPageData[0].language
+                            this.value = 0;
+                            this.cla_hash = this.signPageData[0].cla_hash;
+                            this.setClaText({link_id: this.link_id, lang: this.lang, hash: this.cla_hash});
+                            this.setFields(this.value);
+                            this.setFieldsData();
                         }
+                        localStorage.setItem('lang', this.value)
+                        this.$emit('initHeader', this.value)
                     } else {
                         let message = '';
                         if (this.$store.state.loginType === 'corporation') {
@@ -736,8 +737,12 @@
                     }
                 }
             },
-            setClaText(key) {
-                document.getElementById('claBox').innerHTML = this.signPageData[key].text;
+            setClaText(obj) {
+                this.$nextTick(() => {
+                    this.$refs.pdf_iframe.contentWindow.onload = () => {
+                        this.$refs.pdf_iframe.contentWindow.postMessage(obj, this.claTextUrl)
+                    }
+                })
             },
             setFields(key) {
                 for (let i = 0; i < this.signPageData[key].fields.length; i++) {
@@ -919,6 +924,8 @@
                         this.tipsMessage = this.$t('tips.corp_sign')
                     } else if (this.$store.state.loginType === 'employee') {
                         this.tipsMessage = this.$t('tips.emp_sign')
+                    }else if (this.$store.state.loginType === 'individual') {
+                        this.tipsMessage = this.$t('tips.individual_sign')
                     }
                     this.$store.commit('setSignSuccess', {
                         dialogVisible: true,
@@ -1082,6 +1089,15 @@
                 })
             },
         },
+        activated() {
+            this.$refs.pdf_iframe.contentWindow.onload = () => {
+                this.$refs.pdf_iframe.contentWindow.postMessage({
+                    link_id: this.link_id,
+                    lang: this.lang,
+                    hash: this.cla_hash
+                }, this.claTextUrl)
+            }
+        },
         created() {
             new Promise((resolve, reject) => {
                 this.getCookieData(resolve);
@@ -1092,8 +1108,7 @@
             }).then(res => {
                 this.getNowDate()
             })
-        }
-        ,
+        },
         mounted() {
             this.setClientHeight();
         }
@@ -1281,19 +1296,27 @@
         margin-top: 3rem;
     }
 
+    .iframeClass {
+        width: 100%;
+        height: 900px;
+        box-shadow: 0 0 20px 10px #F3F3F3;
+        border-radius: 1rem;
+    }
+
     #claBox {
         margin-bottom: 2rem;
         border-radius: 1.25rem;
         white-space: pre-wrap;
         font-size: 1.2rem;
-        box-shadow: 0 0 20px 10px #F3F3F3;
-        padding: 2rem;
+        /*box-shadow: 0 0 20px 10px #F3F3F3;*/
+        /*padding: 2rem;*/
     }
 
     .contentTitle {
         font-size: 2rem;
         font-weight: bold;
         margin: 2rem 0;
+        text-align: center;
     }
 
     .size_s {
