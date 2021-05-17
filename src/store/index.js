@@ -65,8 +65,13 @@ export default new Vuex.Store({
         addLang: sessionStorage.getItem('addLang') || undefined,
         add_bind_first: sessionStorage.getItem('add_bind_first') || undefined,
         findPwdEmail: sessionStorage.getItem('findPwdEmail') || undefined,
+        pafData: JSON.parse(sessionStorage.getItem('pafData')) || undefined,
     },
     mutations: {
+        setPafData(state, data) {
+            state.pafData = data;
+            sessionStorage.setItem('pafData',  JSON.stringify(data));
+        },
         setFindPwdEmail(state, data) {
             state.findPwdEmail = data;
             sessionStorage.setItem('findPwdEmail', data);

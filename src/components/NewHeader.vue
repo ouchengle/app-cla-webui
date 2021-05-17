@@ -93,14 +93,16 @@
                 isActive: true,
                 language: 'English',
                 value: 0,
-                options: [{value: 0, label: 'English'}, {value: 1, label: '中文'}],
                 visible: {
                     visibility: 'hidden',
                 },
+                options: [{value: 0, label: 'English'}, {value: 1, label: 'Chinese'}]
             }
         },
-
         methods: {
+            updateLangOptions(data) {
+                this.options = data
+            },
             toIndex() {
                 if (this.$route.path === '/corporationManagerLogin' || this.$route.path === '/platformSelect') {
                     this.$router.push('/')
@@ -251,20 +253,26 @@
             clickSelect() {
                 this.isActive = !this.isActive;
             },
-            init() {
-                if (parseInt(localStorage.getItem('lang'))) {
-                    this.value = parseInt(localStorage.getItem('lang'))
-                }
-                switch (this.value) {
-                    case 0:
-                        this.language = 'English';
+            changeI18N(language) {
+                switch (language) {
+                    case 'English':
                         this.$i18n.locale = 'en-us';
                         break;
-                    case 1:
-                        this.language = '中文';
+                    case 'Chinese':
                         this.$i18n.locale = 'zh-cn';
                         break;
                 }
+            },
+            init(value) {
+                if (value !== '' && value !== undefined) {
+                    this.value = value
+                } else {
+                    if (parseInt(localStorage.getItem('lang'))) {
+                        this.value = parseInt(localStorage.getItem('lang'))
+                    }
+                }
+                this.language = this.options[this.value].label;
+                this.changeI18N(this.language);
                 if (this.$store.state.loginInfo) {
                     this.role = this.$store.state.loginInfo.userInfo[0].role;
                 }
