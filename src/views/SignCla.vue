@@ -188,6 +188,9 @@
             sign_id() {
                 return this.$store.state.sign_id;
             },
+            claTextUrl(){
+                return `${this.$store.state.domain}/cla-pdf`
+            },
         },
         watch: {
             '$i18n.locale'() {
@@ -233,7 +236,6 @@
         },
         data() {
             return {
-                claTextUrl: 'http://cla.osinfra.cn:60031/cla-pdf',
                 claText: '',
                 numPages: null,
                 lang: '',
