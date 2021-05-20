@@ -175,6 +175,9 @@
                     this.sendBtText = value
                 }
             },
+            claTextUrl(){
+                return `${this.$store.state.domain}/cla-pdf`
+            },
         },
         watch: {
             '$i18n.locale'() {
@@ -221,7 +224,6 @@
         inject:['setClientHeight'],
         data() {
             return {
-                claTextUrl: 'http://cla.osinfra.cn:60031/cla-pdf',
                 claText: '',
                 numPages: null,
                 lang: '',
