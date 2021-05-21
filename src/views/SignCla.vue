@@ -16,6 +16,7 @@
                                      class="demo-ruleForm">
                                 <el-form-item v-for="(item,index) in fields"
                                               label-width="0"
+                                              :key="index"
                                               :required="item.required"
                                               :prop="item.id">
                                     <div><span v-if="item.required" class="requiredIcon">*</span>{{item.title}}</div>
@@ -70,7 +71,8 @@
                                 <el-form-item v-for="(item,index) in fields"
                                               :label="item.title"
                                               :required="item.required"
-                                              :prop="item.id">
+                                              :prop="item.id"
+                                              :key="index">
                                     <el-input v-if="item.type==='email'"
                                               :placeholder="$t('signPage.holder',{title:item.title})"
                                               :readonly="loginType!=='corporation'" v-model="ruleForm[item.id]"
@@ -188,17 +190,19 @@
             sign_id() {
                 return this.$store.state.sign_id;
             },
-            claTextUrl(){
+            claTextUrl() {
                 return `${this.$store.state.domain}/cla-pdf`
             },
         },
         watch: {
             '$i18n.locale'() {
+                if (this.$route.path !== '/sign-cla') {
+                    return
+                }
                 this.cla_lang = '';
                 this.lang = this.signPageData[parseInt(localStorage.getItem('lang'))].language
                 this.signPageData.forEach((item, index) => {
                     if (item.language === this.lang) {
-                        document.getElementById('claBox').style.display = 'block';
                         this.cla_lang = item.language;
                         this.value = index;
                         this.cla_hash = item.cla_hash;
@@ -926,7 +930,7 @@
                         this.tipsMessage = this.$t('tips.corp_sign')
                     } else if (this.$store.state.loginType === 'employee') {
                         this.tipsMessage = this.$t('tips.emp_sign')
-                    }else if (this.$store.state.loginType === 'individual') {
+                    } else if (this.$store.state.loginType === 'individual') {
                         this.tipsMessage = this.$t('tips.individual_sign')
                     }
                     this.$store.commit('setSignSuccess', {

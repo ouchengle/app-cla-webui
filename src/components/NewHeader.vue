@@ -80,6 +80,7 @@
 <script>
     import http from '../util/http'
     import * as url from '../util/api'
+    import * as util from '../util/util'
 
     export default {
         name: "NewHeader",
@@ -238,14 +239,7 @@
                     this.value = value
                     localStorage.setItem('lang', value)
                     this.language = this.options[value].label;
-                    switch (value) {
-                        case 0:
-                            this.$i18n.locale = 'en-us';
-                            break;
-                        case 1:
-                            this.$i18n.locale = 'zh-cn';
-                            break;
-                    }
+                    this.changeI18N(this.language)
                 }
                 this.isActive = true;
             },
@@ -275,14 +269,9 @@
                 if (this.$store.state.loginInfo) {
                     this.role = this.$store.state.loginInfo.userInfo[0].role;
                 }
-                if (sessionStorage.getItem('showHeaderMenu') === 'false') {
-                    this.showHeaderMenu = false
-                } else if (sessionStorage.getItem('showHeaderMenu') === 'corp') {
-                    this.showHeaderMenu = true;
-                    this.loginRole = 'corp';
-                } else {
-                    this.showHeaderMenu = true;
-                    this.loginRole = 'org';
+                this.showHeaderMenu = util.getMenuState(this);
+                if (this.showHeaderMenu === 'corp' || this.showHeaderMenu === 'org') {
+                    this.loginRole = this.showHeaderMenu
                 }
             },
         },
