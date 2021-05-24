@@ -432,7 +432,8 @@
                     params = `${row.platform.toLowerCase()}/${row.org_id}`
                 }
                 let base64Params = util.strToBase64(params)
-                let url = `${this.address}${this.signRouter}/${base64Params}`
+                let address = window.location.href.split('/linkedRepo')[0];
+                let url = `${address}${this.signRouter}/${base64Params}`
                 let copyInput = document.createElement("input");
                 copyInput.value = url;
                 document.body.appendChild(copyInput);
