@@ -196,11 +196,13 @@
         },
         watch: {
             '$i18n.locale'() {
+                console.log('watch----',this.$i18n.locale);
                 if (this.$route.path !== '/sign-cla') {
                     return
                 }
                 this.cla_lang = '';
                 this.lang = this.signPageData[parseInt(localStorage.getItem('lang'))].language
+                console.log('watch----',this.lang);
                 this.signPageData.forEach((item, index) => {
                     if (item.language === this.lang) {
                         this.cla_lang = item.language;
@@ -544,7 +546,6 @@
                         this.signPageData.forEach((item, index) => {
                             langLabel = this.upperFirstCase(item.language)
                             langOptions.push({value: index, label: langLabel});
-                            this.$emit('getLangOptions', langOptions)
                             if (item.language === this.lang) {
                                 this.cla_lang = item.language;
                                 this.value = index;
@@ -555,6 +556,7 @@
                                 resolve('complete')
                             }
                         });
+                        this.$emit('getLangOptions', langOptions)
                         if (!this.cla_lang) {
                             this.lang = this.signPageData[0].language
                             this.value = 0;

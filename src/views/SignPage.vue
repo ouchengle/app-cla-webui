@@ -28,9 +28,11 @@
         },
         methods: {
             initHeader(value) {
+                console.log('initHeader');
                 this.$refs.header.init(value);
             },
             getLangOptions(data) {
+                console.log('getLangOptions');
                 this.$refs.header.updateLangOptions(data);
             },
             setClientHeight() {

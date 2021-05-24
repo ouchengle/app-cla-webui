@@ -247,6 +247,7 @@
                 this.isActive = !this.isActive;
             },
             changeI18N(language) {
+                console.log('changeI18N---'+language);
                 switch (language) {
                     case 'English':
                         this.$i18n.locale = 'en-us';
@@ -266,6 +267,8 @@
                 }
                 this.language = this.options[this.value].label;
                 this.changeI18N(this.language);
+                console.log(this.options);
+                console.log(this.value);
                 if (this.$store.state.loginInfo) {
                     this.role = this.$store.state.loginInfo.userInfo[0].role;
                 }
