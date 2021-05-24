@@ -26,10 +26,11 @@
         data() {
             return {
                 privacyText: '',
-                platform:'github',
-                owner:'opensourceways',
-                repo:'app-cla-server',
-                path:'clasign_privacy_policy_20210513.md',
+                platform: 'github',
+                owner: 'opensourceways',
+                repo: 'app-cla-server',
+                path: 'clasign_privacy_policy_20210513.md',
+                langOptions: [{value: 0, label: 'Chinese'}]
             }
         },
         methods: {
@@ -37,8 +38,8 @@
                 let _url = '';
                 if (platform === 'gitee') {
                     _url = `https://gitee.com/api/v5/repos/${owner}/${repo}/contents/${path}`
-                }else if(platform === 'github') {
-                    _url =  `https://api.github.com/repos/${owner}/${repo}/contents/${path}`
+                } else if (platform === 'github') {
+                    _url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`
                 }
                 axios({
                     url: _url
@@ -48,10 +49,15 @@
                 })
             },
             init() {
+                this.$emit('getLangOptions', this.langOptions);
+                localStorage.setItem('lang', this.langOptions[0].label);
+                this.$emit('initHeader', this.langOptions[0].label);
                 this.getPrivacy(this.platform, this.owner, this.repo, this.path);
             },
         },
-
+        activated() {
+            this.init()
+        },
         created() {
             this.init()
         },
