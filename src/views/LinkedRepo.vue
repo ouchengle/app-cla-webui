@@ -435,21 +435,8 @@
                     params = `${row.platform.toLowerCase()}/${row.org_id}`
                 }
                 let base64Params = util.strToBase64(params);
-                let address = window.location.href.split('/linkedRepo')[0];
-                let url = '';
-                if (address.substring(0, 5) === 'http:') {
-                    url = `${LOCAL_ADDRESS}${this.signRouter}/${base64Params}`;
-                } else if (address.substring(8, 15) === 'clasign') {
-                    url = `${PRODUCTION_ADDRESS}${this.signRouter}/${base64Params}`;
-                } else if (address.substring(8, 12) === 'test') {
-                    url = `${TEST_ADDRESS}${this.signRouter}/${base64Params}`;
-                }else{
-                    this.$store.commit('errorCodeSet', {
-                        dialogVisible: true,
-                        dialogMessage: this.$t('tips.copyError'),
-                    });
-                    return
-                }
+                let address = window.location.href.split('/linkedRepo')[0]
+                let url = `${address}${this.signRouter}/${base64Params}`
                 let copyInput = document.createElement("input");
                 copyInput.value = url;
                 document.body.appendChild(copyInput);
