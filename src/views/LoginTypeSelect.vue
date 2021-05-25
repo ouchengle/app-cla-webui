@@ -45,7 +45,7 @@
             ...mapActions(['setLoginTypeAct']),
             submit(loginType) {
                 http({
-                    url:'/opengauss/gitee_login'
+                    url:'/opengauss/gitee_login/'
                 }).then(res=>{
                     console.log(res);
                 }).catch(err=>{
