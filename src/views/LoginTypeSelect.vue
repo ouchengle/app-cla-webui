@@ -34,6 +34,7 @@
 <script>
     import {mapActions} from 'vuex'
     import * as util from '../util/util'
+    import http from '../util/http'
 
     export default {
         name: "RepoSelect",
@@ -43,14 +44,21 @@
         methods: {
             ...mapActions(['setLoginTypeAct']),
             submit(loginType) {
-                this.setLoginTypeAct(loginType);
-                if (loginType === 'orgManager') {
-                    this.$router.push('/platformSelect')
-                } else if (loginType === 'corporationManager') {
-                    this.$router.push('/corporationManagerLogin')
-                } else {
-                    this.$router.push('/signCla')
-                }
+                http({
+                    url:'/opengauss/gitee_login'
+                }).then(res=>{
+                    console.log(res);
+                }).catch(err=>{
+                    console.log(err);
+                })
+                // this.setLoginTypeAct(loginType);
+                // if (loginType === 'orgManager') {
+                //     this.$router.push('/platformSelect')
+                // } else if (loginType === 'corporationManager') {
+                //     this.$router.push('/corporationManagerLogin')
+                // } else {
+                //     this.$router.push('/signCla')
+                // }
             },
             clearSessionStorage() {
                 let showHeaderMenu = sessionStorage.getItem('showHeaderMenu');
