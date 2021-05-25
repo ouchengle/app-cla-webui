@@ -200,7 +200,7 @@
                     return
                 }
                 this.cla_lang = '';
-                this.lang = this.signPageData[parseInt(localStorage.getItem('lang'))].language
+                this.lang = localStorage.getItem('lang').toLowerCase()
                 this.signPageData.forEach((item, index) => {
                     if (item.language === this.lang) {
                         this.cla_lang = item.language;
@@ -217,7 +217,9 @@
                         }
                     }
                 });
-                this.getUserInfo();
+                if (this.loginType !== 'corporation') {
+                    this.getUserInfo()
+                }
                 if (this.sendBtTextFromLang === 'send code' || this.sendBtTextFromLang === '发送验证码') {
                     this.sendBtTextFromLang = this.$t('signPage.sendCode')
                 } else {
@@ -327,7 +329,10 @@
                 }
             },
             async verifyFormEmail(rule, value, callback) {
-                let email = value.trim();
+                let email = '';
+                if (value) {
+                    email = value.trim();
+                }
                 let reg = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z]{2,6}$/;
                 if (reg.test(email)) {
                     callback();
@@ -534,17 +539,14 @@
                     if (res.data.data.clas && res.data.data.clas.length) {
                         this.signPageData = res.data.data.clas;
                         this.link_id = res.data.data.link_id;
-                        if (localStorage.getItem('lang') === '0') {
-                            this.lang = 'english'
-                        } else if (localStorage.getItem('lang') === '1') {
-                            this.lang = 'chinese'
+                        if (localStorage.getItem('lang') !== undefined) {
+                            this.lang = localStorage.getItem('lang').toLowerCase()
                         }
                         let langOptions = [];
                         let langLabel = '';
                         this.signPageData.forEach((item, index) => {
                             langLabel = this.upperFirstCase(item.language)
                             langOptions.push({value: index, label: langLabel});
-                            this.$emit('getLangOptions', langOptions)
                             if (item.language === this.lang) {
                                 this.cla_lang = item.language;
                                 this.value = index;
@@ -555,6 +557,7 @@
                                 resolve('complete')
                             }
                         });
+                        this.$emit('getLangOptions', langOptions)
                         if (!this.cla_lang) {
                             this.lang = this.signPageData[0].language
                             this.value = 0;
@@ -562,9 +565,9 @@
                             this.setClaText({link_id: this.link_id, lang: this.lang, hash: this.cla_hash});
                             this.setFields(this.value);
                             this.setFieldsData();
+                            localStorage.setItem('lang', this.upperFirstCase(this.lang))
                         }
-                        localStorage.setItem('lang', this.value)
-                        this.$emit('initHeader', this.value)
+                        this.$emit('initHeader', this.upperFirstCase(this.lang))
                     } else {
                         let message = '';
                         if (this.$store.state.loginType === 'corporation') {
@@ -1096,6 +1099,34 @@
             },
         },
         activated() {
+            if (this.signPageData) {
+                if (localStorage.getItem('lang') !== undefined) {
+                    this.lang = localStorage.getItem('lang').toLowerCase()
+                }
+                let langOptions = [];
+                let langLabel = '';
+                this.signPageData.forEach((item, index) => {
+                    langLabel = this.upperFirstCase(item.language)
+                    langOptions.push({value: index, label: langLabel});
+                    if (item.language === this.lang) {
+                        this.cla_lang = item.language;
+                        this.value = index;
+                        this.cla_hash = item.cla_hash;
+                        this.setClaText({link_id: this.link_id, lang: this.lang, hash: this.cla_hash});
+                        this.setFields(this.value);
+                    }
+                });
+                this.$emit('getLangOptions', langOptions)
+                if (!this.cla_lang) {
+                    this.lang = this.signPageData[0].language
+                    this.value = 0;
+                    this.cla_hash = this.signPageData[0].cla_hash;
+                    this.setClaText({link_id: this.link_id, lang: this.lang, hash: this.cla_hash});
+                    this.setFields(this.value);
+                    localStorage.setItem('lang', this.upperFirstCase(this.lang))
+                }
+                this.$emit('initHeader', this.upperFirstCase(this.lang))
+            }
             this.$refs.pdf_iframe.contentWindow.onload = () => {
                 this.$refs.pdf_iframe.contentWindow.postMessage({
                     link_id: this.link_id,

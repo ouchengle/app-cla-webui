@@ -237,8 +237,8 @@
             chooseLng(value) {
                 if (this.value !== value) {
                     this.value = value
-                    localStorage.setItem('lang', value)
                     this.language = this.options[value].label;
+                    localStorage.setItem('lang', this.language);
                     this.changeI18N(this.language)
                 }
                 this.isActive = true;
@@ -247,6 +247,7 @@
                 this.isActive = !this.isActive;
             },
             changeI18N(language) {
+                console.log('changeI18N---' + language);
                 switch (language) {
                     case 'English':
                         this.$i18n.locale = 'en-us';
@@ -254,18 +255,31 @@
                     case 'Chinese':
                         this.$i18n.locale = 'zh-cn';
                         break;
+                    default:
+                        this.$i18n.locale = 'en-us';
+                        break;
+
+                }
+            },
+            setLangValue(language) {
+                for (let i = 0; i < this.options.length; i++) {
+                    if (this.options[i].label === language) {
+                        this.value = i
+                    }
                 }
             },
             init(value) {
                 if (value !== '' && value !== undefined) {
-                    this.value = value
+                    this.language = value
                 } else {
-                    if (parseInt(localStorage.getItem('lang'))) {
-                        this.value = parseInt(localStorage.getItem('lang'))
+                    if (localStorage.getItem('lang')) {
+                        this.language = localStorage.getItem('lang')
                     }
                 }
-                this.language = this.options[this.value].label;
                 this.changeI18N(this.language);
+                this.setLangValue(this.language);
+                console.log(this.options);
+                console.log(this.value);
                 if (this.$store.state.loginInfo) {
                     this.role = this.$store.state.loginInfo.userInfo[0].role;
                 }
