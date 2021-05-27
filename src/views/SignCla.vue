@@ -141,6 +141,12 @@
     export default {
         name: "SignCla",
         computed: {
+            pdfData() {
+                if (this.$store.state.pafData) {
+                    return this.$store.state.pafData
+                }
+                return []
+            },
             loginType() {
                 return this.$store.state.loginType
             },
@@ -209,7 +215,8 @@
                         this.$refs.pdf_iframe.contentWindow.postMessage({
                             link_id: this.link_id,
                             lang: this.lang,
-                            hash: this.cla_hash
+                            hash: this.cla_hash,
+                            pdfData: this.pdfData
                         }, this.claTextUrl)
                         this.fields = this.signPageData[this.value].fields;
                         if (Object.keys(this.rules).length === 0) {
@@ -275,6 +282,13 @@
         },
         methods: {
             ...mapActions(['setTokenAct', 'setRepoInfoAct', 'viewPrivacy']),
+            setIframeEventListener() {
+                window.addEventListener('message', (event) => {
+                    if (event.data instanceof Array && event.origin === this.$store.state.domain) {
+                        this.$store.commit('setPafData', event.data);
+                    }
+                }, false)
+            },
             previewPrivacy() {
                 this.$router.push('/privacy')
             },
@@ -477,8 +491,6 @@
                     this.$message.closeAll();
                     this.$message.error(this.$t('tips.not_fill_email'))
                 }
-
-
             },
             getNowDate() {
                 let date = new Date();
@@ -551,7 +563,12 @@
                                 this.cla_lang = item.language;
                                 this.value = index;
                                 this.cla_hash = item.cla_hash;
-                                this.setClaText({link_id: this.link_id, lang: this.lang, hash: this.cla_hash});
+                                this.setClaText({
+                                    link_id: this.link_id,
+                                    lang: this.lang,
+                                    hash: this.cla_hash,
+                                    pdfData: this.pdfData
+                                });
                                 this.setFields(this.value);
                                 this.setFieldsData();
                                 resolve('complete')
@@ -562,7 +579,12 @@
                             this.lang = this.signPageData[0].language
                             this.value = 0;
                             this.cla_hash = this.signPageData[0].cla_hash;
-                            this.setClaText({link_id: this.link_id, lang: this.lang, hash: this.cla_hash});
+                            this.setClaText({
+                                link_id: this.link_id,
+                                lang: this.lang,
+                                hash: this.cla_hash,
+                                pdfData: this.pdfData
+                            });
                             this.setFields(this.value);
                             this.setFieldsData();
                             localStorage.setItem('lang', this.upperFirstCase(this.lang))
@@ -1112,7 +1134,12 @@
                         this.cla_lang = item.language;
                         this.value = index;
                         this.cla_hash = item.cla_hash;
-                        this.setClaText({link_id: this.link_id, lang: this.lang, hash: this.cla_hash});
+                        this.setClaText({
+                            link_id: this.link_id,
+                            lang: this.lang,
+                            hash: this.cla_hash,
+                            pdfData: this.pdfData
+                        });
                         this.setFields(this.value);
                     }
                 });
@@ -1121,7 +1148,12 @@
                     this.lang = this.signPageData[0].language
                     this.value = 0;
                     this.cla_hash = this.signPageData[0].cla_hash;
-                    this.setClaText({link_id: this.link_id, lang: this.lang, hash: this.cla_hash});
+                    this.setClaText({
+                        link_id: this.link_id,
+                        lang: this.lang,
+                        hash: this.cla_hash,
+                        pdfData: this.pdfData
+                    });
                     this.setFields(this.value);
                     localStorage.setItem('lang', this.upperFirstCase(this.lang))
                 }
@@ -1131,11 +1163,13 @@
                 this.$refs.pdf_iframe.contentWindow.postMessage({
                     link_id: this.link_id,
                     lang: this.lang,
-                    hash: this.cla_hash
+                    hash: this.cla_hash,
+                    pdfData: this.pdfData,
                 }, this.claTextUrl)
             }
         },
         created() {
+            this.setIframeEventListener();
             new Promise((resolve, reject) => {
                 this.getCookieData(resolve);
             }).then(res => {

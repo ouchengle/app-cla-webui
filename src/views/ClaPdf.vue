@@ -19,15 +19,17 @@
             return {
                 claText: '',
                 numPages: null,
-                pafData: this.$store.state.pafData,
             }
         },
-        computed:{
-            apply_to(){
+        computed: {
+            apply_to() {
                 if (this.$store.state.loginType === 'corporation') {
                     return this.$store.state.loginType
                 }
                 return 'individual'
+            },
+            claTextUrl() {
+                return this.$store.state.domain
             },
         },
         created() {
@@ -50,14 +52,29 @@
                 })
             },
             setClaText(obj) {
+                let dataFromParent = obj;
+                if (dataFromParent.pdfData.length) {
+                    for (let i = 0; i < dataFromParent.pdfData.length; i++) {
+                        if (dataFromParent.pdfData[i].hasOwnProperty(dataFromParent.lang)) {
+                            this.claText && window.URL.revokeObjectURL(this.claText);
+                            this.claText = window.URL.createObjectURL(dataFromParent.pdfData[i][dataFromParent.lang]);
+                            this.getNumPages(this.claText);
+                            return
+                        }
+                    }
+                }
                 http({
-                    url: `${url.getCLAPdf}/${obj.link_id}/${this.apply_to}/${obj.lang}/${obj.hash}`,
+                    url: `${url.getCLAPdf}/${dataFromParent.link_id}/${this.apply_to}/${dataFromParent.lang}/${dataFromParent.hash}`,
                     responseType: 'blob',
                 }).then(res => {
                     if (res && res.data) {
                         let blob = new Blob([(res.data)], {type: 'application/pdf'});
-                        this.claText = window.URL.createObjectURL(blob)
-                        this.getNumPages(this.claText)
+                        let data = dataFromParent.pdfData;
+                        data.push({[dataFromParent.lang]: blob});
+                        window.parent.postMessage(data, this.claTextUrl);
+                        window.URL.revokeObjectURL(this.claText);
+                        this.claText = window.URL.createObjectURL(blob);
+                        this.getNumPages(this.claText);
                     }
                 }).catch(err => {
                     if (err.data && err.data.hasOwnProperty('data')) {
