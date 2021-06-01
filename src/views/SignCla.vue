@@ -1046,14 +1046,15 @@
                     localStorage.setItem('lang', this.upperFirstCase(this.lang))
                 }
                 this.$emit('initHeader', this.upperFirstCase(this.lang))
+                this.$refs.pdf_iframe.contentWindow.onload = () => {
+                    this.$refs.pdf_iframe.contentWindow.postMessage({
+                        link_id: this.link_id,
+                        lang: this.lang,
+                        hash: this.cla_hash
+                    }, this.claTextUrl)
+                }
             }
-            this.$refs.pdf_iframe.contentWindow.onload = () => {
-                this.$refs.pdf_iframe.contentWindow.postMessage({
-                    link_id: this.link_id,
-                    lang: this.lang,
-                    hash: this.cla_hash
-                }, this.claTextUrl)
-            }
+
         },
         created() {
             new Promise((resolve, reject) => {
