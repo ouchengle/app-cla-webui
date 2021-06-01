@@ -1017,6 +1017,8 @@
             },
         },
         activated() {
+            console.log(this.signPageData);
+            console.log(Boolean(this.signPageData));
             if (this.signPageData) {
                 if (localStorage.getItem('lang') !== undefined) {
                     this.lang = localStorage.getItem('lang').toLowerCase()
