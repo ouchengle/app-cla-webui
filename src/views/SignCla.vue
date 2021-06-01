@@ -31,19 +31,14 @@
                                               @blur="setMyForm(item.type,ruleForm[item.id])"></el-input>
                                 </el-form-item>
                                 <el-form-item
-                                        :label="$t('signPage.verifyCode')"
+                                        v-if="rules.code&&(loginType==='corporation'||loginType==='employee')"
                                         :required="rules.code[0].required"
+                                        label-width="0"
                                         prop="code">
+                                    <div><span v-if="rules.code[0].required" class="requiredIcon">*</span>{{$t('signPage.verifyCode')}}
+                                    </div>
                                     <el-input v-model="ruleForm.code" :placeholder="$t('signPage.verifyCodeHolder')"
                                               size="small">
-                                        <el-tooltip slot="append" :content="$t('signPage.sendCodeTip')" placement="top"
-                                                    effect="light"
-                                                    popper-class="my_tooltip">
-                                            <el-button
-                                                    :disabled="sendBtTextFromLang!==$t('signPage.sendCode')"
-                                                    @click="sendCode()">{{sendBtTextFromLang}}
-                                            </el-button>
-                                        </el-tooltip>
                                     </el-input>
                                 </el-form-item>
                                 <button class="margin-top-1rem mobileBt"
@@ -78,10 +73,6 @@
                                               :placeholder="$t('signPage.holder',{title:item.title})"
                                               :readonly="loginType!=='corporation'" v-model="ruleForm[item.id]"
                                               size="small" @blur="setMyForm(item.type,ruleForm[item.id])"></el-input>
-                                    <el-input v-else-if="item.type==='platform_id'"
-                                              :readonly="loginType!=='corporation'"
-                                              v-model="ruleForm[item.id]"
-                                              size="small" @blur="setMyForm(item.type,ruleForm[item.id])"></el-input>
                                     <el-input v-else-if="item.type==='date'" readonly="" v-model="ruleForm[item.id]"
                                               size="small" @blur="setMyForm(item.type,ruleForm[item.id])"></el-input>
                                     <el-input v-else v-model="ruleForm[item.id]"
@@ -89,16 +80,19 @@
                                               @blur="setMyForm(item.type,ruleForm[item.id])"></el-input>
                                 </el-form-item>
                                 <el-form-item
-                                        v-if="rules.code&&(loginType==='corporation'||loginType==='employee')"
                                         :label="$t('signPage.verifyCode')"
                                         :required="rules.code[0].required"
                                         prop="code">
                                     <el-input v-model="ruleForm.code" :placeholder="$t('signPage.verifyCodeHolder')"
                                               size="small">
-                                        <el-button slot="append"
-                                                   :disabled="sendBtTextFromLang!==$t('signPage.sendCode')"
-                                                   @click="sendCode()">{{sendBtTextFromLang}}
-                                        </el-button>
+                                        <el-tooltip slot="append" :content="$t('signPage.sendCodeTip')" placement="top"
+                                                    effect="light"
+                                                    popper-class="my_tooltip">
+                                            <el-button
+                                                    :disabled="sendBtTextFromLang!==$t('signPage.sendCode')"
+                                                    @click="sendCode()">{{sendBtTextFromLang}}
+                                            </el-button>
+                                        </el-tooltip>
                                     </el-input>
                                 </el-form-item>
                                 <div class="borderClass fontSize12"><span class="requiredIcon">*</span>{{$t('signPage.requireText')}}
@@ -1017,8 +1011,6 @@
             },
         },
         activated() {
-            console.log(this.signPageData);
-            console.log(Boolean(this.signPageData));
             if (this.signPageData) {
                 if (localStorage.getItem('lang') !== undefined) {
                     this.lang = localStorage.getItem('lang').toLowerCase()
