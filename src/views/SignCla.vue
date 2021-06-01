@@ -213,7 +213,6 @@
                         this.$refs['ruleForm'].validateField(item.labelFor)
                     }
                 });
-
             },
         },
         inject: ['setClientHeight'],
@@ -818,6 +817,7 @@
                 });
                 this.ruleForm = form;
                 this.rules = rules
+                console.log(this.rules.code);
             },
             signCla() {
                 let info = {};
