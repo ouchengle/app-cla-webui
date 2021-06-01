@@ -1092,6 +1092,7 @@
             })
         },
         mounted() {
+            console.log(document.getElementById("signCla"));
             this.setClientHeight();
         }
     }
