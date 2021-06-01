@@ -22,10 +22,6 @@
                                     <div><span v-if="item.required" class="requiredIcon">*</span>{{item.title}}</div>
                                     <el-input v-if="item.type==='email'"
                                               :placeholder="$t('signPage.holder',{title:item.title})"
-                                              :readonly="loginType!=='corporation'" v-model="ruleForm[item.id]"
-                                              size="small" @blur="setMyForm(item.type,ruleForm[item.id])"></el-input>
-                                    <el-input v-else-if="item.type==='platform_id'"
-                                              :readonly="loginType!=='corporation'"
                                               v-model="ruleForm[item.id]"
                                               size="small" @blur="setMyForm(item.type,ruleForm[item.id])"></el-input>
                                     <el-input v-else-if="item.type==='date'" readonly="" v-model="ruleForm[item.id]"
@@ -35,14 +31,19 @@
                                               @blur="setMyForm(item.type,ruleForm[item.id])"></el-input>
                                 </el-form-item>
                                 <el-form-item
-                                        v-if="rules.code&&(loginType==='corporation'||loginType==='employee')"
+                                        :label="$t('signPage.verifyCode')"
                                         :required="rules.code[0].required"
-                                        label-width="0"
                                         prop="code">
-                                    <div><span v-if="rules.code[0].required" class="requiredIcon">*</span>{{$t('signPage.verifyCode')}}
-                                    </div>
                                     <el-input v-model="ruleForm.code" :placeholder="$t('signPage.verifyCodeHolder')"
                                               size="small">
+                                        <el-tooltip slot="append" :content="$t('signPage.sendCodeTip')" placement="top"
+                                                    effect="light"
+                                                    popper-class="my_tooltip">
+                                            <el-button
+                                                    :disabled="sendBtTextFromLang!==$t('signPage.sendCode')"
+                                                    @click="sendCode()">{{sendBtTextFromLang}}
+                                            </el-button>
+                                        </el-tooltip>
                                     </el-input>
                                 </el-form-item>
                                 <button class="margin-top-1rem mobileBt"
@@ -144,15 +145,6 @@
             loginType() {
                 return this.$store.state.loginType
             },
-            platform_token() {
-                return this.$store.state.sign_platform_token
-            },
-            access_token() {
-                return this.$store.state.sign_access_token
-            },
-            refresh_token() {
-                return this.$store.state.sign_refresh_token
-            },
             org() {
                 let org = this.$store.state.repoInfo.org_id;
                 if (org.length > 1) {
@@ -184,12 +176,6 @@
                     this.sendBtText = value
                 }
             },
-            sign_email() {
-                return this.$store.state.sign_email;
-            },
-            sign_id() {
-                return this.$store.state.sign_id;
-            },
             claTextUrl() {
                 return `${this.$store.state.domain}/cla-pdf`
             },
@@ -210,7 +196,7 @@
                             link_id: this.link_id,
                             lang: this.lang,
                             hash: this.cla_hash
-                        }, this.claTextUrl)
+                        }, this.claTextUrl);
                         this.fields = this.signPageData[this.value].fields;
                         if (Object.keys(this.rules).length === 0) {
                             this.setFieldsData();
@@ -477,8 +463,6 @@
                     this.$message.closeAll();
                     this.$message.error(this.$t('tips.not_fill_email'))
                 }
-
-
             },
             getNowDate() {
                 let date = new Date();
@@ -492,40 +476,6 @@
                         Object.assign(this.ruleForm, {[item.id]: year + '-' + month + '-' + day});
                         break;
                     }
-                }
-                if (this.loginType !== 'corporation') {
-                    this.getUserInfo()
-                }
-            },
-            getCookieData(resolve) {
-                if (document.cookie) {
-                    let cookieArr = document.cookie.split(';');
-                    let access_token, refresh_token, platform_token, _mark, error_code = '';
-                    cookieArr.forEach((item) => {
-                        let arr = item.split('=');
-                        let name = arr[0].trim();
-                        let value = arr[1].trim();
-                        if (name === '_mark') {
-                            _mark = value
-                        } else if (name === 'refresh_token') {
-                            refresh_token = value;
-                        } else if (name === 'platform_token') {
-                            platform_token = value;
-                        } else if (name === 'access_token') {
-                            access_token = value;
-                        } else if (name === 'sign_user') {
-                            this.$store.commit('setSignID', value);
-                        } else if (name === 'sign_email') {
-                            this.$store.commit('setSignEmail', value);
-                        } else if (name === 'error_code') {
-                            error_code = value;
-                        }
-                        cookie.remove(name, {path: '/'});
-                    });
-                    let data = {access_token, refresh_token, platform_token, resolve};
-                    this.$store.commit('setSignToken', data);
-                } else {
-                    resolve('complete');
                 }
             },
             upperFirstCase(word) {
@@ -583,7 +533,6 @@
                             dialogMessage: message,
                         });
                     }
-
                 }
             },
             getSignPage(resolve) {
@@ -717,34 +666,6 @@
                         })
                     }
                 })
-            },
-            getUserInfo() {
-                this.myForm.email = this.sign_email;
-                this.myForm.sign_id = this.sign_id;
-                let setName, setEmail, setPlanformID = false;
-                for (let item of this.fields) {
-                    if (item.type === 'name') {
-                        Object.assign(this.ruleForm, {[item.id]: this.myForm.name});
-                        setName = true;
-                        if (setName && setEmail && setPlanformID) {
-                            break;
-                        }
-                    }
-                    if (item.type === 'email') {
-                        Object.assign(this.ruleForm, {[item.id]: this.myForm.email});
-                        setEmail = true;
-                        if (setName && setEmail && setPlanformID) {
-                            break;
-                        }
-                    }
-                    if (item.type === 'platform_id') {
-                        Object.assign(this.ruleForm, {[item.id]: this.myForm.sign_id});
-                        setEmail = true;
-                        if (setName && setEmail && setPlanformID) {
-                            break;
-                        }
-                    }
-                }
             },
             setClaText(obj) {
                 this.$nextTick(() => {
@@ -892,15 +813,7 @@
                         Object.assign(info, {[key]: this.ruleForm[key] + ''})
                     }
                 }
-                if (this.$store.state.loginType === 'individual') {
-                    myUrl = `${url.individual_signing}/${this.link_id}/${this.cla_lang}/${this.cla_hash}`;
-                    obj = {
-                        id: this.myForm.sign_id,
-                        name: this.myForm.name,
-                        email: this.myForm.email,
-                        info: info,
-                    }
-                } else if (this.$store.state.loginType === 'corporation') {
+                if (this.$store.state.loginType === 'corporation') {
                     myUrl = `${url.corporation_signing}/${this.link_id}/${this.cla_lang}/${this.cla_hash}`;
                     obj = {
                         corporation_name: this.myForm.corporationName,
@@ -910,20 +823,25 @@
                         info: info,
                         verification_code: this.ruleForm.code
                     }
-                } else if (this.$store.state.loginType === 'employee') {
-                    myUrl = `${url.employee_signing}/${this.link_id}/${this.cla_lang}/${this.cla_hash}`;
+                } else {
                     obj = {
-                        id: this.myForm.sign_id,
                         name: this.myForm.name,
                         email: this.myForm.email,
                         verification_code: this.ruleForm.code,
                         info: info,
+                    };
+                    if (this.$store.state.loginType === 'individual') {
+                        myUrl = `${url.individual_signing}/${this.link_id}/${this.cla_lang}/${this.cla_hash}`;
+                    } else if (this.$store.state.loginType === 'employee') {
+                        myUrl = `${url.employee_signing}/${this.link_id}/${this.cla_lang}/${this.cla_hash}`;
                     }
                 }
-
                 this.sign(myUrl, obj)
             },
             sign(myUrl, obj) {
+                if (!myUrl) {
+                    return
+                }
                 http({
                     url: myUrl,
                     method: 'post',
@@ -1137,18 +1055,14 @@
         },
         created() {
             new Promise((resolve, reject) => {
-                this.getCookieData(resolve);
-            }).then(res => {
-                return new Promise((resolve, reject) => {
-                    this.getSignPage(resolve);
-                })
+                this.getSignPage(resolve);
             }).then(res => {
                 this.getNowDate()
             })
         },
         mounted() {
             this.setClientHeight();
-        }
+        },
     }
 </script>
 
