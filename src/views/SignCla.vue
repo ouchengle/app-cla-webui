@@ -203,9 +203,6 @@
                         }
                     }
                 });
-                if (this.loginType !== 'corporation') {
-                    this.getUserInfo()
-                }
                 if (this.sendBtTextFromLang === 'send code' || this.sendBtTextFromLang === '发送验证码') {
                     this.sendBtTextFromLang = this.$t('signPage.sendCode')
                 } else {
