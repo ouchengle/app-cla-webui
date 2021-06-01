@@ -23,9 +23,13 @@
             VueMarkdown,
         },
         inject: ['setClientHeight'],
+        computed: {
+            privacyText() {
+                return this.$store.state.privacyData
+            },
+        },
         data() {
             return {
-                privacyText: '',
                 platform: 'github',
                 owner: 'opensourceways',
                 repo: 'app-cla-server',
@@ -35,18 +39,21 @@
         },
         methods: {
             getPrivacy(platform, owner, repo, path) {
-                let _url = '';
-                if (platform === 'gitee') {
-                    _url = `https://gitee.com/api/v5/repos/${owner}/${repo}/contents/${path}`
-                } else if (platform === 'github') {
-                    _url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`
+                if (!this.privacyText) {
+                    let _url = '';
+                    if (platform === 'gitee') {
+                        _url = `https://gitee.com/api/v5/repos/${owner}/${repo}/contents/${path}`
+                    } else if (platform === 'github') {
+                        _url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`
+                    }
+                    axios({
+                        url: _url
+                    }).then(res => {
+                        let Base64 = require('js-base64').Base64;
+                        let privacy = Base64.decode(res.data.content);
+                        this.$store.commit('setPrivacyData', privacy)
+                    })
                 }
-                axios({
-                    url: _url
-                }).then(res => {
-                    let Base64 = require('js-base64').Base64;
-                    this.privacyText = Base64.decode(res.data.content)
-                })
             },
             init() {
                 this.$emit('getLangOptions', this.langOptions);
@@ -54,9 +61,6 @@
                 this.$emit('initHeader', this.langOptions[0].label);
                 this.getPrivacy(this.platform, this.owner, this.repo, this.path);
             },
-        },
-        activated() {
-            this.init()
         },
         created() {
             this.init()

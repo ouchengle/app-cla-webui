@@ -966,9 +966,7 @@
                     url: _url,
                 }).then(res => {
                     if (res && res.data.data && res.data.data.clas) {
-                        if (res.data.data.clas.length && applyTo === 'individual') {
-                            this.isBindIndividualCLA = true
-                        } else if (res.data.data.clas.length && applyTo === 'corporation') {
+                       if (res.data.data.clas.length && applyTo === 'corporation') {
                             this.isBindCorpCLA = true
                         }
                     }

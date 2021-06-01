@@ -118,6 +118,8 @@
                     } else {
                         this.$router.push('/managerList')
                     }
+                }else if (this.$route.path === '/privacy') {
+                    this.$router.push('/sign-cla')
                 }
             },
             openOrCloseMenu() {
@@ -247,7 +249,6 @@
                 this.isActive = !this.isActive;
             },
             changeI18N(language) {
-                console.log('changeI18N---' + language);
                 switch (language) {
                     case 'English':
                         this.$i18n.locale = 'en-us';
@@ -278,8 +279,6 @@
                 }
                 this.changeI18N(this.language);
                 this.setLangValue(this.language);
-                console.log(this.options);
-                console.log(this.value);
                 if (this.$store.state.loginInfo) {
                     this.role = this.$store.state.loginInfo.userInfo[0].role;
                 }
