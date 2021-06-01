@@ -2,9 +2,9 @@ const SIGNATURE_FILE_MAX_SIZE = 5;        //M
 const COPYRIGHT = 'Copyright ©2020 claSign';
 const INDIVIDUALMETADATAARR_EN = [
     {
-        title: `${sessionStorage.getItem('platform')}-ID`,
-        type: 'platform_id',
-        description: 'The ID of your authorized account',
+        title: 'Name',
+        type: 'name',
+        description: 'Your name',
         required: true,
     },
     {
@@ -13,30 +13,21 @@ const INDIVIDUALMETADATAARR_EN = [
         description: 'The email of your authorized account',
         required: true,
     },
-    {
-        title: 'Name',
-        type: 'name',
-        description: 'Your name',
-        required: true,
-    },];
+];
 const INDIVIDUALMETADATAARR_ZH = [
-    {
-        title: `${sessionStorage.getItem('platform')}-ID`,
-        type: 'platform_id',
-        description: '授权账号的ID',
-        required: true,
-    }, {
-        title: '邮箱',
-        type: 'email',
-        description: '授权账号的邮箱',
-        required: true,
-    },
     {
         title: '姓名',
         type: 'name',
         description: '你的姓名',
         required: true,
-    },];
+    },
+    {
+        title: '邮箱',
+        type: 'email',
+        description: '授权账号的邮箱',
+        required: true,
+    },
+];
 const CORPORATIONMETADATAARR_EN = [
     {
         title: 'Authorized Representative',
