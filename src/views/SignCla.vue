@@ -1001,6 +1001,7 @@
             },
             setClientHeight() {
                 this.$nextTick(() => {
+                    console.log(document.getElementById("signCla"));
                     document.getElementById("signCla").style.minHeight = '0px';
                     if (util.getClientHeight() > document.getElementById('signCla').offsetHeight) {
                         document.getElementById("signCla").style.minHeight = util.getClientHeight() + 'px'
