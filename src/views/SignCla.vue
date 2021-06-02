@@ -422,7 +422,6 @@
                                         dialogMessage: this.$t('tips.failed_to_send_email'),
                                     });
                                     break;
-
                                 case 'cla.not_same_corp':
                                     this.$store.commit('errorCodeSet', {
                                         dialogVisible: true,
@@ -920,6 +919,12 @@
                                 this.$store.commit('errorCodeSet', {
                                     dialogVisible: true,
                                     dialogMessage: this.$t('tips.wrong_verification_code'),
+                                });
+                                break;
+                            case 'cla.restricted_email_suffix':
+                                this.$store.commit('errorCodeSet', {
+                                    dialogVisible: true,
+                                    dialogMessage: this.$t('tips.restricted_email_suffix'),
                                 });
                                 break;
                             case 'cla.expired_verification_code':

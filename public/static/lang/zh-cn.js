@@ -70,7 +70,7 @@ module.exports = {
         unknown_email_platform: '目前不支持此类型的邮箱',
         failed_to_send_email: '发送邮件失败',
         wrong_verification_code: '验证码错误',
-        restricted_email_suffix: '受限的电子邮件后缀',
+        restricted_email_suffix: '受限的电子邮件后缀,请使用公司的专属邮箱',
         expired_verification_code: '验证码已过期',
         pdf_has_not_uploaded: '未上传组织的签名',
         num_of_corp_managers_exceeded: '管理员人数超出限制',
