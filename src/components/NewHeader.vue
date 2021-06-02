@@ -259,7 +259,6 @@
                     default:
                         this.$i18n.locale = 'en-us';
                         break;
-
                 }
             },
             setLangValue(language) {
@@ -272,10 +271,8 @@
             init(value) {
                 if (value !== '' && value !== undefined) {
                     this.language = value
-                } else {
-                    if (localStorage.getItem('lang')) {
+                } else if (localStorage.getItem('lang')) {
                         this.language = localStorage.getItem('lang')
-                    }
                 }
                 this.changeI18N(this.language);
                 this.setLangValue(this.language);

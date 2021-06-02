@@ -69,7 +69,7 @@ module.exports = {
         unknown_email_platform: 'This type of mailbox is not supported at the moment',
         failed_to_send_email: 'Failed to send mail.',
         wrong_verification_code: 'Verification code error.',
-        restricted_email_suffix: 'Restricted email suffixes',
+        restricted_email_suffix: 'Restricted email suffixes. Please use the company\'s exclusive email',
         expired_verification_code: 'Verification code expired.',
         pdf_has_not_uploaded: 'Signature of organization is not uploaded.',
         num_of_corp_managers_exceeded: 'The number of managers exceeds the limit.',
