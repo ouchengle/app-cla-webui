@@ -62,6 +62,11 @@
                 this.getPrivacy(this.platform, this.owner, this.repo, this.path);
             },
         },
+        activated() {
+            this.$emit('getLangOptions', this.langOptions);
+            localStorage.setItem('lang', this.langOptions[0].label);
+            this.$emit('initHeader', this.langOptions[0].label);
+        },
         created() {
             this.init()
         },

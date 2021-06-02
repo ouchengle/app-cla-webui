@@ -20,26 +20,17 @@
                                               :required="item.required"
                                               :prop="item.id">
                                     <div><span v-if="item.required" class="requiredIcon">*</span>{{item.title}}</div>
-                                    <el-input v-if="item.type==='email'"
-                                              :placeholder="$t('signPage.holder',{title:item.title})"
-                                              :readonly="loginType!=='corporation'" v-model="ruleForm[item.id]"
-                                              size="small" @blur="setMyForm(item.type,ruleForm[item.id])"></el-input>
-                                    <el-input v-else-if="item.type==='platform_id'"
-                                              :readonly="loginType!=='corporation'"
-                                              v-model="ruleForm[item.id]"
-                                              size="small" @blur="setMyForm(item.type,ruleForm[item.id])"></el-input>
-                                    <el-input v-else-if="item.type==='date'" readonly="" v-model="ruleForm[item.id]"
+                                    <el-input v-if="item.type==='date'" readonly="" v-model="ruleForm[item.id]"
                                               size="small" @blur="setMyForm(item.type,ruleForm[item.id])"></el-input>
                                     <el-input v-else v-model="ruleForm[item.id]"
                                               :placeholder="$t('signPage.holder',{title:item.title})" size="small"
                                               @blur="setMyForm(item.type,ruleForm[item.id])"></el-input>
                                 </el-form-item>
                                 <el-form-item
-                                        v-if="rules.code&&(loginType==='corporation'||loginType==='employee')"
-                                        :required="rules.code[0].required"
+                                        v-if="rules.code"
                                         label-width="0"
                                         prop="code">
-                                    <div><span v-if="rules.code[0].required" class="requiredIcon">*</span>{{$t('signPage.verifyCode')}}
+                                    <div><span class="requiredIcon">*</span>{{$t('signPage.verifyCode')}}
                                     </div>
                                     <el-input v-model="ruleForm.code" :placeholder="$t('signPage.verifyCodeHolder')"
                                               size="small">
@@ -50,7 +41,7 @@
                                         :disabled="sendBtTextFromLang!==$t('signPage.sendCode')"
                                         @click="sendCode()">{{sendBtTextFromLang}}
                                 </button>
-                                <div class="borderClass fontSize12"><span style="color: #F56C6C;">*</span>{{$t('signPage.requireText')}}
+                                <div class="borderClass fontSize12"><span class="requiredIcon">*</span>{{$t('signPage.requireText')}}
                                 </div>
                                 <div class="margin-top-1rem fontSize12">
                                     <el-checkbox v-model="isRead"><span>{{$t('signPage.checkBoxText1')}}<span
@@ -73,31 +64,26 @@
                                               :required="item.required"
                                               :prop="item.id"
                                               :key="index">
-                                    <el-input v-if="item.type==='email'"
-                                              :placeholder="$t('signPage.holder',{title:item.title})"
-                                              :readonly="loginType!=='corporation'" v-model="ruleForm[item.id]"
-                                              size="small" @blur="setMyForm(item.type,ruleForm[item.id])"></el-input>
-                                    <el-input v-else-if="item.type==='platform_id'"
-                                              :readonly="loginType!=='corporation'"
-                                              v-model="ruleForm[item.id]"
-                                              size="small" @blur="setMyForm(item.type,ruleForm[item.id])"></el-input>
-                                    <el-input v-else-if="item.type==='date'" readonly="" v-model="ruleForm[item.id]"
+                                    <el-input v-if="item.type==='date'" readonly="" v-model="ruleForm[item.id]"
                                               size="small" @blur="setMyForm(item.type,ruleForm[item.id])"></el-input>
                                     <el-input v-else v-model="ruleForm[item.id]"
                                               :placeholder="$t('signPage.holder',{title:item.title})" size="small"
                                               @blur="setMyForm(item.type,ruleForm[item.id])"></el-input>
                                 </el-form-item>
                                 <el-form-item
-                                        v-if="rules.code&&(loginType==='corporation'||loginType==='employee')"
+                                        v-if="rules.code"
                                         :label="$t('signPage.verifyCode')"
-                                        :required="rules.code[0].required"
                                         prop="code">
                                     <el-input v-model="ruleForm.code" :placeholder="$t('signPage.verifyCodeHolder')"
                                               size="small">
-                                        <el-button slot="append"
-                                                   :disabled="sendBtTextFromLang!==$t('signPage.sendCode')"
-                                                   @click="sendCode()">{{sendBtTextFromLang}}
-                                        </el-button>
+                                        <el-tooltip slot="append" :content="$t('signPage.sendCodeTip')" placement="top"
+                                                    effect="light"
+                                                    popper-class="my_tooltip">
+                                            <el-button
+                                                    :disabled="sendBtTextFromLang!==$t('signPage.sendCode')"
+                                                    @click="sendCode()">{{sendBtTextFromLang}}
+                                            </el-button>
+                                        </el-tooltip>
                                     </el-input>
                                 </el-form-item>
                                 <div class="borderClass fontSize12"><span class="requiredIcon">*</span>{{$t('signPage.requireText')}}
@@ -130,9 +116,7 @@
     import * as util from '../util/util'
     import * as url from '../util/api'
     import {mapActions} from 'vuex'
-    import http from '../util/sign_http'
     import axios from '../util/_axios'
-    import cookie from 'js-cookie'
     import ReLoginDialog from '../components/ReLoginDialog'
     import ReTryDialog from '../components/ReTryDialog'
     import SignSuccessDialog from '../components/SignSuccessDialog'
@@ -149,15 +133,6 @@
             },
             loginType() {
                 return this.$store.state.loginType
-            },
-            platform_token() {
-                return this.$store.state.sign_platform_token
-            },
-            access_token() {
-                return this.$store.state.sign_access_token
-            },
-            refresh_token() {
-                return this.$store.state.sign_refresh_token
             },
             org() {
                 let org = this.$store.state.repoInfo.org_id;
@@ -190,12 +165,6 @@
                     this.sendBtText = value
                 }
             },
-            sign_email() {
-                return this.$store.state.sign_email;
-            },
-            sign_id() {
-                return this.$store.state.sign_id;
-            },
             claTextUrl() {
                 return `${this.$store.state.domain}/cla-pdf`
             },
@@ -224,9 +193,6 @@
                         }
                     }
                 });
-                if (this.loginType !== 'corporation') {
-                    this.getUserInfo()
-                }
                 if (this.sendBtTextFromLang === 'send code' || this.sendBtTextFromLang === '发送验证码') {
                     this.sendBtTextFromLang = this.$t('signPage.sendCode')
                 } else {
@@ -249,6 +215,9 @@
         },
         data() {
             return {
+                corporation: 'corporation',
+                individual: 'individual',
+                employee: 'employee',
                 claText: '',
                 numPages: null,
                 lang: '',
@@ -402,14 +371,8 @@
             sendCode() {
                 let reg = new RegExp("^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$");
                 let email = this.myForm.email;
-                let myHttp = '';
-                if (this.$store.state.loginType === 'individual' || this.$store.state.loginType === 'employee') {
-                    myHttp = http
-                } else {
-                    myHttp = axios
-                }
                 if (email && reg.test(email)) {
-                    myHttp({
+                    axios({
                         url: `${url.sendVerifyCode}/${this.link_id}/${this.myForm.email}`,
                         method: 'post',
                     }).then(res => {
@@ -453,7 +416,6 @@
                                         dialogMessage: this.$t('tips.unknown_token'),
                                     });
                                     break;
-
                                 case 'cla.failed_to_send_email':
                                     this.$store.commit('errorCodeSet', {
                                         dialogVisible: true,
@@ -504,40 +466,6 @@
                         Object.assign(this.ruleForm, {[item.id]: year + '-' + month + '-' + day});
                         break;
                     }
-                }
-                if (this.loginType !== 'corporation') {
-                    this.getUserInfo()
-                }
-            },
-            getCookieData(resolve) {
-                if (document.cookie) {
-                    let cookieArr = document.cookie.split(';');
-                    let access_token, refresh_token, platform_token, _mark, error_code = '';
-                    cookieArr.forEach((item) => {
-                        let arr = item.split('=');
-                        let name = arr[0].trim();
-                        let value = arr[1].trim();
-                        if (name === '_mark') {
-                            _mark = value
-                        } else if (name === 'refresh_token') {
-                            refresh_token = value;
-                        } else if (name === 'platform_token') {
-                            platform_token = value;
-                        } else if (name === 'access_token') {
-                            access_token = value;
-                        } else if (name === 'sign_user') {
-                            this.$store.commit('setSignID', value);
-                        } else if (name === 'sign_email') {
-                            this.$store.commit('setSignEmail', value);
-                        } else if (name === 'error_code') {
-                            error_code = value;
-                        }
-                        cookie.remove(name, {path: '/'});
-                    });
-                    let data = {access_token, refresh_token, platform_token, resolve};
-                    this.$store.commit('setSignToken', data);
-                } else {
-                    resolve('complete');
                 }
             },
             upperFirstCase(word) {
@@ -592,12 +520,12 @@
                         this.$emit('initHeader', this.upperFirstCase(this.lang))
                     } else {
                         let message = '';
-                        if (this.$store.state.loginType === 'corporation') {
+                        if (this.$store.state.loginType === this.corporation) {
                             message = this.$t('tips.no_cla_binding_corp')
-                        } else if (this.$store.state.loginType === 'employee') {
+                        } else if (this.$store.state.loginType === this.employee) {
                             message = this.$t('tips.no_cla_binding_emp')
                         }
-                        if (this.$store.state.loginType === 'individual') {
+                        if (this.$store.state.loginType === this.individual) {
                             message = this.$t('tips.no_cla_binding_individual')
                         }
                         this.$store.commit('setSignReLogin', {
@@ -611,21 +539,13 @@
             getSignPage(resolve) {
                 let applyTo = '';
                 let _url = '';
-                let _http = '';
-                if
-                (this.$store.state.loginType === 'individual' || this.$store.state.loginType === 'employee') {
-                    applyTo = 'individual';
-                    _http = http;
-                } else if (this.$store.state.loginType === 'corporation') {
-                    applyTo = 'corporation';
-                    _http = axios;
-                }
+                this.loginType === this.corporation ? applyTo = this.loginType : applyTo = this.individual;
                 if (this.$store.state.repoInfo.repo_id) {
                     _url = `${url.getSignPage}/${this.$store.state.repoInfo.platform}/${this.$store.state.repoInfo.org_id}:${this.$store.state.repoInfo.repo_id}/${applyTo}`
                 } else {
                     _url = `${url.getSignPage}/${this.$store.state.repoInfo.platform}/${this.$store.state.repoInfo.org_id}/${applyTo}`
                 }
-                _http({
+                axios({
                     url: _url,
                 }).then(res => {
                     this.setData(res, resolve)
@@ -634,12 +554,12 @@
                         switch (err.data.data.error_code) {
                             case 'cla.no_cla_binding':
                                 let message = '';
-                                if (this.$store.state.loginType === 'corporation') {
+                                if (this.$store.state.loginType === this.corporation) {
                                     message = this.$t('tips.no_cla_binding_corp')
-                                } else if (this.$store.state.loginType === 'employee') {
+                                } else if (this.$store.state.loginType === this.employee) {
                                     message = this.$t('tips.no_cla_binding_emp')
                                 }
-                                if (this.$store.state.loginType === 'individual') {
+                                if (this.$store.state.loginType === this.individual) {
                                     message = this.$t('tips.no_cla_binding_individual')
                                 }
                                 this.$store.commit('setSignReLogin', {
@@ -739,34 +659,6 @@
                         })
                     }
                 })
-            },
-            getUserInfo() {
-                this.myForm.email = this.sign_email;
-                this.myForm.sign_id = this.sign_id;
-                let setName, setEmail, setPlanformID = false;
-                for (let item of this.fields) {
-                    if (item.type === 'name') {
-                        Object.assign(this.ruleForm, {[item.id]: this.myForm.name});
-                        setName = true;
-                        if (setName && setEmail && setPlanformID) {
-                            break;
-                        }
-                    }
-                    if (item.type === 'email') {
-                        Object.assign(this.ruleForm, {[item.id]: this.myForm.email});
-                        setEmail = true;
-                        if (setName && setEmail && setPlanformID) {
-                            break;
-                        }
-                    }
-                    if (item.type === 'platform_id') {
-                        Object.assign(this.ruleForm, {[item.id]: this.myForm.sign_id});
-                        setEmail = true;
-                        if (setName && setEmail && setPlanformID) {
-                            break;
-                        }
-                    }
-                }
             },
             setClaText(obj) {
                 this.$nextTick(() => {
@@ -914,15 +806,7 @@
                         Object.assign(info, {[key]: this.ruleForm[key] + ''})
                     }
                 }
-                if (this.$store.state.loginType === 'individual') {
-                    myUrl = `${url.individual_signing}/${this.link_id}/${this.cla_lang}/${this.cla_hash}`;
-                    obj = {
-                        id: this.myForm.sign_id,
-                        name: this.myForm.name,
-                        email: this.myForm.email,
-                        info: info,
-                    }
-                } else if (this.$store.state.loginType === 'corporation') {
+                if (this.$store.state.loginType === this.corporation) {
                     myUrl = `${url.corporation_signing}/${this.link_id}/${this.cla_lang}/${this.cla_hash}`;
                     obj = {
                         corporation_name: this.myForm.corporationName,
@@ -932,30 +816,36 @@
                         info: info,
                         verification_code: this.ruleForm.code
                     }
-                } else if (this.$store.state.loginType === 'employee') {
-                    myUrl = `${url.employee_signing}/${this.link_id}/${this.cla_lang}/${this.cla_hash}`;
+                } else {
                     obj = {
-                        id: this.myForm.sign_id,
                         name: this.myForm.name,
                         email: this.myForm.email,
                         verification_code: this.ruleForm.code,
                         info: info,
+                    }
+                    if (this.$store.state.loginType === this.individual) {
+                        myUrl = `${url.individual_signing}/${this.link_id}/${this.cla_lang}/${this.cla_hash}`;
+                    } else if (this.$store.state.loginType === this.employee) {
+                        myUrl = `${url.employee_signing}/${this.link_id}/${this.cla_lang}/${this.cla_hash}`;
                     }
                 }
 
                 this.sign(myUrl, obj)
             },
             sign(myUrl, obj) {
-                http({
+                if (!myUrl) {
+                    return
+                }
+                axios({
                     url: myUrl,
                     method: 'post',
                     data: obj,
                 }).then(res => {
-                    if (this.$store.state.loginType === 'corporation') {
+                    if (this.$store.state.loginType === this.corporation) {
                         this.tipsMessage = this.$t('tips.corp_sign')
-                    } else if (this.$store.state.loginType === 'employee') {
+                    } else if (this.$store.state.loginType === this.employee) {
                         this.tipsMessage = this.$t('tips.emp_sign')
-                    } else if (this.$store.state.loginType === 'individual') {
+                    } else if (this.$store.state.loginType === this.individual) {
                         this.tipsMessage = this.$t('tips.individual_sign')
                     }
                     this.$store.commit('setSignSuccess', {
@@ -968,7 +858,7 @@
                         switch (err.data.data.error_code) {
                             case 'cla.resigned':
                                 let message = '';
-                                if (this.$store.state.loginType === 'corporation') {
+                                if (this.$store.state.loginType === this.corporation) {
                                     message = this.$t('tips.corp_has_signed');
                                 } else {
                                     message = this.$t('tips.has_signed')
@@ -1127,6 +1017,7 @@
                 }
                 let langOptions = [];
                 let langLabel = '';
+                this.cla_lang = '';
                 this.signPageData.forEach((item, index) => {
                     langLabel = this.upperFirstCase(item.language)
                     langOptions.push({value: index, label: langLabel});
@@ -1158,24 +1049,20 @@
                     localStorage.setItem('lang', this.upperFirstCase(this.lang))
                 }
                 this.$emit('initHeader', this.upperFirstCase(this.lang))
-            }
-            this.$refs.pdf_iframe.contentWindow.onload = () => {
-                this.$refs.pdf_iframe.contentWindow.postMessage({
-                    link_id: this.link_id,
-                    lang: this.lang,
-                    hash: this.cla_hash,
-                    pdfData: this.pdfData,
-                }, this.claTextUrl)
+                this.$refs.pdf_iframe.contentWindow.onload = () => {
+                    this.$refs.pdf_iframe.contentWindow.postMessage({
+                        link_id: this.link_id,
+                        lang: this.lang,
+                        hash: this.cla_hash,
+                        pdfData: this.pdfData,
+                    }, this.claTextUrl)
+                }
             }
         },
         created() {
             this.setIframeEventListener();
             new Promise((resolve, reject) => {
-                this.getCookieData(resolve);
-            }).then(res => {
-                return new Promise((resolve, reject) => {
-                    this.getSignPage(resolve);
-                })
+                this.getSignPage(resolve);
             }).then(res => {
                 this.getNowDate()
             })

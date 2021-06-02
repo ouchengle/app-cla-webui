@@ -767,8 +767,6 @@
     import NewFooter from '@components/NewFooter'
     import * as util from '../util/util'
     import * as url from '../util/api'
-    import http from '../util/http'
-    import sign_http from '../util/sign_http'
     import _axios from '../util/_axios'
     import _cookie from 'js-cookie'
     import {mapActions} from 'vuex'
@@ -950,23 +948,16 @@
             },
             getSignPage(platform, org_id, repo_id, applyTo) {
                 let _url = '';
-                let _http = '';
-                if
-                (applyTo === 'individual') {
-                    _http = sign_http;
-                } else if (applyTo === 'corporation') {
-                    _http = _axios;
-                }
                 if (repo_id) {
                     _url = `${url.getSignPage}/${platform}/${org_id}:${repo_id}/${applyTo}`
                 } else {
                     _url = `${url.getSignPage}/${platform}/${org_id}/${applyTo}`
                 }
-                _http({
+                _axios({
                     url: _url,
                 }).then(res => {
                     if (res && res.data.data && res.data.data.clas) {
-                       if (res.data.data.clas.length && applyTo === 'corporation') {
+                        if (res.data.data.clas.length && applyTo === 'corporation') {
                             this.isBindCorpCLA = true
                         }
                     }
@@ -976,66 +967,7 @@
 
             submit(loginType) {
                 this.setLoginTypeAct(loginType);
-                if (loginType === 'individual' || loginType === 'employee') {
-                    http({
-                        url: `${url.getAuthCodeUrl}/${this.platform}/sign`,
-                    }).then(res => {
-                        window.location.href = res.data.data.url
-                    }).catch(err => {
-                        if (err.data.hasOwnProperty('data')) {
-                            switch (err.data.data.error_code) {
-                                case 'cla.invalid_parameter':
-                                    let repoInfo = this.$store.state.repoInfo;
-                                    let params = repoInfo.repo_id ? `${repoInfo.platform}/${repoInfo.org_id}/${repoInfo.repo_id}` : `${repoInfo.platform}/${repoInfo.org_id}`
-                                    let path = '';
-                                    if (sessionStorage.getItem('orgAddress')) {
-                                        path = `${this.signRouter}/${util.strToBase64(params)}/${sessionStorage.getItem('orgAddress')}`
-                                    } else {
-                                        path = `${this.signRouter}/${util.strToBase64(params)}`
-                                    }
-                                    this.$router.replace(path)
-                                    break;
-                                case 'cla.invalid_token':
-                                    this.$store.commit('setSignReLogin', {
-                                        dialogVisible: true,
-                                        dialogMessage: this.$t('tips.invalid_token'),
-                                    });
-                                    break;
-                                case 'cla.missing_token':
-                                    this.$store.commit('setSignReLogin', {
-                                        dialogVisible: true,
-                                        dialogMessage: this.$t('tips.missing_token'),
-                                    });
-                                    break;
-                                case 'cla.unknown_token':
-                                    this.$store.commit('setSignReLogin', {
-                                        dialogVisible: true,
-                                        dialogMessage: this.$t('tips.unknown_token'),
-                                    });
-                                    break;
-                                case 'cla.system_error':
-                                    this.$store.commit('errorCodeSet', {
-                                        dialogVisible: true,
-                                        dialogMessage: this.$t('tips.system_error'),
-                                    });
-                                    break;
-                                default :
-                                    this.$store.commit('errorCodeSet', {
-                                        dialogVisible: true,
-                                        dialogMessage: this.$t('tips.unknown_error'),
-                                    });
-                                    break;
-                            }
-                        } else {
-                            this.$store.commit('errorCodeSet', {
-                                dialogVisible: true,
-                                dialogMessage: this.$t('tips.system_error'),
-                            })
-                        }
-                    })
-                } else {
-                    this.$router.push('/sign-cla')
-                }
+                this.$router.push('/sign-cla')
             },
             clickSignTypeGuide(type) {
                 this.signType = type;
