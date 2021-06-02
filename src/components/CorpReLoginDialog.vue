@@ -34,15 +34,18 @@
                 }
             },
             dialogMessage() {
-                if (localStorage.getItem('lang') === '0') {
+                if (localStorage.getItem('lang') === this.english) {
                     return 'dialogMessageEn'
-                } else if (localStorage.getItem('lang') === '1') {
+                } else if (localStorage.getItem('lang') === this.chinese) {
                     return 'dialogMessage'
                 }
             },
         },
         data() {
-            return {}
+            return {
+                chinese:'Chinese',
+                english:'English',
+            }
         },
         methods: {
             clickGoHome() {

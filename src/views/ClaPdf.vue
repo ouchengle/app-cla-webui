@@ -7,7 +7,7 @@
 
 <script>
     import pdf from 'vue-pdf'
-    import http from '../util/sign_http'
+    import http from '../util/_axios'
     import * as url from '../util/api'
 
     export default {
