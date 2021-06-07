@@ -6,6 +6,12 @@
                     <svg-icon icon-class="logo" class="icon"></svg-icon>
                 </div>
                 <div>
+                    <div v-if="showHeaderMenu==='corp'">
+                        <div>
+                            <span>{{communityInfo}}</span>
+                            <span class="margin-left-1rem">{{this.$store.state.loginInfo.userName}}</span>
+                        </div>
+                    </div>
                     <div>
                         <div v-if="showHeaderMenu" class="menuBox">
                             <div class="userImgBox" id="imgBox">
@@ -84,6 +90,14 @@
 
     export default {
         name: "NewHeader",
+        computed:{
+            communityInfo(){
+                if (this.$store.state.loginInfo.userInfo[0].repo_id) {
+                    return `${this.$store.state.loginInfo.userInfo[0].org_id}/${this.$store.state.loginInfo.userInfo[0].repo_id}`
+                }
+                    return this.$store.state.loginInfo.userInfo[0].org_id
+            },
+        },
         data() {
             return {
                 role: '',
@@ -118,7 +132,7 @@
                     } else {
                         this.$router.push('/managerList')
                     }
-                }else if (this.$route.path === '/privacy') {
+                } else if (this.$route.path === '/privacy') {
                     this.$router.push('/sign-cla')
                 }
             },
@@ -272,7 +286,7 @@
                 if (value !== '' && value !== undefined) {
                     this.language = value
                 } else if (localStorage.getItem('lang')) {
-                        this.language = localStorage.getItem('lang')
+                    this.language = localStorage.getItem('lang')
                 }
                 this.changeI18N(this.language);
                 this.setLangValue(this.language);
@@ -324,6 +338,10 @@
             padding: 0 1rem;
             height: 5.5rem;
 
+            .margin-left-1rem {
+                margin-left: 1rem;
+            }
+
             .box {
                 cursor: pointer;
             }
@@ -334,6 +352,10 @@
 
             .pointer {
                 cursor: pointer;
+            }
+
+            .infoBox {
+
             }
 
             .menuBox {
