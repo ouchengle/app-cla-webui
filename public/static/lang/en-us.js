@@ -190,6 +190,7 @@ module.exports = {
         managerEmail: 'Manager Email',
         managerId: 'Manager ID',
         managerIdDesc: 'The ID used by the manager to log in to the system, can be customized and cannot be repeated',
+        search: 'Search',
     },
     index: {
         org_login: 'Opensource Community Manager',

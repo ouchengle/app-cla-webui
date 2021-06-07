@@ -190,6 +190,7 @@ module.exports = {
         managerEmail: '管理员邮箱',
         managerId: '管理员用户名',
         managerIdDesc: '管理员用于登陆系统的ID，可自定义且不能重复',
+        search: '查询',
     },
     index: {
         org_login: '开源社区管理员',
