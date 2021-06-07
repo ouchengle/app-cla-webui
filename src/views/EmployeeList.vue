@@ -4,6 +4,23 @@
         <el-tabs v-model="active">
             <el-tab-pane :label="$t('corp.inactive')" name="first" style="margin-top: 1rem">
                 <div style="margin-bottom: 1rem" class="tableStyle">
+                    <el-row :gutter="10">
+                        <el-col :offset="15" :span="6">
+                            <el-input
+                                    clearable
+                                    @keydown.native="pressEnter(inactiveSearchValue,inactiveData)"
+                                    :placeholder="$t('corp.email_input_holder')"
+                                    @input="searchEmail(inactiveSearchValue,inactiveData)"
+                                    v-model="inactiveSearchValue">
+                                <i slot="prefix" class="el-input__icon el-icon-search"></i>
+                            </el-input>
+                        </el-col>
+                        <el-col :span="3">
+                            <el-button @click="searchEmail(inactiveSearchValue,inactiveData)" class="searchButton">
+                                {{$t('corp.search')}}
+                            </el-button>
+                        </el-col>
+                    </el-row>
                     <el-table
                             :empty-text="$t('corp.no_data')"
                             class="tableClass"
@@ -62,6 +79,23 @@
             </el-tab-pane>
             <el-tab-pane :label="$t('corp.active')" name="second" style="margin-top: 1rem">
                 <div style="margin-bottom: 1rem" class="tableStyle">
+                    <el-row :gutter="10">
+                        <el-col :offset="15" :span="6">
+                            <el-input
+                                    clearable
+                                    @keydown.native="pressEnter(activeSearchValue,activeData)"
+                                    :placeholder="$t('corp.email_input_holder')"
+                                    @input="searchEmail(activeSearchValue,activeData)"
+                                    v-model="activeSearchValue">
+                                <i slot="prefix" class="el-input__icon el-icon-search"></i>
+                            </el-input>
+                        </el-col>
+                        <el-col :span="3">
+                            <el-button @click="searchEmail(activeSearchValue,activeData)" class="searchButton">
+                                {{$t('corp.search')}}
+                            </el-button>
+                        </el-col>
+                    </el-row>
                     <el-table
                             :empty-text="$t('corp.no_data')"
                             class="tableClass"
@@ -132,6 +166,8 @@
         },
         data() {
             return {
+                inactiveSearchValue: '',
+                activeSearchValue: '',
                 inactivePageData: [],
                 activePageData: [],
                 pageSize: 5,
@@ -148,7 +184,7 @@
             }
         },
         computed: {
-            deleteMessage(){
+            deleteMessage() {
                 return this.$t('corp.deleteTips')
             },
             orgValue() {
@@ -168,6 +204,29 @@
             },
         },
         methods: {
+            pressEnter(searchValue, pageData) {
+                if (event.keyCode === 13) {
+                    this.searchEmail(searchValue, pageData)
+                }
+            },
+            searchEmail(searchValue, pageData) {
+                if (searchValue.trim() === '') {
+                    this.getEmployee()
+                } else {
+                    let searchData = [];
+                    for (let i = 0; i < pageData.length; i++) {
+                        if (pageData[i].email.indexOf(searchValue.trim()) !== -1) {
+                            searchData.push(pageData[i]);
+                            break;
+                        }
+                    }
+                    if (this.active === 'first') {
+                        this.inactivePageData = searchData
+                    } else if (this.active === 'second') {
+                        this.activePageData = searchData
+                    }
+                }
+            },
             getInactivePageData() {
                 let data = [];
                 data = this.inactiveData.slice((this.inactiveCurrentPage - 1) * this.pageSize, this.inactiveCurrentPage * this.pageSize);
@@ -196,7 +255,7 @@
                 this.inactiveCurrentPage = page;
                 this.inactivePageData = this.getInactivePageData()
             },
-            cancelDeleteEmployee(){
+            cancelDeleteEmployee() {
                 this.deleteUserVisible = false;
             },
             submitDeleteEmployee() {
@@ -584,6 +643,18 @@
 
         .el-pagination button:disabled {
             cursor: auto;
+        }
+
+        .searchButton {
+            width: 100%;
+            border-radius: 1rem;
+            border: none;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            background: linear-gradient(to right, #97DB30, #319E55);
+            margin-bottom: 1rem;
+            user-select: none;
         }
     }
 
