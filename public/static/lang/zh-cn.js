@@ -137,6 +137,7 @@ module.exports = {
         checkRepoMessage: '您输入的仓库不属于该组织或者该仓库为私有仓库或者该仓库不存在，是否继续？',
         cla_is_used: '该CLA已经被使用',
         go_to_sign_employee_cla: '你所在的公司已经签署企业CLA，所以你只能签署员工CLA',
+        page_error: '页面错误，请关闭页面重新打开',
     },
     header: {
         home: '首页',

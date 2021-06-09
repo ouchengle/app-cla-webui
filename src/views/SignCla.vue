@@ -236,11 +236,9 @@
                 claIdArr: [],
                 isVerify: false,
                 verifyCode: '',
-                platform: this.$store.state.repoInfo.platform,
                 dialogVisible: false,
                 repositoryOptions: [],
                 role: '0',
-                repo: this.$store.state.repoInfo.repo_id,
                 ruleForm: {},
                 myForm: {},
                 rules: {},
@@ -539,10 +537,18 @@
                 let applyTo = '';
                 let _url = '';
                 this.loginType === this.corporation ? applyTo = this.loginType : applyTo = this.individual;
-                if (this.$store.state.repoInfo.repo_id) {
-                    _url = `${url.getSignPage}/${this.$store.state.repoInfo.platform}/${this.$store.state.repoInfo.org_id}:${this.$store.state.repoInfo.repo_id}/${applyTo}`
-                } else {
-                    _url = `${url.getSignPage}/${this.$store.state.repoInfo.platform}/${this.$store.state.repoInfo.org_id}/${applyTo}`
+                try {
+                    if (this.$store.state.repoInfo.repo_id) {
+                        _url = `${url.getSignPage}/${this.$store.state.repoInfo.platform}/${this.$store.state.repoInfo.org_id}:${this.$store.state.repoInfo.repo_id}/${applyTo}`
+                    } else {
+                        _url = `${url.getSignPage}/${this.$store.state.repoInfo.platform}/${this.$store.state.repoInfo.org_id}/${applyTo}`
+                    }
+                }catch (e) {
+                    this.$store.commit('errorCodeSet', {
+                        dialogVisible: true,
+                        dialogMessage: this.$t('tips.page_error'),
+                    });
+                    return
                 }
                 axios({
                     url: _url,
@@ -612,24 +618,6 @@
                                 this.$store.commit('setSignReLogin', {
                                     dialogVisible: true,
                                     dialogMessage: this.$t('tips.uncompleted_signing'),
-                                });
-                                break;
-                            case 'cla.unknown_email_platform':
-                                this.$store.commit('errorCodeSet', {
-                                    dialogVisible: true,
-                                    dialogMessage: this.$t('tips.unknown_email_platform'),
-                                });
-                                break;
-                            case 'cla.pdf_has_not_uploaded':
-                                this.$store.commit('setSignReLogin', {
-                                    dialogVisible: true,
-                                    dialogMessage: this.$t('tips.pdf_has_not_uploaded'),
-                                });
-                                break;
-                            case 'cla.not_same_corp':
-                                this.$store.commit('errorCodeSet', {
-                                    dialogVisible: true,
-                                    dialogMessage: this.$t('tips.not_same_corp'),
                                 });
                                 break;
                             case 'cla.not_ready_to_sign':
@@ -933,28 +921,10 @@
                                     dialogMessage: this.$t('tips.expired_verification_code'),
                                 });
                                 break;
-                            case 'cla.not_same_corp':
-                                this.$store.commit('errorCodeSet', {
-                                    dialogVisible: true,
-                                    dialogMessage: this.$t('tips.not_same_corp'),
-                                });
-                                break;
                             case 'cla.error_parsing_api_body':
                                 this.$store.commit('errorCodeSet', {
                                     dialogVisible: true,
                                     dialogMessage: this.$t('tips.error_parsing_api_body'),
-                                });
-                                break;
-                            case 'cla.unmatched_email':
-                                this.$store.commit('errorCodeSet', {
-                                    dialogVisible: true,
-                                    dialogMessage: this.$t('tips.unmatched_email'),
-                                });
-                                break;
-                            case 'cla.unmatched_user_id':
-                                this.$store.commit('errorCodeSet', {
-                                    dialogVisible: true,
-                                    dialogMessage: this.$t('tips.unmatched_user_id'),
                                 });
                                 break;
                             case 'cla.no_link':

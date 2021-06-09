@@ -137,6 +137,7 @@ module.exports = {
         checkRepoMessage: 'The repository you entered does not belong to the organization, or the repository is private or does not exist. Do you want to continue?',
         cla_is_used: 'The CLA has been used',
         go_to_sign_employee_cla: 'Your company has signed corporation CLA, so you can only sign employee CLA',
+        page_error: 'Page error, please close the page and reopen',
     },
     header: {
         home: 'Home',
