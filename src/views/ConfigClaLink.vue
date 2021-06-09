@@ -185,7 +185,20 @@
             toNextPage() {
                 if (this.cla_link_individual && this.individualClaLanguageValue) {
                     if (this.cla_link_corporation && this.corpClaLanguageValue || !(this.cla_link_corporation || this.corpClaLanguageValue)) {
-                        this.$router.replace('/config-fields')
+                        let arr = this.cla_link_individual.trim().split('.');
+                        let isRightFormat = true;
+                        if (this.cla_link_corporation) {
+                            let arr = this.cla_link_corporation.split('.');
+                            if (arr[arr.length - 1] !== 'pdf') {
+                                isRightFormat = false
+                            }
+                        }
+                        if (arr[arr.length - 1] === 'pdf' && isRightFormat) {
+                            this.$router.replace('/config-fields')
+                        } else {
+                            this.$message.closeAll();
+                            this.$message.error(this.$t('org.cla_format_err'))
+                        }
                     } else if (this.cla_link_corporation) {
                         this.$store.commit('errorCodeSet', {
                             dialogVisible: true,
