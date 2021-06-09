@@ -10,7 +10,7 @@ const INDIVIDUALMETADATAARR_EN = [
     {
         title: 'E-Mail',
         type: 'email',
-        description: 'The email of your authorized account',
+        description: 'Email for signing CLA',
         required: true,
     },
    ];
@@ -24,7 +24,7 @@ const INDIVIDUALMETADATAARR_ZH = [
    {
         title: '邮箱',
         type: 'email',
-        description: '授权账号的邮箱',
+        description: '签署CLA的邮箱',
         required: true,
     },
    ];
