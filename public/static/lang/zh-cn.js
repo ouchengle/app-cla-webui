@@ -47,6 +47,7 @@ module.exports = {
         verifyCodeHolder: '请输入验证码',
         holder: '请输入{title}',
         sendCodeTip: '发送验证码到邮箱',
+        corpName: '公司名称',
     },
     tips: {
         failedTitle: '失败',
@@ -104,6 +105,7 @@ module.exports = {
         fill_representative_name: '请输入代表姓名',
         fill_date: '请输入日期',
         fill_verification_code: '请输入验证码',
+        choose_corp_name: '请选择公司名称',
         review_privacy: '请查看隐私声明',
         not_fill_id: '请输入ID',
         invalid_account_or_pw: '旧密码无效，请重试',

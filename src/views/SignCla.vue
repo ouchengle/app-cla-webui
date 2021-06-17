@@ -71,6 +71,23 @@
                                               @blur="setMyForm(item.type,ruleForm[item.id])"></el-input>
                                 </el-form-item>
                                 <el-form-item
+                                        v-if="rules.corpName"
+                                        :label="$t('signPage.corpName')"
+                                        prop="corpName">
+                                    <el-select
+                                            class="my-select"
+                                            :placeholder="$t('corp.choose_corp_name')"
+                                            filterable
+                                            v-model="corpName">
+                                        <el-option
+                                                v-for="item in corpNameArr"
+                                                :key="item.value"
+                                                :value="item.value"
+                                                :label="item.label">
+                                        </el-option>
+                                    </el-select>
+                                </el-form-item>
+                                <el-form-item
                                         v-if="rules.code"
                                         :label="$t('signPage.verifyCode')"
                                         prop="code">
@@ -215,6 +232,8 @@
         },
         data() {
             return {
+                corpName: '',
+                corpNameArr: [],
                 corporation: 'corporation',
                 individual: 'individual',
                 employee: 'employee',
@@ -361,6 +380,13 @@
             async verifyCodeCheck(rule, value, callback) {
                 if (!value) {
                     callback(new Error(this.$t('tips.fill_verification_code')))
+                } else {
+                    callback();
+                }
+            },
+            async verifyChooseCorpName(rule, value, callback) {
+                if (!value) {
+                    callback(new Error(this.$t('tips.choose_corp_name')))
                 } else {
                     callback();
                 }
@@ -790,6 +816,15 @@
                     code: [{
                         required: true,
                         validator: this.verifyCodeCheck,
+                        trigger: ['blur', 'change']
+                    },]
+                });
+                Object.assign(form, {corpName: ''});
+                Object.assign(this.myForm, {corpName: ''});
+                Object.assign(rules, {
+                    corpName: [{
+                        required: true,
+                        validator: this.verifyChooseCorpName,
                         trigger: ['blur', 'change']
                     },]
                 });
