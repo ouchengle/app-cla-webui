@@ -76,7 +76,7 @@
                                         prop="corpName">
                                     <el-select
                                             class="my-select"
-                                            :placeholder="$t('corp.choose_corp_name')"
+                                            :placeholder="$t('tips.choose_corp_name')"
                                             filterable
                                             v-model="corpName">
                                         <el-option
@@ -1133,6 +1133,10 @@
         .el-form-item__content {
             width: 100%;
             text-align: center;
+        }
+
+        .my-select {
+            width: 100%;
         }
     }
 
