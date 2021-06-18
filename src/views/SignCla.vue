@@ -1135,9 +1135,7 @@
             text-align: center;
         }
 
-        .my-select {
-            width: 100%;
-        }
+
     }
 
     .dialogBt {
@@ -1329,6 +1327,10 @@
         display: flex;
         flex-direction: column;
         box-sizing: border-box;
+
+        .my-select {
+            width: 100%;
+        }
 
         .requiredIcon {
             color: #F56C6C;
