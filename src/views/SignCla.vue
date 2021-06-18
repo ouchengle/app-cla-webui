@@ -393,6 +393,12 @@
             },
             setMyForm(type, value) {
                 this.myForm[type] = value
+                if(type === 'email'){
+                    this.getCorpName(value)
+                }
+            },
+            getCorpName(email){
+                console.log('getCorpName---',email);
             },
             sendCode() {
                 let reg = new RegExp("^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$");
