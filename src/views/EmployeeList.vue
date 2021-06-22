@@ -8,15 +8,14 @@
                         <el-col :offset="15" :span="6">
                             <el-input
                                     clearable
-                                    @keydown.native="pressEnter(inactiveSearchValue,inactiveData)"
                                     :placeholder="$t('corp.email_input_holder')"
-                                    @input="searchEmail(inactiveSearchValue,inactiveData)"
+                                    @input="searchEmail(inactiveSearchValue,inactiveOriginData)"
                                     v-model="inactiveSearchValue">
                                 <i slot="prefix" class="el-input__icon el-icon-search"></i>
                             </el-input>
                         </el-col>
                         <el-col :span="3">
-                            <el-button @click="searchEmail(inactiveSearchValue,inactiveData)" class="searchButton">
+                            <el-button @click="searchEmail(inactiveSearchValue,inactiveOriginData)" class="searchButton">
                                 {{$t('corp.search')}}
                             </el-button>
                         </el-col>
@@ -83,15 +82,14 @@
                         <el-col :offset="15" :span="6">
                             <el-input
                                     clearable
-                                    @keydown.native="pressEnter(activeSearchValue,activeData)"
                                     :placeholder="$t('corp.email_input_holder')"
-                                    @input="searchEmail(activeSearchValue,activeData)"
+                                    @input="searchEmail(activeSearchValue,activeOriginData)"
                                     v-model="activeSearchValue">
                                 <i slot="prefix" class="el-input__icon el-icon-search"></i>
                             </el-input>
                         </el-col>
                         <el-col :span="3">
-                            <el-button @click="searchEmail(activeSearchValue,activeData)" class="searchButton">
+                            <el-button @click="searchEmail(activeSearchValue,activeOriginData)" class="searchButton">
                                 {{$t('corp.search')}}
                             </el-button>
                         </el-col>
@@ -174,11 +172,11 @@
                 pagerPage: 5,
                 inactiveCurrentPage: 1,
                 activeCurrentPage: 1,
-                inactiveTotal: 0,
-                activeTotal: 0,
                 deleteUserVisible: false,
                 active: 'first',
                 inactiveData: [],
+                inactiveOriginData: [],
+                activeOriginData: [],
                 activeData: [],
                 deleteData: '',
             }
@@ -202,13 +200,14 @@
             corpReTryDialogVisible() {
                 return this.$store.state.reTryDialogVisible
             },
+            activeTotal() {
+                return this.activeData.length
+            },
+            inactiveTotal() {
+                return this.inactiveData.length
+            },
         },
         methods: {
-            pressEnter(searchValue, pageData) {
-                if (event.keyCode === 13) {
-                    this.searchEmail(searchValue, pageData)
-                }
-            },
             searchEmail(searchValue, pageData) {
                 if (searchValue.trim() === '') {
                     this.getEmployee()
@@ -217,13 +216,14 @@
                     for (let i = 0; i < pageData.length; i++) {
                         if (pageData[i].email.indexOf(searchValue.trim()) !== -1) {
                             searchData.push(pageData[i]);
-                            break;
                         }
                     }
                     if (this.active === 'first') {
-                        this.inactivePageData = searchData
+                        this.inactiveData = searchData;
+                        this.inactivePageData = this.getInactivePageData()
                     } else if (this.active === 'second') {
-                        this.activePageData = searchData
+                        this.activeData = searchData;
+                        this.activePageData = this.getActivePageData()
                     }
                 }
             },
@@ -298,16 +298,17 @@
                 http({
                     url: url.queryEmployee,
                 }).then(res => {
-                    this.inactiveData = [];
-                    this.activeData = [];
+                    let inactiveArr = [], activeArr = [];
                     let data = res.data.data;
                     data.forEach((item, index) => {
-                        item.enabled === false ? this.inactiveData.push(item) : this.activeData.push(item)
+                        item.enabled === false ? inactiveArr.push(item) : activeArr.push(item)
                     });
+                    this.inactiveData = inactiveArr;
+                    this.inactiveOriginData = inactiveArr;
+                    this.activeData = activeArr;
+                    this.activeOriginData = activeArr;
                     this.inactivePageData = this.getInactivePageData();
                     this.activePageData = this.getActivePageData();
-                    this.inactiveTotal = this.inactiveData.length;
-                    this.activeTotal = this.activeData.length
                 }).catch(err => {
                     util.catchErr(err, 'errorSet', this)
                 })
