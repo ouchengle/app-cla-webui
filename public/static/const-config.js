@@ -106,5 +106,7 @@ const PWD_MIN_LENGTH = 6;
 const PWD_MAX_LENGTH = 16;
 const PWD_MIN_ASCII = 33;
 const PWD_MAX_ASCII = 126;
+const EMAIL_REG = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z]{2,6}$/;
+const PHONE_REG = /^(((\+\d{2}-)?0\d{2,3}-\d{7,8})|((\+\d{2}-)?(\d{2,3}-)?([1][3,4,5,7,8][0-9]\d{8})))$/;
 
 

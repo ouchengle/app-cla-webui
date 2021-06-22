@@ -296,8 +296,7 @@
             },
             async requireVerifyTel(rule, value, callback) {
                 if (value) {
-                    let reg = /^1[3456789]\d{9}$/;
-                    if (reg.test(value)) {
+                    if (PHONE_REG.test(value)) {
                         callback();
                     } else {
                         callback(new Error(this.$t('tips.invalid_telephone_num')))
@@ -308,8 +307,7 @@
             },
             async verifyTel(rule, value, callback) {
                 if (value) {
-                    let reg = /^1[3456789]\d{9}$/;
-                    if (reg.test(value)) {
+                    if (PHONE_REG.test(value)) {
                         callback();
                     } else {
                         callback(new Error(this.$t('tips.invalid_telephone_num')))
@@ -335,8 +333,7 @@
                 if (value) {
                     email = value.trim();
                 }
-                let reg = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z]{2,6}$/;
-                if (reg.test(email)) {
+                if (EMAIL_REG.test(email)) {
                     callback();
                 } else {
                     callback(new Error(this.$t('tips.invalid_email')))
@@ -393,17 +390,16 @@
             },
             setMyForm(type, value) {
                 this.myForm[type] = value
-                if(type === 'email'){
+                if (type === 'email') {
                     this.getCorpName(value)
                 }
             },
-            getCorpName(email){
-                console.log('getCorpName---',email);
+            getCorpName(email) {
+                console.log('getCorpName---', email);
             },
             sendCode() {
-                let reg = new RegExp("^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$");
                 let email = this.myForm.email;
-                if (email && reg.test(email)) {
+                if (email && EMAIL_REG.test(email)) {
                     axios({
                         url: `${url.sendVerifyCode}/${this.link_id}/${this.myForm.email}`,
                         method: 'post',
@@ -421,64 +417,7 @@
                             }
                         }, 1000)
                     }).catch(err => {
-                        if (err.data && err.data.hasOwnProperty('data')) {
-                            switch (err.data.data.error_code) {
-
-                                case 'cla.invalid_parameter':
-                                    this.$store.commit('setSignReLogin', {
-                                        dialogVisible: true,
-                                        dialogMessage: this.$t('tips.invalid_parameter'),
-                                    });
-                                    break;
-                                case 'cla.invalid_token':
-                                    this.$store.commit('setSignReLogin', {
-                                        dialogVisible: true,
-                                        dialogMessage: this.$t('tips.invalid_token'),
-                                    });
-                                    break;
-                                case 'cla.missing_token':
-                                    this.$store.commit('setSignReLogin', {
-                                        dialogVisible: true,
-                                        dialogMessage: this.$t('tips.missing_token'),
-                                    });
-                                    break;
-                                case 'cla.unknown_token':
-                                    this.$store.commit('setSignReLogin', {
-                                        dialogVisible: true,
-                                        dialogMessage: this.$t('tips.unknown_token'),
-                                    });
-                                    break;
-                                case 'cla.failed_to_send_email':
-                                    this.$store.commit('errorCodeSet', {
-                                        dialogVisible: true,
-                                        dialogMessage: this.$t('tips.failed_to_send_email'),
-                                    });
-                                    break;
-                                case 'cla.not_same_corp':
-                                    this.$store.commit('errorCodeSet', {
-                                        dialogVisible: true,
-                                        dialogMessage: this.$t('tips.not_same_corp'),
-                                    });
-                                    break;
-                                case 'cla.system_error':
-                                    this.$store.commit('errorCodeSet', {
-                                        dialogVisible: true,
-                                        dialogMessage: this.$t('tips.system_error'),
-                                    });
-                                    break;
-                                default :
-                                    this.$store.commit('errorCodeSet', {
-                                        dialogVisible: true,
-                                        dialogMessage: this.$t('tips.unknown_error'),
-                                    });
-                                    break;
-                            }
-                        } else {
-                            this.$store.commit('errorCodeSet', {
-                                dialogVisible: true,
-                                dialogMessage: this.$t('tips.system_error'),
-                            })
-                        }
+                        util.catchErr(err, 'setSignReLogin', this)
                     })
                 } else {
                     this.$message.closeAll();
@@ -564,7 +503,6 @@
                             dialogMessage: message,
                         });
                     }
-
                 }
             },
             getSignPage(resolve) {
@@ -581,114 +519,7 @@
                 }).then(res => {
                     this.setData(res, resolve)
                 }).catch(err => {
-                    if (err.data && err.data.hasOwnProperty('data')) {
-                        switch (err.data.data.error_code) {
-                            case 'cla.no_cla_binding':
-                                let message = '';
-                                if (this.$store.state.loginType === this.corporation) {
-                                    message = this.$t('tips.no_cla_binding_corp')
-                                } else if (this.$store.state.loginType === this.employee) {
-                                    message = this.$t('tips.no_cla_binding_emp')
-                                }
-                                if (this.$store.state.loginType === this.individual) {
-                                    message = this.$t('tips.no_cla_binding_individual')
-                                }
-                                this.$store.commit('setSignReLogin', {
-                                    dialogVisible: true,
-                                    dialogMessage: message,
-                                });
-                                break;
-                            case 'cla.invalid_parameter':
-                                this.$store.commit('setSignReLogin', {
-                                    dialogVisible: true,
-                                    dialogMessage: this.$t('tips.invalid_parameter'),
-                                });
-                                break;
-                            case 'cla.no_corp_manager':
-                                this.$store.commit('setSignReLogin', {
-                                    dialogVisible: true,
-                                    dialogMessage: this.$t('tips.no_corp_manager'),
-                                });
-                                break;
-                            case 'cla.has_not_signed':
-                                this.$store.commit('setSignReLogin', {
-                                    dialogVisible: true,
-                                    dialogMessage: this.$t('tips.has_not_signed'),
-                                });
-                                break;
-                            case 'cla.invalid_token':
-                                this.$store.commit('setSignReLogin', {
-                                    dialogVisible: true,
-                                    dialogMessage: this.$t('tips.invalid_token'),
-                                });
-                                break;
-                            case 'cla.expired_token':
-                                this.$store.commit('setSignReLogin', {
-                                    dialogVisible: true,
-                                    dialogMessage: this.$t('tips.invalid_token'),
-                                });
-                                break;
-                            case 'cla.missing_token':
-                                this.$store.commit('setSignReLogin', {
-                                    dialogVisible: true,
-                                    dialogMessage: this.$t('tips.missing_token'),
-                                });
-                                break;
-                            case 'cla.unknown_token':
-                                this.$store.commit('setSignReLogin', {
-                                    dialogVisible: true,
-                                    dialogMessage: this.$t('tips.unknown_token'),
-                                });
-                                break;
-                            case 'cla.uncompleted_signing':
-                                this.$store.commit('setSignReLogin', {
-                                    dialogVisible: true,
-                                    dialogMessage: this.$t('tips.uncompleted_signing'),
-                                });
-                                break;
-                            case 'cla.unknown_email_platform':
-                                this.$store.commit('errorCodeSet', {
-                                    dialogVisible: true,
-                                    dialogMessage: this.$t('tips.unknown_email_platform'),
-                                });
-                                break;
-                            case 'cla.pdf_has_not_uploaded':
-                                this.$store.commit('setSignReLogin', {
-                                    dialogVisible: true,
-                                    dialogMessage: this.$t('tips.pdf_has_not_uploaded'),
-                                });
-                                break;
-                            case 'cla.not_same_corp':
-                                this.$store.commit('errorCodeSet', {
-                                    dialogVisible: true,
-                                    dialogMessage: this.$t('tips.not_same_corp'),
-                                });
-                                break;
-                            case 'cla.not_ready_to_sign':
-                                this.$store.commit('setSignReLogin', {
-                                    dialogVisible: true,
-                                    dialogMessage: this.$t('tips.not_ready_to_sign'),
-                                });
-                                break;
-                            case 'cla.system_error':
-                                this.$store.commit('errorCodeSet', {
-                                    dialogVisible: true,
-                                    dialogMessage: this.$t('tips.system_error'),
-                                });
-                                break;
-                            default :
-                                this.$store.commit('errorCodeSet', {
-                                    dialogVisible: true,
-                                    dialogMessage: this.$t('tips.unknown_error'),
-                                });
-                                break;
-                        }
-                    } else {
-                        this.$store.commit('errorCodeSet', {
-                            dialogVisible: true,
-                            dialogMessage: this.$t('tips.system_error'),
-                        })
-                    }
+                    util.catchErr(err, 'setSignReLogin', this)
                 })
             },
             setClaText(obj) {
@@ -856,20 +687,24 @@
                         info: info,
                         verification_code: this.ruleForm.code
                     }
-                } else {
+                }else if (this.$store.state.loginType === this.employee){
+                    myUrl = `${url.employee_signing}/${this.link_id}/${this.cla_lang}/${this.cla_hash}`;
+                    obj = {
+                        corporation_name: this.myForm.corporationName,
+                        name: this.myForm.name,
+                        email: this.myForm.email,
+                        verification_code: this.ruleForm.code,
+                        info: info,
+                    }
+                }  else {
+                    myUrl = `${url.individual_signing}/${this.link_id}/${this.cla_lang}/${this.cla_hash}`;
                     obj = {
                         name: this.myForm.name,
                         email: this.myForm.email,
                         verification_code: this.ruleForm.code,
                         info: info,
                     }
-                    if (this.$store.state.loginType === this.individual) {
-                        myUrl = `${url.individual_signing}/${this.link_id}/${this.cla_lang}/${this.cla_hash}`;
-                    } else if (this.$store.state.loginType === this.employee) {
-                        myUrl = `${url.employee_signing}/${this.link_id}/${this.cla_lang}/${this.cla_hash}`;
-                    }
                 }
-
                 this.sign(myUrl, obj)
             },
             sign(myUrl, obj) {
@@ -894,141 +729,7 @@
                     });
 
                 }).catch(err => {
-                    if (err.data && err.data.hasOwnProperty('data')) {
-                        switch (err.data.data.error_code) {
-                            case 'cla.resigned':
-                                let message = '';
-                                if (this.$store.state.loginType === this.corporation) {
-                                    message = this.$t('tips.corp_has_signed');
-                                } else {
-                                    message = this.$t('tips.has_signed')
-                                }
-                                this.$store.commit('setSignReLogin', {
-                                    dialogVisible: true,
-                                    dialogMessage: message,
-                                });
-                                break;
-                            case 'cla.invalid_parameter':
-                                this.$store.commit('setSignReLogin', {
-                                    dialogVisible: true,
-                                    dialogMessage: this.$t('tips.invalid_parameter'),
-                                });
-                                break;
-                            case 'cla.expired_token':
-                                this.$store.commit('setSignReLogin', {
-                                    dialogVisible: true,
-                                    dialogMessage: this.$t('tips.invalid_token'),
-                                });
-                                break;
-                            case 'cla.missing_token':
-                                this.$store.commit('setSignReLogin', {
-                                    dialogVisible: true,
-                                    dialogMessage: this.$t('tips.missing_token'),
-                                });
-                                break;
-                            case 'cla.unknown_token':
-                                this.$store.commit('setSignReLogin', {
-                                    dialogVisible: true,
-                                    dialogMessage: this.$t('tips.unknown_token'),
-                                });
-                                break;
-                            case 'cla.unauthorized_token':
-                                this.$store.commit('setSignReLogin', {
-                                    dialogVisible: true,
-                                    dialogMessage: this.$t('tips.unauthorized_token'),
-                                });
-                                break;
-                            case 'cla.go_to_sign_employee_cla':
-                                this.$store.commit('setSignReLogin', {
-                                    dialogVisible: true,
-                                    dialogMessage: this.$t('tips.go_to_sign_employee_cla'),
-                                });
-                                break;
-                            case 'cla.no_employee_manager':
-                                this.$store.commit('setSignReLogin', {
-                                    dialogVisible: true,
-                                    dialogMessage: this.$t('tips.no_corp_manager'),
-                                });
-                                break;
-                            case 'cla.failed_to_send_email':
-                                this.$store.commit('errorCodeSet', {
-                                    dialogVisible: true,
-                                    dialogMessage: this.$t('tips.failed_to_send_email'),
-                                });
-                                break;
-                            case 'cla.wrong_verification_code':
-                                this.$store.commit('errorCodeSet', {
-                                    dialogVisible: true,
-                                    dialogMessage: this.$t('tips.wrong_verification_code'),
-                                });
-                                break;
-                            case 'cla.restricted_email_suffix':
-                                this.$store.commit('errorCodeSet', {
-                                    dialogVisible: true,
-                                    dialogMessage: this.$t('tips.restricted_email_suffix'),
-                                });
-                                break;
-                            case 'cla.expired_verification_code':
-                                this.$store.commit('errorCodeSet', {
-                                    dialogVisible: true,
-                                    dialogMessage: this.$t('tips.expired_verification_code'),
-                                });
-                                break;
-                            case 'cla.not_same_corp':
-                                this.$store.commit('errorCodeSet', {
-                                    dialogVisible: true,
-                                    dialogMessage: this.$t('tips.not_same_corp'),
-                                });
-                                break;
-                            case 'cla.error_parsing_api_body':
-                                this.$store.commit('errorCodeSet', {
-                                    dialogVisible: true,
-                                    dialogMessage: this.$t('tips.error_parsing_api_body'),
-                                });
-                                break;
-                            case 'cla.unmatched_email':
-                                this.$store.commit('errorCodeSet', {
-                                    dialogVisible: true,
-                                    dialogMessage: this.$t('tips.unmatched_email'),
-                                });
-                                break;
-                            case 'cla.unmatched_user_id':
-                                this.$store.commit('errorCodeSet', {
-                                    dialogVisible: true,
-                                    dialogMessage: this.$t('tips.unmatched_user_id'),
-                                });
-                                break;
-                            case 'cla.no_link':
-                                this.$store.commit('setSignReLogin', {
-                                    dialogVisible: true,
-                                    dialogMessage: this.$t('tips.no_link'),
-                                });
-                                break;
-                            case 'cla.unmatched_cla':
-                                this.$store.commit('errorCodeSet', {
-                                    dialogVisible: true,
-                                    dialogMessage: this.$t('tips.unmatched_cla'),
-                                });
-                                break;
-                            case 'cla.system_error':
-                                this.$store.commit('errorCodeSet', {
-                                    dialogVisible: true,
-                                    dialogMessage: this.$t('tips.system_error'),
-                                });
-                                break;
-                            default :
-                                this.$store.commit('errorCodeSet', {
-                                    dialogVisible: true,
-                                    dialogMessage: this.$t('tips.unknown_error'),
-                                });
-                                break;
-                        }
-                    } else {
-                        this.$store.commit('errorCodeSet', {
-                            dialogVisible: true,
-                            dialogMessage: this.$t('tips.system_error'),
-                        })
-                    }
+                    util.catchErr(err, 'setSignReLogin', this)
                 })
             },
             submitForm(formName) {
