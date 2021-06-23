@@ -298,8 +298,24 @@
             init(value) {
                 if (value !== '' && value !== undefined) {
                     this.language = value
-                } else if (localStorage.getItem('lang')) {
-                    this.language = localStorage.getItem('lang')
+                } else {
+                    let lang = localStorage.getItem('lang');
+                    switch (lang) {
+                        case '0':
+                        case 'English':
+                            this.language = 'English';
+                            localStorage.setItem('lang', 'English');
+                            break;
+                        case '1':
+                        case 'Chinese':
+                            this.language = 'Chinese';
+                            localStorage.setItem('lang', 'Chinese');
+                            break;
+                        default:
+                            this.language = 'English';
+                            localStorage.setItem('lang', 'English');
+                            break;
+                    }
                 }
                 this.changeI18N(this.language);
                 this.setLangValue(this.language);
