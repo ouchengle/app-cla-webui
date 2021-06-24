@@ -176,6 +176,7 @@
                 }
                 this.cla_lang = '';
                 this.lang = localStorage.getItem('lang').toLowerCase()
+                console.log(this.lang);
                 this.signPageData.forEach((item, index) => {
                     if (item.language === this.lang) {
                         this.cla_lang = item.language;
@@ -203,7 +204,7 @@
                         this.$refs['ruleForm'].validateField(item.labelFor)
                     }
                 });
-
+                console.log(this.cla_lang);
             },
         },
         inject: ['setClientHeight'],
