@@ -304,6 +304,7 @@
                     this.language = value
                 } else {
                     let lang = localStorage.getItem('lang');
+                    console.log(lang);
                     switch (lang) {
                         case '0':
                         case 'English':
