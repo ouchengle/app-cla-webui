@@ -301,29 +301,29 @@
             init(value) {
                 console.log(value);
                 if (value !== '' && value !== undefined) {
-                    this.language = value
+                    this.value = value
                 } else {
                     let lang = localStorage.getItem('lang');
                     console.log(lang);
                     switch (lang) {
                         case '0':
                         case 'English':
-                            this.language = 'English';
+                            this.value = 'English';
                             localStorage.setItem('lang', 'English');
                             break;
                         case '1':
                         case 'Chinese':
-                            this.language = 'Chinese';
+                            this.value = 'Chinese';
                             localStorage.setItem('lang', 'Chinese');
                             break;
                         default:
-                            this.language = 'English';
+                            this.value = 'English';
                             localStorage.setItem('lang', 'English');
                             break;
                     }
                 }
-                this.changeI18N(this.language);
-                this.setLangValue(this.language);
+                this.changeI18N(this.value);
+                this.setLangValue(this.value);
                 if (this.$store.state.loginInfo) {
                     this.role = this.$store.state.loginInfo.userInfo[0].role;
                 }
