@@ -480,6 +480,7 @@
                         }
                         let langOptions = [];
                         let langLabel = '';
+                        console.log(this.lang);
                         this.signPageData.forEach((item, index) => {
                             langLabel = this.upperFirstCase(item.language)
                             langOptions.push({value: index, label: langLabel});
@@ -498,6 +499,7 @@
                                 resolve('complete')
                             }
                         });
+                        console.log(this.cla_lang);
                         this.$emit('getLangOptions', langOptions)
                         if (!this.cla_lang) {
                             this.lang = this.signPageData[0].language
@@ -513,6 +515,7 @@
                             this.setFieldsData();
                             localStorage.setItem('lang', this.upperFirstCase(this.lang))
                         }
+                        console.log(this.cla_lang);
                         this.$emit('initHeader', this.upperFirstCase(this.lang))
                     } else {
                         let message = '';
