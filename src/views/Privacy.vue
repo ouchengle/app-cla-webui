@@ -34,7 +34,7 @@
                 owner: 'opensourceways',
                 repo: 'app-cla-server',
                 path: 'clasign_privacy_policy_20210513.md',
-                langOptions: [{value: 0, label: 'Chinese'}]
+                langOptions: [{value: 'Chinese', label: 'Chinese'}]
             }
         },
         methods: {

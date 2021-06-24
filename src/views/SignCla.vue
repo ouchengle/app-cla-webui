@@ -483,7 +483,7 @@
                         console.log(this.lang);
                         this.signPageData.forEach((item, index) => {
                             langLabel = this.upperFirstCase(item.language)
-                            langOptions.push({value: index, label: langLabel});
+                            langOptions.push({value: langLabel, label: langLabel});
                             if (item.language === this.lang) {
                                 this.cla_lang = item.language;
                                 this.value = index;
