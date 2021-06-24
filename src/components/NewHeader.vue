@@ -109,11 +109,11 @@
                 menuVisible: false,
                 isActive: true,
                 language: 'English',
-                value: 0,
+                value: 'English',
                 visible: {
                     visibility: 'hidden',
                 },
-                options: [{value: 0, label: 'English'}, {value: 1, label: 'Chinese'}]
+                options: [{value: 'English', label: 'English'}, {value: 'Chinese', label: 'Chinese'}]
             }
         },
         methods: {
@@ -265,10 +265,13 @@
             },
             chooseLng(value) {
                 if (this.value !== value) {
-                    this.value = value
-                    this.language = this.options[value].label;
-                    localStorage.setItem('lang', this.language);
-                    this.changeI18N(this.language)
+                    for (let i = 0, len = this.options.length; i < len; i++) {
+                        if (this.options[i].value === value){
+                            this.value = value;
+                        }
+                    }
+                    localStorage.setItem('lang', this.value);
+                    this.changeI18N(this.value)
                 }
                 this.isActive = true;
             },
@@ -291,7 +294,7 @@
             setLangValue(language) {
                 for (let i = 0; i < this.options.length; i++) {
                     if (this.options[i].label === language) {
-                        this.value = i
+                        this.value = language
                     }
                 }
             },
