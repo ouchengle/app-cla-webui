@@ -177,6 +177,7 @@
                 this.cla_lang = '';
                 this.lang = localStorage.getItem('lang').toLowerCase()
                 console.log(this.lang);
+                console.log(this.$i18n.locale);
                 this.signPageData.forEach((item, index) => {
                     if (item.language === this.lang) {
                         this.cla_lang = item.language;

@@ -297,6 +297,7 @@
             },
             init(value) {
                 console.log(value);
+                console.log(this.$i18n.locale);
                 if (value !== '' && value !== undefined) {
                     this.language = value
                 } else if (localStorage.getItem('lang')) {
@@ -311,6 +312,7 @@
                 if (this.showHeaderMenu === 'corp' || this.showHeaderMenu === 'org') {
                     this.loginRole = this.showHeaderMenu
                 }
+                console.log(this.$i18n.locale);
             },
         },
         created() {
