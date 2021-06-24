@@ -502,6 +502,7 @@
                         console.log(this.cla_lang);
                         this.$emit('getLangOptions', langOptions)
                         if (!this.cla_lang) {
+                            console.log(!this.cla_lang);
                             this.lang = this.signPageData[0].language
                             this.value = 0;
                             this.cla_hash = this.signPageData[0].cla_hash;
