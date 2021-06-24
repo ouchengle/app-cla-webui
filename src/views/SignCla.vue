@@ -516,6 +516,7 @@
                             });
                             this.setFields(this.value);
                             this.setFieldsData();
+                            console.log('this.lang--',this.lang);
                             localStorage.setItem('lang', this.upperFirstCase(this.lang))
                         }
                         console.log(this.cla_lang);

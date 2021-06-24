@@ -296,6 +296,7 @@
                 }
             },
             init(value) {
+                console.log(value);
                 if (value !== '' && value !== undefined) {
                     this.language = value
                 } else if (localStorage.getItem('lang')) {
