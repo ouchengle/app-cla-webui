@@ -504,6 +504,7 @@
                         if (!this.cla_lang) {
                             console.log(!this.cla_lang);
                             this.lang = this.signPageData[0].language
+                            this.cla_lang = this.signPageData[0].language
                             this.value = 0;
                             this.cla_hash = this.signPageData[0].cla_hash;
                             this.setClaText({
@@ -546,7 +547,7 @@
                     } else {
                         _url = `${url.getSignPage}/${this.$store.state.repoInfo.platform}/${this.$store.state.repoInfo.org_id}/${applyTo}`
                     }
-                }catch (e) {
+                } catch (e) {
                     this.$store.commit('errorCodeSet', {
                         dialogVisible: true,
                         dialogMessage: this.$t('tips.page_error'),
