@@ -73,6 +73,7 @@ export const clearSession = (_this) => {
 };
 export const setI18nLang = () => {
     let lang = localStorage.getItem('lang');
+    console.log(lang);
     if (lang === null) {
         localStorage.setItem('lang', 'English');
         return 'en-us'
@@ -80,6 +81,8 @@ export const setI18nLang = () => {
         if (lang === 'Chinese') {
             return 'zh-cn'
         } else if (lang === 'English') {
+            return 'en-us'
+        }else{
             return 'en-us'
         }
     }
