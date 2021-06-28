@@ -6,7 +6,12 @@
                     <svg-icon icon-class="github" class="footerIcon"></svg-icon>
                 </div>
                 <div class="box">
-                    <span class="copyright">{{this.copyright}}</span>
+                    <div class="copyright">
+                        <span>{{copyright}}</span>
+                        <span class="pointer" @click="previewPrivacy">{{$t('signPage.privacy')}}</span> |
+                        <span class="pointer" @click="checkIcp">{{icp}}</span> |
+                        <span class="pointer" @click="checkPoliceRecord"> {{policeRecord}}</span>
+                    </div>
                 </div>
             </el-col>
         </el-row>
@@ -14,14 +19,31 @@
 </template>
 
 <script>
+    import {mapActions} from 'vuex';
+    import * as util from '../util/util';
+
     export default {
         name: 'NewFooter',
         data() {
             return {
-                copyright: COPYRIGHT
+                copyright: COPYRIGHT,
+                icp: ICP,
+                icpLink: ICP_LINK,
+                policeRecord: POLICE_RECORD,
+                policeRecordLink: POLICE_RECORD_LINK
             };
         },
         methods: {
+            ...mapActions(['viewPrivacy']),
+            previewPrivacy() {
+                util.toPrivacy(this);
+            },
+            checkIcp() {
+                open(this.icpLink);
+            },
+            checkPoliceRecord() {
+                open(this.policeRecordLink);
+            },
             join() {
                 window.open('https://github.com/opensourceways/app-cla-server');
             }
@@ -72,7 +94,6 @@
         }
 
         .box {
-            cursor: pointer;
             display: flex;
             flex-direction: column;
             justify-content: center;

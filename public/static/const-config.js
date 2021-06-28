@@ -1,5 +1,4 @@
 const SIGNATURE_FILE_MAX_SIZE = 5;        //M
-const COPYRIGHT = 'Copyright ©2020 claSign';
 const INDIVIDUALMETADATAARR_EN = [
     {
         title: 'Name',
@@ -107,6 +106,11 @@ const PWD_MAX_LENGTH = 16;
 const PWD_MIN_ASCII = 33;
 const PWD_MAX_ASCII = 126;
 const EMAIL_REG = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z]{2,6}$/;
+const COPYRIGHT = 'MIT Licensed | Copyright © opensourceways infrastructure | ';
+const ICP = '蜀ICP备20009468号-1';
+const ICP_LINK = 'https://icp.chinaz.com/home/info?host=osinfra.cn';
+const POLICE_RECORD = '粤公网安备 44030702003822号';
+const POLICE_RECORD_LINK = 'http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=44030702003822';
 
 
 

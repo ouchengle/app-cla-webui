@@ -257,7 +257,7 @@
                 }, false);
             },
             previewPrivacy() {
-                this.$router.push('/privacy');
+                util.toPrivacy(this);
             },
             toIndex() {
                 let date = new Date();
