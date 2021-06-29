@@ -71,6 +71,7 @@
             },
             submit() {
                 let data = JSON.parse(JSON.stringify(this.$store.state.loginInfo));
+                this.$store.commit('setPwdIsChanged', data.userInfo[this.orgValue].initial_pw_changed);
                 Object.assign(data, {orgValue: this.orgValue});
                 this.setCorpTokenAct(data.userInfo[this.orgValue].token);
                 this.setLoginInfoAct(data);
