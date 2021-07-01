@@ -141,7 +141,16 @@
                     this.$router.push('/sign-cla')
                 } else if (this.$route.path === '/corporationManagerLogin') {
                     let params = '';
-                    let repoInfo = this.$store.state.repoInfo;
+                    let repoInfo = {};
+                    if (this.$store.state.repoInfo) {
+                        repoInfo = this.$store.state.repoInfo;
+                    } else {
+                        this.$store.commit('errorCodeSet', {
+                            dialogVisible: true,
+                            dialogMessage: this.$t('tips.page_error'),
+                        });
+                        return
+                    }
                     if (repoInfo.repo_id) {
                         params = `${repoInfo.platform.toLowerCase()}/${repoInfo.org_id}/${repoInfo.repo_id}`
                     } else {
