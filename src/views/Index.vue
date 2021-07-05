@@ -61,7 +61,6 @@
             }
         },
         methods: {
-            ...mapActions(['setPlatformAct']),
             clickSignTypeGuide(type) {
                 this.signType = type;
             },

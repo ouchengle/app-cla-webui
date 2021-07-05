@@ -248,7 +248,7 @@
             }
         },
         methods: {
-            ...mapActions(['setTokenAct', 'setRepoInfoAct', 'viewPrivacy']),
+            ...mapActions(['setTokenAct', 'setRepoInfoAct']),
             setIframeEventListener() {
                 window.addEventListener('message', (event) => {
                     if (event.data instanceof Array && event.origin === this.$store.state.domain) {

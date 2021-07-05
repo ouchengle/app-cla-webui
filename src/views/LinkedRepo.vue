@@ -232,7 +232,7 @@
             this.setClientHeight();
         },
         methods: {
-            ...mapActions(['setLoginUserAct', 'setTokenAct', 'setTableDataAct']),
+            ...mapActions(['setTokenAct']),
             menuCommand(command) {
                 switch (command.command) {
                     case 'a':
