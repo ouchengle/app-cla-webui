@@ -24,7 +24,6 @@
             }
         },
         methods: {
-            ...mapActions(['viewPrivacy']),
             join() {
                 window.open('https://github.com/opensourceways/app-cla-server')
             },

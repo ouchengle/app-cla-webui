@@ -283,11 +283,6 @@
                 access_token: this.$store.state.access_token,
                 refresh_token: this.$store.state.refresh_token,
                 platform_token: this.$store.state.platform_token,
-                user: {
-                    userName: this.$store.state.user.userName,
-                    userId: this.$store.state.user.userId,
-                    isAuthorize: false,
-                },
             }
         },
         inject: ['setClientHeight'],
