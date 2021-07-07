@@ -23,24 +23,24 @@
 </template>
 
 <script>
-    import * as url from '../util/api'
-    import http from '../util/_axios'
-    import Step from '../components/FindPwdSteps'
+    import * as url from '../util/api';
+    import http from '../util/_axios';
+    import Step from '../components/FindPwdSteps';
 
 
     export default {
-        name: "FindPassword",
+        name: 'FindPassword',
         components: {
-            Step,
+            Step
         },
         watch: {
             '$i18n.locale'() {
                 this.$refs['ruleForm'] && this.$refs['ruleForm'].fields.forEach(item => {
                     if (item.validateState === 'error') {
-                        this.$refs['ruleForm'].validateField(item.labelFor)
+                        this.$refs['ruleForm'].validateField(item.labelFor);
                     }
                 });
-            },
+            }
         },
         data() {
             var validateNewPwd = (rule, value, callback) => {
@@ -70,41 +70,39 @@
                 rules: {
                     newPassword: [{required: true, validator: validateNewPwd, trigger: ['blur', 'change']}],
                     newPasswordAgain: [{required: true, validator: validateNewPwdAgain, trigger: ['blur', 'change']}]
-                },
-            }
+                }
+            };
         },
         methods: {
             checkIllegalChar(str) {
                 for (let char of str) {
                     if (char.charCodeAt() > PWD_MAX_ASCII || char.charCodeAt() < PWD_MIN_ASCII) {
-                        return true
+                        return true;
                     }
                 }
-                return false
+                return false;
             },
             submitNewPassword() {
                 http({
                     url: url.submitNewPassword,
                     data: {email: this.$store.state.findPwdEmail, password: this.ruleForm.newPassword}
                 }).then(res => {
-                    console.log(res);
-                    this.$router.push('/reset-done')
+                    this.$router.push('/reset-done');
                 }).catch(err => {
-                    console.log(err);
-                })
+                });
             },
             submitForm(formName) {
                 console.log(formName);
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        this.submitNewPassword()
+                        this.submitNewPassword();
                     } else {
                         return false;
                     }
                 });
-            },
-        },
-    }
+            }
+        }
+    };
 </script>
 
 <style scoped lang="less">

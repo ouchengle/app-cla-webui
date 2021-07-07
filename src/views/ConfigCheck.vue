@@ -196,27 +196,27 @@
 </template>
 
 <script>
-    import * as url from '../util/api'
-    import http from '../util/http'
-    import * as util from '../util/util'
-    import ReLoginDialog from '../components/ReLoginDialog'
-    import ReTryDialog from '../components/ReTryDialog'
+    import * as url from '../util/api';
+    import http from '../util/http';
+    import * as util from '../util/util';
+    import ReLoginDialog from '../components/ReLoginDialog';
+    import ReTryDialog from '../components/ReTryDialog';
 
     export default {
-        name: "ConfigCheck",
+        name: 'ConfigCheck',
         components: {
             ReLoginDialog,
             ReTryDialog
         },
         computed: {
             reTryVisible() {
-                return this.$store.state.reTryDialogVisible
+                return this.$store.state.reTryDialogVisible;
             },
             reLoginDialogVisible() {
-                return this.$store.state.orgReLoginDialogVisible
+                return this.$store.state.orgReLoginDialogVisible;
             },
             reLoginMsg() {
-                return this.$store.state.dialogMessage
+                return this.$store.state.dialogMessage;
             },
             orgChoose() {
                 return `${this.$store.state.orgChoose}` === 'true';
@@ -225,39 +225,39 @@
                 return `${this.$store.state.isEmail}` === 'true';
             },
             repositoryChoose() {
-                return `${this.$store.state.repositoryChoose}` === 'true'
+                return `${this.$store.state.repositoryChoose}` === 'true';
             },
             email() {
                 return this.$store.state.email;
             },
             org() {
-                return this.$store.state.chooseOrg
+                return this.$store.state.chooseOrg;
             },
             orgAlias() {
                 if (this.$store.state.orgAlias) {
-                    return this.$store.state.orgAlias
+                    return this.$store.state.orgAlias;
                 } else {
-                    return this.$store.state.chooseOrg
+                    return this.$store.state.chooseOrg;
                 }
             },
             repo() {
-                return this.$store.state.repo
+                return this.$store.state.repo;
             },
             cla_link_individual: {
                 get() {
                     return this.$store.state.claLinkIndividual;
                 },
                 set(value) {
-                    this.$store.commit('setClaLinkIndividual', value)
-                },
+                    this.$store.commit('setClaLinkIndividual', value);
+                }
             },
             cla_link_corporation: {
                 get() {
                     return this.$store.state.claLinkCorp;
                 },
                 set(value) {
-                    this.$store.commit('setClaLinkCorp', value)
-                },
+                    this.$store.commit('setClaLinkCorp', value);
+                }
             },
             individualMetadata() {
                 return this.$store.state.individualMetadata;
@@ -272,8 +272,8 @@
                 return this.$store.state.corpLanguage;
             },
             platform() {
-                return this.$store.state.platform.toLowerCase()
-            },
+                return this.$store.state.platform.toLowerCase();
+            }
         },
         data() {
             return {
@@ -282,8 +282,8 @@
                 loginType: this.$store.state.loginType,
                 access_token: this.$store.state.access_token,
                 refresh_token: this.$store.state.refresh_token,
-                platform_token: this.$store.state.platform_token,
-            }
+                platform_token: this.$store.state.platform_token
+            };
         },
         inject: ['setClientHeight'],
         methods: {
@@ -309,13 +309,13 @@
                                 title: item.title,
                                 type: item.type,
                                 description: item.description,
-                                required: item.required,
-                            })
+                                required: item.required
+                            });
                         }
                     });
                     return fields;
                 } else {
-                    return false
+                    return false;
                 }
             },
             dataURLtoFile(dataurl, filename) {
@@ -330,7 +330,7 @@
                 if (this.$store.state.bindType === 'add-bind') {
                     this.addBinding();
                 } else {
-                    this.newBinding()
+                    this.newBinding();
                 }
             },
             addBinding() {
@@ -356,58 +356,58 @@
                 http({
                     url: _url,
                     method: 'post',
-                    data: formData,
+                    data: formData
                 }).then(res => {
-                    util.successMessage(this)
+                    util.successMessage(this);
                     util.clearSession(this);
-                    this.$router.push('/corporationList')
+                    this.$router.push('/corporationList');
                 }).catch(err => {
                     if (err.data && err.data.hasOwnProperty('data')) {
                         switch (err.data.data.error_code) {
                             case 'cla.invalid_token':
                                 this.$store.commit('setOrgReLogin', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.invalid_token'),
+                                    dialogMessage: this.$t('tips.invalid_token')
                                 });
                                 break;
                             case 'cla.missing_token':
                                 this.$store.commit('setOrgReLogin', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.missing_token'),
+                                    dialogMessage: this.$t('tips.missing_token')
                                 });
                                 break;
                             case 'cla.unknown_token':
                                 this.$store.commit('setOrgReLogin', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.unknown_token'),
+                                    dialogMessage: this.$t('tips.unknown_token')
                                 });
                                 break;
                             case 'cla.cla_exists':
                                 this.$store.commit('errorCodeSet', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.cla_exists', {lang: this.$store.state.addLang}),
+                                    dialogMessage: this.$t('tips.cla_exists', {lang: this.$store.state.addLang})
                                 });
                                 break;
                             case 'cla.system_error':
                                 this.$store.commit('errorCodeSet', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.system_error'),
+                                    dialogMessage: this.$t('tips.system_error')
                                 });
                                 break;
                             default :
                                 this.$store.commit('errorCodeSet', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.unknown_error'),
+                                    dialogMessage: this.$t('tips.unknown_error')
                                 });
                                 break;
                         }
                     } else {
                         this.$store.commit('errorCodeSet', {
                             dialogVisible: true,
-                            dialogMessage: this.$t('tips.system_error'),
-                        })
+                            dialogMessage: this.$t('tips.system_error')
+                        });
                     }
-                })
+                });
             },
             newBinding() {
                 let formData = new FormData();
@@ -432,7 +432,7 @@
                             org_id: this.org,
                             org_alias: this.orgAlias,
                             individual_cla: individualCla,
-                            corp_cla: corpCla,
+                            corp_cla: corpCla
                         };
                     } else {
                         obj = {
@@ -441,7 +441,7 @@
                             org_id: this.org,
                             org_alias: this.orgAlias,
                             individual_cla: individualCla,
-                            corp_cla: corpCla,
+                            corp_cla: corpCla
                         };
                     }
                 } else {
@@ -452,7 +452,7 @@
                             platform: this.platform,
                             org_id: this.org,
                             org_alias: this.orgAlias,
-                            individual_cla: individualCla,
+                            individual_cla: individualCla
                         };
                     } else {
                         obj = {
@@ -460,7 +460,7 @@
                             platform: this.platform,
                             org_id: this.org,
                             org_alias: this.orgAlias,
-                            individual_cla: individualCla,
+                            individual_cla: individualCla
                         };
                     }
                 }
@@ -468,63 +468,63 @@
                 http({
                     url: url.linkRepository,
                     method: 'post',
-                    data: formData,
+                    data: formData
                 }).then(res => {
                     util.successMessage(this);
-                    this.$router.push('/home')
+                    this.$router.push('/home');
                 }).catch(err => {
                     if (err.data && err.data.hasOwnProperty('data')) {
                         switch (err.data.data.error_code) {
                             case 'cla.invalid_token':
                                 this.$store.commit('setOrgReLogin', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.invalid_token'),
+                                    dialogMessage: this.$t('tips.invalid_token')
                                 });
                                 break;
                             case 'cla.missing_token':
                                 this.$store.commit('setOrgReLogin', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.missing_token'),
+                                    dialogMessage: this.$t('tips.missing_token')
                                 });
                                 break;
                             case 'cla.unknown_token':
                                 this.$store.commit('setOrgReLogin', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.unknown_token'),
+                                    dialogMessage: this.$t('tips.unknown_token')
                                 });
                                 break;
                             case 'cla.system_error':
                                 this.$store.commit('errorCodeSet', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.system_error'),
+                                    dialogMessage: this.$t('tips.system_error')
                                 });
                                 break;
                             case 'cla.link_exists':
                                 this.$store.commit('errorCodeSet', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.link_exists'),
+                                    dialogMessage: this.$t('tips.link_exists')
                                 });
                                 break;
                             default :
                                 this.$store.commit('errorCodeSet', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.unknown_error'),
+                                    dialogMessage: this.$t('tips.unknown_error')
                                 });
                                 break;
                         }
                     } else {
                         this.$store.commit('errorCodeSet', {
                             dialogVisible: true,
-                            dialogMessage: this.$t('tips.system_error'),
-                        })
+                            dialogMessage: this.$t('tips.system_error')
+                        });
                     }
-                })
-            },
+                });
+            }
         },
         updated() {
             this.setClientHeight();
-        },
-    }
+        }
+    };
 </script>
 
 <style lang="less">

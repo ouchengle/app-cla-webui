@@ -23,41 +23,40 @@
 
 <script>
     export default {
-        name: "ReLoginDialog",
+        name: 'ReLoginDialog',
         props: ['dialogVisible', 'message'],
         computed: {
             dialogWidth() {
                 if (this.IS_MOBILE) {
-                    return '80%'
+                    return '80%';
                 } else {
-                    return '30%'
+                    return '30%';
                 }
             },
             dialogMessage() {
                 if (localStorage.getItem('lang') === this.english) {
-                    return 'dialogMessageEn'
+                    return 'dialogMessageEn';
                 } else if (localStorage.getItem('lang') === this.chinese) {
-                    return 'dialogMessage'
+                    return 'dialogMessage';
                 }
-            },
+            }
         },
         data() {
             return {
-                chinese:'Chinese',
-                english:'English',
-            }
+                chinese: 'Chinese',
+                english: 'English'
+            };
         },
         methods: {
             clickGoHome() {
                 this.$store.commit('errorSet', {
                     dialogVisible: false,
-                    dialogMessage: '',
+                    dialogMessage: ''
                 });
-                this.$router.replace('/corporationManagerLogin')
-
-            },
-        },
-    }
+                this.$router.replace('/corporationManagerLogin');
+            }
+        }
+    };
 </script>
 
 <style lang="less">

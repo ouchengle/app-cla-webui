@@ -1,7 +1,7 @@
 const path = require('path');
 
 function resolve(dir) {
-    return path.join(__dirname, dir)
+    return path.join(__dirname, dir);
 }
 
 module.exports = {
@@ -16,13 +16,7 @@ module.exports = {
     },
     lintOnSave: false,
     devServer: {
-        // open: true,
-        // host: 'localhost',
-        // port: 8080,
-        // https: false,
-        // hotOnly: false,
-        hot:true,
-
+        hot: true,
         proxy: {
             '/api': {
                 target: 'http://159.138.58.253:8080',
@@ -31,10 +25,9 @@ module.exports = {
                 pathRewrite: {
                     '^/api': ''
                 }
-            },
+            }
         }
     },
-
     chainWebpack: config => {
         const svgRule = config.module.rule('svg');
         svgRule.uses.clear();
@@ -55,12 +48,10 @@ module.exports = {
             .end()
             .use('file-loader')
             .loader('file-loader');
-
         config.resolve.alias
             .set('@', resolve('src'))
-            .set('@components', resolve('src/components'))
-    },
-
+            .set('@components', resolve('src/components'));
+    }
 };
 
 

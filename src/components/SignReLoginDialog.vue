@@ -22,59 +22,56 @@
 </template>
 
 <script>
-    import * as util from '../util/util'
+    import * as util from '../util/util';
 
     export default {
-        name: "ReLoginDialog",
+        name: 'ReLoginDialog',
         props: ['dialogVisible', 'message'],
         computed: {
             dialogWidth() {
                 if (this.IS_MOBILE) {
-                    return '80%'
+                    return '80%';
                 } else {
-                    return '30%'
+                    return '30%';
                 }
             },
             dialogMessage() {
                 if (localStorage.getItem('lang') === this.english) {
-                    return 'dialogMessageEn'
+                    return 'dialogMessageEn';
                 } else if (localStorage.getItem('lang') === this.chinese) {
-                    return 'dialogMessage'
+                    return 'dialogMessage';
                 }
-            },
+            }
         },
         data() {
             return {
                 domain: this.$store.state.domain,
                 signRouter: this.$store.state.signRouter,
-                chinese:'Chinese',
-                english:'English',
-            }
+                chinese: 'Chinese',
+                english: 'English'
+            };
         },
         methods: {
             clickGoHome() {
                 this.$store.commit('setSignReLogin', {
                     dialogVisible: false,
-                    dialogMessage: '',
+                    dialogMessage: ''
                 });
-
                 let date = new Date();
                 date.setTime(date.getTime() - 10000);
                 document.cookie = `_mark=; expire=${date.toUTCString()}; Domain=${this.domain}; path=/`;
                 let repoInfo = this.$store.state.repoInfo;
-                let params = repoInfo.repo_id ? `${repoInfo.platform}/${repoInfo.org_id}/${repoInfo.repo_id}` : `${repoInfo.platform}/${repoInfo.org_id}`
+                let params = repoInfo.repo_id ? `${repoInfo.platform}/${repoInfo.org_id}/${repoInfo.repo_id}` : `${repoInfo.platform}/${repoInfo.org_id}`;
                 let path = '';
                 if (sessionStorage.getItem('orgAddress')) {
-                    path = `${this.signRouter}/${util.strToBase64(params)}/${sessionStorage.getItem('orgAddress')}`
+                    path = `${this.signRouter}/${util.strToBase64(params)}/${sessionStorage.getItem('orgAddress')}`;
                 } else {
-                    path = `${this.signRouter}/${util.strToBase64(params)}`
+                    path = `${this.signRouter}/${util.strToBase64(params)}`;
                 }
-
-                this.$router.replace(path)
-
-            },
-        },
-    }
+                this.$router.replace(path);
+            }
+        }
+    };
 </script>
 
 <style lang="less">

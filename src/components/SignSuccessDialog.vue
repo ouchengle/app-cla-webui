@@ -22,48 +22,48 @@
 </template>
 
 <script>
-    import * as util from '../util/util'
+    import * as util from '../util/util';
 
     export default {
-        name: "SignSuccessDialog",
+        name: 'SignSuccessDialog',
         props: ['dialogVisible', 'message'],
         computed: {
             dialogWidth() {
                 if (this.IS_MOBILE) {
-                    return '80%'
+                    return '80%';
                 } else {
-                    return '30%'
+                    return '30%';
                 }
             },
             dialogMessage() {
                 if (localStorage.getItem('lang') === this.english) {
-                    return 'dialogMessageEn'
+                    return 'dialogMessageEn';
                 } else if (localStorage.getItem('lang') === this.chinese) {
-                    return 'dialogMessage'
+                    return 'dialogMessage';
                 }
-            },
+            }
         },
         data() {
             return {
                 domain: this.$store.state.domain,
                 signRouter: this.$store.state.signRouter,
                 chinese: 'Chinese',
-                english: 'English',
-            }
+                english: 'English'
+            };
         },
         methods: {
             clickGoHome() {
                 this.$store.commit('setSignSuccess', {
                     dialogVisible: false,
-                    dialogMessage: '',
+                    dialogMessage: ''
                 });
-                let repoInfo = this.$store.state.repoInfo
-                let params = repoInfo.repo_id ? `${repoInfo.platform}/${repoInfo.org_id}/${repoInfo.repo_id}` : `${repoInfo.platform}/${repoInfo.org_id}`
+                let repoInfo = this.$store.state.repoInfo;
+                let params = repoInfo.repo_id ? `${repoInfo.platform}/${repoInfo.org_id}/${repoInfo.repo_id}` : `${repoInfo.platform}/${repoInfo.org_id}`;
                 let path = `${this.signRouter}/${util.strToBase64(params)}`;
-                this.$router.replace(path)
+                this.$router.replace(path);
             }
-        },
-    }
+        }
+    };
 </script>
 
 <style lang="less">
@@ -101,6 +101,5 @@
             }
         }
     }
-
 
 </style>

@@ -148,37 +148,37 @@
     </div>
 </template>
 <script>
-    import ReTryDialog from '../components/ReTryDialog'
-    import ReLoginDialog from '../components/ReLoginDialog'
+    import ReTryDialog from '../components/ReTryDialog';
+    import ReLoginDialog from '../components/ReLoginDialog';
 
     export default {
-        name: "AddIndividualCla",
+        name: 'AddIndividualCla',
         components: {
             ReTryDialog,
-            ReLoginDialog,
+            ReLoginDialog
         },
         computed: {
             add_bind_first() {
-                return this.$store.state.add_bind_first
+                return this.$store.state.add_bind_first;
             },
             reTryVisible() {
-                return this.$store.state.reTryDialogVisible
+                return this.$store.state.reTryDialogVisible;
             },
             reLoginDialogVisible() {
-                return this.$store.state.orgReLoginDialogVisible
+                return this.$store.state.orgReLoginDialogVisible;
             },
             reLoginMsg() {
-                return this.$store.state.dialogMessage
+                return this.$store.state.dialogMessage;
             },
             individualCustomMetadataArr() {
                 if (this.$store.state.add_bind_first) {
                     if (this.$store.state.individualCustomMetadataArr && this.$store.state.individualCustomMetadataArr.length) {
-                        return this.$store.state.individualCustomMetadataArr
+                        return this.$store.state.individualCustomMetadataArr;
                     } else {
                         return this.initIndividualCustomMetadata;
                     }
                 } else {
-                    return this.$store.state.individualCustomMetadataArr
+                    return this.$store.state.individualCustomMetadataArr;
                 }
             },
             cla_link_individual: {
@@ -186,17 +186,17 @@
                     return this.$store.state.claLinkIndividual;
                 },
                 set(value) {
-                    this.$store.commit('setClaLinkIndividual', value)
-                },
+                    this.$store.commit('setClaLinkIndividual', value);
+                }
             },
             individualClaLanguageValue: {
                 get() {
                     return this.$store.state.individualLanguage;
                 },
                 set(value) {
-                    this.$store.commit('setIndividualLanguage', value)
+                    this.$store.commit('setIndividualLanguage', value);
                 }
-            },
+            }
         },
         data() {
             return {
@@ -204,8 +204,8 @@
                 dataTypeOptions: DATATYPEOPTIONS,
                 languageOptions: [{value: 'english', label: 'English'}, {value: 'chinese', label: '中文'}],
                 individualMetadataArr: INDIVIDUALMETADATAARR_EN,
-                initIndividualCustomMetadata: INITCUSTOMMETADATA,
-            }
+                initIndividualCustomMetadata: INITCUSTOMMETADATA
+            };
         },
         methods: {
             addRow(index) {
@@ -214,26 +214,26 @@
                     title: '',
                     type: '',
                     description: '',
-                    required: false,
+                    required: false
                 });
-                this.$store.commit('setIndividualCustomMetadataArr', metadata)
+                this.$store.commit('setIndividualCustomMetadataArr', metadata);
             },
             myDeleteRow(index) {
                 let metadata = this.individualCustomMetadataArr;
                 if (metadata.length === 1) {
                     metadata[0].type = '';
                     metadata[0].title = '';
-                    metadata[0].description = ''
+                    metadata[0].description = '';
                 } else {
                     metadata.splice(index, 1);
                 }
-                this.$store.commit('setIndividualCustomMetadataArr', metadata)
+                this.$store.commit('setIndividualCustomMetadataArr', metadata);
             },
             initMetadata(lang) {
                 if (lang === 'chinese') {
-                    this.individualMetadataArr = INDIVIDUALMETADATAARR_ZH
+                    this.individualMetadataArr = INDIVIDUALMETADATAARR_ZH;
                 } else if (lang === 'english') {
-                    this.individualMetadataArr = INDIVIDUALMETADATAARR_EN
+                    this.individualMetadataArr = INDIVIDUALMETADATAARR_EN;
                 }
             },
             individualInit() {
@@ -254,17 +254,17 @@
                         this.$router.replace('/config-check');
                     } else {
                         this.$message.closeAll();
-                        this.$message.error(this.$t('tips.title_type_repeat'))
+                        this.$message.error(this.$t('tips.title_type_repeat'));
                     }
                 } else if (this.cla_link_individual) {
                     this.$store.commit('errorCodeSet', {
                         dialogVisible: true,
-                        dialogMessage: this.$t('tips.select_individual_language'),
+                        dialogMessage: this.$t('tips.select_individual_language')
                     });
                 } else {
                     this.$store.commit('errorCodeSet', {
                         dialogVisible: true,
-                        dialogMessage: this.$t('tips.paste_individual_link'),
+                        dialogMessage: this.$t('tips.paste_individual_link')
                     });
                 }
             },
@@ -272,7 +272,7 @@
                 let individualMetadata = [];
                 this.individualCustomMetadataArr && this.individualCustomMetadataArr.forEach((item) => {
                     if (item.title !== '' && item.type !== '') {
-                        individualMetadata.push(item)
+                        individualMetadata.push(item);
                     }
                 });
                 let individualArr = this.individualMetadataArr.concat(individualMetadata);
@@ -284,13 +284,13 @@
                     }
                 }
                 this.individualMetadata = individualMetadata;
-                return individualArr
+                return individualArr;
             },
             changeIndividualLanguage(value) {
                 this.initMetadata(value);
                 this.$store.commit('setIndividualLanguage', value);
-                this.$store.commit('setAddLang', value)
-            },
+                this.$store.commit('setAddLang', value);
+            }
         },
         created() {
             this.initMetadata(this.$store.state.individualLanguage);
@@ -300,9 +300,9 @@
                 if (from.path === '/') {
                     vm.individualInit();
                 }
-            })
-        },
-    }
+            });
+        }
+    };
 </script>
 
 <style scoped>

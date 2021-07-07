@@ -10,9 +10,9 @@
 
 <script>
     export default {
-        name: "FindPwdSteps",
-        props: ['steping'],
-    }
+        name: 'FindPwdSteps',
+        props: ['steping']
+    };
 </script>
 
 <style scoped>

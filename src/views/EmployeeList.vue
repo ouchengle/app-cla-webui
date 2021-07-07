@@ -15,7 +15,8 @@
                             </el-input>
                         </el-col>
                         <el-col :span="3">
-                            <el-button @click="searchEmail(inactiveSearchValue,inactiveOriginData)" class="searchButton">
+                            <el-button @click="searchEmail(inactiveSearchValue,inactiveOriginData)"
+                                       class="searchButton">
                                 {{$t('corp.search')}}
                             </el-button>
                         </el-col>
@@ -147,20 +148,20 @@
     </div>
 </template>
 <script>
-    import * as url from '../util/api'
-    import http from '../util/http'
-    import * as util from '../util/util'
-    import corpReLoginDialog from '../components/CorpReLoginDialog'
-    import reTryDialog from '../components/ReTryDialog'
-    import DeleteDialog from '../components/DeleteDialog'
+    import * as url from '../util/api';
+    import http from '../util/http';
+    import * as util from '../util/util';
+    import corpReLoginDialog from '../components/CorpReLoginDialog';
+    import reTryDialog from '../components/ReTryDialog';
+    import DeleteDialog from '../components/DeleteDialog';
 
 
     export default {
-        name: "EmployeeList",
+        name: 'EmployeeList',
         components: {
             corpReLoginDialog,
             reTryDialog,
-            DeleteDialog,
+            DeleteDialog
         },
         data() {
             return {
@@ -178,39 +179,39 @@
                 inactiveOriginData: [],
                 activeOriginData: [],
                 activeData: [],
-                deleteData: '',
-            }
+                deleteData: ''
+            };
         },
         computed: {
             deleteMessage() {
-                return this.$t('corp.deleteTips')
+                return this.$t('corp.deleteTips');
             },
             orgValue() {
-                return this.$store.state.loginInfo.orgValue
+                return this.$store.state.loginInfo.orgValue;
             },
             userInfo() {
-                return this.$store.state.loginInfo.userInfo
+                return this.$store.state.loginInfo.userInfo;
             },
             corpReLoginDialogVisible() {
-                return this.$store.state.dialogVisible
+                return this.$store.state.dialogVisible;
             },
             corpReLoginMsg() {
-                return this.$store.state.dialogMessage
+                return this.$store.state.dialogMessage;
             },
             corpReTryDialogVisible() {
-                return this.$store.state.reTryDialogVisible
+                return this.$store.state.reTryDialogVisible;
             },
             activeTotal() {
-                return this.activeData.length
+                return this.activeData.length;
             },
             inactiveTotal() {
-                return this.inactiveData.length
-            },
+                return this.inactiveData.length;
+            }
         },
         methods: {
             searchEmail(searchValue, pageData) {
                 if (searchValue.trim() === '') {
-                    this.getEmployee()
+                    this.getEmployee();
                 } else {
                     let searchData = [];
                     for (let i = 0; i < pageData.length; i++) {
@@ -220,10 +221,10 @@
                     }
                     if (this.active === 'first') {
                         this.inactiveData = searchData;
-                        this.inactivePageData = this.getInactivePageData()
+                        this.inactivePageData = this.getInactivePageData();
                     } else if (this.active === 'second') {
                         this.activeData = searchData;
-                        this.activePageData = this.getActivePageData()
+                        this.activePageData = this.getActivePageData();
                     }
                 }
             },
@@ -232,9 +233,9 @@
                 data = this.inactiveData.slice((this.inactiveCurrentPage - 1) * this.pageSize, this.inactiveCurrentPage * this.pageSize);
                 if (data.length === 0 && this.inactiveCurrentPage > 1) {
                     this.inactiveCurrentPage--;
-                    return this.getInactivePageData()
+                    return this.getInactivePageData();
                 } else {
-                    return data
+                    return data;
                 }
             },
             getActivePageData() {
@@ -242,18 +243,18 @@
                 data = this.activeData.slice((this.activeCurrentPage - 1) * this.pageSize, this.activeCurrentPage * this.pageSize);
                 if (data.length === 0 && this.activeCurrentPage > 1) {
                     this.activeCurrentPage--;
-                    return this.getActivePageData()
+                    return this.getActivePageData();
                 } else {
-                    return data
+                    return data;
                 }
             },
             changeActivePage(page) {
                 this.activeCurrentPage = page;
-                this.activePageData = this.getActivePageData()
+                this.activePageData = this.getActivePageData();
             },
             changeInActivePage(page) {
                 this.inactiveCurrentPage = page;
-                this.inactivePageData = this.getInactivePageData()
+                this.inactivePageData = this.getInactivePageData();
             },
             cancelDeleteEmployee() {
                 this.deleteUserVisible = false;
@@ -264,13 +265,13 @@
                 http({
                     url: `${url.enableEmployee}/${this.deleteData.email}`,
                     method: 'delete',
-                    data: obj,
+                    data: obj
                 }).then(res => {
                     this.getEmployee();
                     util.successMessage(this);
                 }).catch(err => {
-                    util.catchErr(err, 'errorSet', this)
-                })
+                    util.catchErr(err, 'errorSet', this);
+                });
             },
             deleteEmployee(cla_org_id, email, enabled) {
                 this.deleteData = {
@@ -278,7 +279,7 @@
                     email: email,
                     enabled: enabled
                 };
-                this.deleteUserVisible = true
+                this.deleteUserVisible = true;
             },
             changeActive(cla_org_id, email, enabled) {
                 let data = {
@@ -287,21 +288,21 @@
                 http({
                     url: `${url.enableEmployee}/${email}`,
                     method: 'put',
-                    data: data,
+                    data: data
                 }).then(res => {
-                    this.getEmployee()
+                    this.getEmployee();
                 }).catch(err => {
-                    util.catchErr(err, 'errorSet', this)
-                })
+                    util.catchErr(err, 'errorSet', this);
+                });
             },
             getEmployee() {
                 http({
-                    url: url.queryEmployee,
+                    url: url.queryEmployee
                 }).then(res => {
                     let inactiveArr = [], activeArr = [];
                     let data = res.data.data;
                     data.forEach((item, index) => {
-                        item.enabled === false ? inactiveArr.push(item) : activeArr.push(item)
+                        item.enabled === false ? inactiveArr.push(item) : activeArr.push(item);
                     });
                     this.inactiveData = inactiveArr;
                     this.inactiveOriginData = inactiveArr;
@@ -310,14 +311,14 @@
                     this.inactivePageData = this.getInactivePageData();
                     this.activePageData = this.getActivePageData();
                 }).catch(err => {
-                    util.catchErr(err, 'errorSet', this)
-                })
-            },
+                    util.catchErr(err, 'errorSet', this);
+                });
+            }
         },
         created() {
             this.getEmployee();
         }
-    }
+    };
 </script>
 
 <style lang="less">

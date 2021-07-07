@@ -21,17 +21,17 @@
 
 <script>
     export default {
-        name: "DeleteDialog",
-        props:['deleteVisible','deleteMessage'],
-        methods:{
-            submit(){
-                this.$emit('delete')
+        name: 'DeleteDialog',
+        props: ['deleteVisible', 'deleteMessage'],
+        methods: {
+            submit() {
+                this.$emit('delete');
             },
-            cancel(){
-                this.$emit('cancel')
-            },
-        },
-    }
+            cancel() {
+                this.$emit('cancel');
+            }
+        }
+    };
 </script>
 
 <style scoped>

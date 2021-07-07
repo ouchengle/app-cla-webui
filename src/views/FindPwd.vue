@@ -13,34 +13,33 @@
 </template>
 
 <script>
-    import Footer from '@components/NewFooter'
-    import * as util from '../util/util'
-    import * as url from '../util/api'
+    import Footer from '@components/NewFooter';
+    import * as util from '../util/util';
+    import * as url from '../util/api';
 
     export default {
-        name: "FindPwd",
+        name: 'FindPwd',
         components: {
             Footer
         },
-        data(){
-            return{
-                findPwdClass:{
-                    height:'',
+        data() {
+            return {
+                findPwdClass: {
+                    height: ''
                 }
-            }
+            };
         },
-        methods:{
+        methods: {
             toHome() {
-                this.$router.push('/home')
+                this.$router.push('/home');
             },
             setClientHeight() {
                 this.$nextTick(() => {
                     util.getClientHeight() > document.getElementById('findPwd').offsetHeight ?
                         this.findPwdClass.height = util.getClientHeight() + 'px' :
-                        this.findPwdClass.height = document.getElementById('findPwd').offsetHeight
-
-                })
-            },
+                        this.findPwdClass.height = document.getElementById('findPwd').offsetHeight;
+                });
+            }
         },
         created() {
 
@@ -48,18 +47,19 @@
         mounted() {
             this.setClientHeight();
         }
-    }
+    };
     window.onresize = () => {
         if (util.getClientHeight() > document.getElementById('findPwd').offsetHeight) {
-            document.getElementById("findPwd").style.height = util.getClientHeight() + 'px'
+            document.getElementById('findPwd').style.height = util.getClientHeight() + 'px';
         }
-    }
+    };
 </script>
 
 <style scoped lang="less">
     .pointer {
         cursor: pointer;
     }
+
     .header {
         position: fixed;
         top: 0;

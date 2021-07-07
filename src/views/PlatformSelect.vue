@@ -35,34 +35,34 @@
                     </div>
                 </el-col>
             </el-row>
-            <reTryDialog  :message="corpReLoginMsg" :dialogVisible="corpReTryDialogVisible"></reTryDialog>
+            <reTryDialog :message="corpReLoginMsg" :dialogVisible="corpReTryDialogVisible"></reTryDialog>
         </el-col>
     </el-row>
 </template>
 
 <script>
-    import {mapActions} from 'vuex'
-    import * as url from '../util/api'
-    import reTryDialog from '../components/ReTryDialog'
-    import http from '../util/http'
+    import {mapActions} from 'vuex';
+    import * as url from '../util/api';
+    import reTryDialog from '../components/ReTryDialog';
+    import http from '../util/http';
 
     export default {
-        name: "PlatformSelect",
+        name: 'PlatformSelect',
         components: {
-            reTryDialog,
+            reTryDialog
         },
         computed: {
             corpReLoginMsg() {
-                return this.$store.state.dialogMessage
+                return this.$store.state.dialogMessage;
             },
 
             corpReTryDialogVisible() {
-                return this.$store.state.reTryDialogVisible
-            },
+                return this.$store.state.reTryDialogVisible;
+            }
         },
         data() {
             return {
-                platform: '',
+                platform: ''
             };
         },
         inject: ['setClientHeight'],
@@ -75,9 +75,9 @@
                 let interval = setInterval(() => {
                     if (this.$store.state.platform) {
                         http({
-                            url: `${url.getAuthCodeUrl}/${platform}/login`,
+                            url: `${url.getAuthCodeUrl}/${platform}/login`
                         }).then(res => {
-                            window.location.href=res.data.data.url
+                            window.location.href = res.data.data.url;
                         }).catch(err => {
                             if (err.data.hasOwnProperty('data')) {
                                 switch (err.data.data.error_code) {
@@ -90,17 +90,17 @@
                                     case 'cla.missing_token':
                                         this.$store.commit('errorSet', {
                                             dialogVisible: true,
-                                            dialogMessage:this.$t('tips.missing_token')
+                                            dialogMessage: this.$t('tips.missing_token')
                                         });
                                         break;
                                     case 'cla.unknown_token':
                                         this.$store.commit('errorSet', {
                                             dialogVisible: true,
-                                            dialogMessage:this.$t('tips.unknown_token')
+                                            dialogMessage: this.$t('tips.unknown_token')
                                         });
                                         break;
                                     case 'cla.invalid_parameter':
-                                        this.$router.replace('/platformSelect')
+                                        this.$router.replace('/platformSelect');
                                         break;
 
                                     case 'cla.system_error':
@@ -112,7 +112,7 @@
                                     default :
                                         this.$store.commit('errorCodeSet', {
                                             dialogVisible: true,
-                                            dialogMessage: this.$t('tips.unknown_error'),
+                                            dialogMessage: this.$t('tips.unknown_error')
                                         });
                                         break;
                                 }
@@ -120,22 +120,22 @@
                                 this.$store.commit('errorCodeSet', {
                                     dialogVisible: true,
                                     dialogMessage: this.$t('tips.system_error')
-                                })
+                                });
                             }
                         });
-                        clearInterval(interval)
+                        clearInterval(interval);
                     }
-                }, 100)
-            },
+                }, 100);
+            }
         },
         created() {
-            this.setClientHeight()
-        },
-    }
+            this.setClientHeight();
+        }
+    };
 </script>
 
 <style lang="less">
-    #platformSelect{
+    #platformSelect {
         .bt_desc {
             height: 100px;
             display: flex;

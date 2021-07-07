@@ -5,85 +5,85 @@ const INDIVIDUALMETADATAARR_EN = [
         title: 'Name',
         type: 'name',
         description: 'Your name',
-        required: true,
+        required: true
     },
     {
         title: 'E-Mail',
         type: 'email',
         description: 'Email for signing CLA',
-        required: true,
-    },
-   ];
+        required: true
+    }
+];
 const INDIVIDUALMETADATAARR_ZH = [
     {
         title: '姓名',
         type: 'name',
         description: '你的姓名',
-        required: true,
+        required: true
     },
-   {
+    {
         title: '邮箱',
         type: 'email',
         description: '签署CLA的邮箱',
-        required: true,
-    },
-   ];
+        required: true
+    }
+];
 const CORPORATIONMETADATAARR_EN = [
     {
         title: 'Authorized Representative',
         type: 'authorized',
         description: 'name of Authorized Representative',
-        required: true,
+        required: true
     },
     {
         title: 'Title',
         type: 'title',
         description: 'title of Authorized Representative',
-        required: true,
+        required: true
     },
     {
         title: 'Corporation Name',
         type: 'corporationName',
         description: 'corporation name',
-        required: true,
+        required: true
     },
 
     {
         title: 'E-Mail',
         type: 'email',
         description: 'corporation email',
-        required: true,
-    },];
+        required: true
+    }];
 const CORPORATIONMETADATAARR_ZH = [
     {
         title: '授权代表',
         type: 'authorized',
         description: '授权代表的姓名',
-        required: true,
+        required: true
     },
     {
         title: '职位',
         type: 'title',
         description: '授权代表的职位',
-        required: true,
+        required: true
     },
     {
         title: '公司名称',
         type: 'corporationName',
         description: '签署者所在公司名称',
-        required: true,
+        required: true
     },
     {
         title: '邮箱',
         type: 'email',
         description: '签署者所在公司的邮箱',
-        required: true,
-    },];
+        required: true
+    }];
 const INITCUSTOMMETADATA = [{
     title: '',
     type: '',
     description: '',
-    required: false,
+    required: false
 }];
 const DATATYPEOPTIONS = [
     {label: 'name', value: 'name'}, {
@@ -95,7 +95,7 @@ const DATATYPEOPTIONS = [
     }, {label: 'address', value: 'address'}, {label: 'email', value: 'email'}, {
         label: 'fax',
         value: 'fax'
-    },
+    }
 ];
 const EMAIL_UNAUTHORIZE = 'refuse_to_authorize_email';
 const NO_PUBLIC_EMAIL = 'no_public_email';

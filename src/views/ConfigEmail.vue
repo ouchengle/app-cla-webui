@@ -71,55 +71,55 @@
 </template>
 
 <script>
-    import * as url from '../util/api'
-    import http from '../util/http'
-    import _cookie from 'js-cookie'
-    import ReLoginDialog from '../components/ReLoginDialog'
-    import ReTryDialog from '../components/ReTryDialog'
+    import * as url from '../util/api';
+    import http from '../util/http';
+    import _cookie from 'js-cookie';
+    import ReLoginDialog from '../components/ReLoginDialog';
+    import ReTryDialog from '../components/ReTryDialog';
 
     export default {
-        name: "ConfigThree",
+        name: 'ConfigThree',
         components: {
             ReLoginDialog,
             ReTryDialog
         },
         computed: {
             reTryVisible() {
-                return this.$store.state.reTryDialogVisible
+                return this.$store.state.reTryDialogVisible;
             },
             reLoginDialogVisible() {
-                return this.$store.state.orgReLoginDialogVisible
+                return this.$store.state.orgReLoginDialogVisible;
             },
             reLoginMsg() {
-                return this.$store.state.dialogMessage
+                return this.$store.state.dialogMessage;
             },
             isEmail() {
                 return `${this.$store.state.isEmail}` === 'true';
             },
             email() {
                 return this.$store.state.email;
-            },
+            }
         },
         data() {
             return {
                 lang: '',
                 emailDialogVisible: false,
                 emailTypeArr: [{value: 'G-Mail', label: 'G-Mail'}],
-                emailType: '',
-            }
+                emailType: ''
+            };
         },
         inject: ['setClientHeight'],
         methods: {
             toPreviousPage() {
-                this.$router.replace('/config-org').then(route=>{
-                }).catch(err=>{
-                })
+                this.$router.replace('/config-org').then(route => {
+                }).catch(err => {
+                });
             },
             toNextPage() {
                 if (this.email) {
-                    this.$router.replace('/config-cla-link').then(route=>{
-                    }).catch(err=>{
-                    })
+                    this.$router.replace('/config-cla-link').then(route => {
+                    }).catch(err => {
+                    });
                 } else {
                     this.$message.closeAll();
                     this.$message.error(this.$t('tips.authorized_email'));
@@ -134,11 +134,11 @@
                         let name = arr[0].trim();
                         let value = arr[1].trim();
                         if (name === 'email') {
-                            email = value
+                            email = value;
                         } else if (name === SYSTEM_ERROR) {
                             this.$store.commit('errorCodeSet', {
                                 dialogVisible: true,
-                                dialogMessage: this.$t('tips.email_system_error'),
+                                dialogMessage: this.$t('tips.email_system_error')
                             });
                         }
                     });
@@ -158,7 +158,7 @@
                         break;
                 }
                 http({
-                    url: myUrl,
+                    url: myUrl
                 }).then(res => {
                     window.location.href = res.data.data.url;
                 }).catch(err => {
@@ -167,47 +167,47 @@
                             case 'cla.invalid_token':
                                 this.$store.commit('setOrgReLogin', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.invalid_token'),
+                                    dialogMessage: this.$t('tips.invalid_token')
                                 });
                                 break;
                             case 'cla.expired_token':
                                 this.$store.commit('setOrgReLogin', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.invalid_token'),
+                                    dialogMessage: this.$t('tips.invalid_token')
                                 });
                                 break;
                             case 'cla.missing_token':
                                 this.$store.commit('setOrgReLogin', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.missing_token'),
+                                    dialogMessage: this.$t('tips.missing_token')
                                 });
                                 break;
                             case 'cla.unknown_token':
                                 this.$store.commit('setOrgReLogin', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.unknown_token'),
+                                    dialogMessage: this.$t('tips.unknown_token')
                                 });
                                 break;
                             case 'cla.system_error':
                                 this.$store.commit('errorCodeSet', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.system_error'),
+                                    dialogMessage: this.$t('tips.system_error')
                                 });
                                 break;
                             default :
                                 this.$store.commit('errorCodeSet', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.unknown_error'),
+                                    dialogMessage: this.$t('tips.unknown_error')
                                 });
                                 break;
                         }
                     } else {
                         this.$store.commit('errorCodeSet', {
                             dialogVisible: true,
-                            dialogMessage: this.$t('tips.system_error'),
-                        })
+                            dialogMessage: this.$t('tips.system_error')
+                        });
                     }
-                })
+                });
             },
             changeEmailType(value) {
             },
@@ -215,12 +215,12 @@
                 this.$store.commit('setEmail', '');
                 this.$store.commit('setIsEmail', false);
                 sessionStorage.removeItem('email');
-            },
+            }
         },
         created() {
             this.getCookieData();
         },
-        mounted(){
+        mounted() {
             this.setClientHeight();
         },
         beforeRouteEnter(to, from, next) {
@@ -238,9 +238,9 @@
                         vm.init();
                     }
                 }
-            })
-        },
-    }
+            });
+        }
+    };
 </script>
 
 <style lang="less">

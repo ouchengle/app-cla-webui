@@ -13,8 +13,10 @@
             </div>
             <el-row>
                 <el-col align="center">
-                    <p :class="dialogMessage">{{$t('tips.no_public_email_1',{platform:this.$store.state.repoInfo.platform})}}
-                        <a :href="emailSetAddress" target="_blank">{{this.$t('tips.click_here')}}</a>{{emailNotOpenEnd}}</p>
+                    <p :class="dialogMessage">
+                        {{$t('tips.no_public_email_1',{platform:this.$store.state.repoInfo.platform})}}
+                        <a :href="emailSetAddress" target="_blank">{{this.$t('tips.click_here')}}</a>{{emailNotOpenEnd}}
+                    </p>
                     <button class="dialogBt" @click="reTry()">{{$t('tips.dialogBt')}}</button>
                 </el-col>
             </el-row>
@@ -24,54 +26,54 @@
 
 <script>
     export default {
-        name: "EmailReLoginDialog",
+        name: 'EmailReLoginDialog',
         props: ['dialogVisible'],
-        computed:{
+        computed: {
             dialogMessage() {
                 if (localStorage.getItem('lang') === this.english) {
-                    return 'dialogMessageEn'
+                    return 'dialogMessageEn';
                 } else if (localStorage.getItem('lang') === this.chinese) {
-                    return 'dialogMessage'
+                    return 'dialogMessage';
                 }
             },
             dialogWidth() {
                 if (this.IS_MOBILE) {
-                    return '80%'
+                    return '80%';
                 } else {
-                    return '30%'
+                    return '30%';
                 }
             },
-            emailNotOpenEnd(){
+            emailNotOpenEnd() {
                 if (this.$store.state.repoInfo.platform.toLowerCase() === 'gitee') {
-                    return this.$t('tips.gitee_no_public_email_2')
-                }else if (this.$store.state.repoInfo.platform.toLowerCase() === 'github') {
-                    return this.$t('tips.github_no_public_email_2')
+                    return this.$t('tips.gitee_no_public_email_2');
+                } else if (this.$store.state.repoInfo.platform.toLowerCase() === 'github') {
+                    return this.$t('tips.github_no_public_email_2');
                 }
             },
-            emailSetAddress(){
+            emailSetAddress() {
                 if (this.$store.state.repoInfo.platform.toLowerCase() === 'gitee') {
-                    return 'https://gitee.com/profile/emails'
-                }else if (this.$store.state.repoInfo.platform.toLowerCase() === 'github') {
-                    return 'https://github.com/settings/emails'
+                    return 'https://gitee.com/profile/emails';
+                } else if (this.$store.state.repoInfo.platform.toLowerCase() === 'github') {
+                    return 'https://github.com/settings/emails';
                 }
-            },
+            }
         },
         data() {
             return {
-                chinese:'Chinese',
-                english:'English',
-            }
+                chinese: 'Chinese',
+                english: 'English'
+            };
         },
         methods: {
             reTry() {
-                this.$store.commit('setEmailErr', false)
-            },
-        },
-    }
+                this.$store.commit('setEmailErr', false);
+            }
+        }
+    };
 </script>
 
 <style lang="less">
-    #emailReTryDialog{
+    #emailReTryDialog {
         .dialogBt {
             margin-top: 3rem;
             width: 8rem;
@@ -83,20 +85,25 @@
             cursor: pointer;
             outline: none;
         }
-        a{
+
+        a {
             color: #319E55;
         }
-        .el-dialog__header{
+
+        .el-dialog__header {
             padding: 0;
         }
-        .el-dialog__body{
+
+        .el-dialog__body {
             padding: 20px;
         }
+
         .titleBox {
             text-align: left;
             font-size: 1.5rem;
             color: #E22424;
             margin-bottom: 1rem;
+
             .dialogIcon {
                 width: 1.5rem;
                 height: 1.5rem;

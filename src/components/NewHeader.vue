@@ -87,19 +87,19 @@
 </template>
 
 <script>
-    import http from '../util/http'
-    import * as url from '../util/api'
-    import * as util from '../util/util'
+    import http from '../util/http';
+    import * as url from '../util/api';
+    import * as util from '../util/util';
 
     export default {
-        name: "NewHeader",
+        name: 'NewHeader',
         computed: {
             communityInfo() {
                 if (this.$store.state.loginInfo.userInfo[0].repo_id) {
-                    return `${this.$store.state.loginInfo.userInfo[0].org_id}/${this.$store.state.loginInfo.userInfo[0].repo_id}`
+                    return `${this.$store.state.loginInfo.userInfo[0].org_id}/${this.$store.state.loginInfo.userInfo[0].repo_id}`;
                 }
-                return this.$store.state.loginInfo.userInfo[0].org_id
-            },
+                return this.$store.state.loginInfo.userInfo[0].org_id;
+            }
         },
         data() {
             return {
@@ -111,38 +111,38 @@
                 language: 'English',
                 value: 0,
                 visible: {
-                    visibility: 'hidden',
+                    visibility: 'hidden'
                 },
                 options: [{value: 0, label: 'English'}, {value: 1, label: 'Chinese'}]
-            }
+            };
         },
         methods: {
             updateLangOptions(data) {
-                this.options = data
+                this.options = data;
             },
             toIndex() {
                 if (this.$route.path === '/corporationManagerLogin' || this.$route.path === '/platformSelect') {
-                    this.$router.push('/')
+                    this.$router.push('/');
                 } else if (this.$route.path === '/corporationList' || this.$route.path === '/addCorpUrl' || this.$route.path === '/config-check'
                     || this.$route.path === '/addIndividualUrl' || this.$route.path === '/config-org' || this.$route.path === '/config-email'
                     || this.$route.path === '/config-cla-link' || this.$route.path === '/config-fields') {
-                    this.$router.push('/linkedRepo')
+                    this.$router.push('/linkedRepo');
                 } else if (this.$route.path === '/createManager') {
-                    this.$router.push('/managerList')
+                    this.$router.push('/managerList');
                 } else if (this.$route.path === '/resetPassword') {
                     if (this.$store.state.loginInfo.userInfo[0].role === 'manager') {
-                        this.$router.push('/employeeList')
+                        this.$router.push('/employeeList');
                     } else {
-                        this.$router.push('/managerList')
+                        this.$router.push('/managerList');
                     }
                 } else if (this.$route.path === '/add-subemail') {
-                    this.$router.push('/subemail')
+                    this.$router.push('/subemail');
                 } else if (this.$route.path === '/privacy') {
-                    this.$router.push('/sign-cla')
+                    this.$router.push('/sign-cla');
                 }
             },
             openOrCloseMenu() {
-                this.menuVisible = !this.menuVisible
+                this.menuVisible = !this.menuVisible;
             },
             handleCommand(command) {
                 switch (command) {
@@ -174,43 +174,43 @@
             },
             toHome() {
                 if (this.$route.path !== '/linkedRepo') {
-                    this.$router.push('/home')
+                    this.$router.push('/home');
                 }
             },
             toManager() {
                 if (this.$route.path !== '/managerList') {
-                    this.$router.push('/managerList')
+                    this.$router.push('/managerList');
                 }
             },
             toEmployee() {
                 if (this.$route.path !== '/employeeList') {
-                    this.$router.push('/employeeList')
+                    this.$router.push('/employeeList');
                 }
             },
             toAddSubEmail() {
                 if (this.$route.path !== '/subemail') {
-                    this.$router.push('/subemail')
+                    this.$router.push('/subemail');
                 }
             },
             toCreateManager() {
                 if (this.$route.path !== '/createManager') {
-                    this.$router.push('/createManager')
+                    this.$router.push('/createManager');
                 }
             },
             toResetPwd() {
                 if (this.$route.path !== '/resetPassword') {
-                    this.$router.push('/resetPassword')
+                    this.$router.push('/resetPassword');
                 }
             },
             toCLA() {
                 http({
                     url: url.corporationPdf,
-                    responseType: 'blob',
+                    responseType: 'blob'
                 }).then(res => {
                     if (res && res.data) {
                         let blob = new Blob([(res.data)], {type: 'application/pdf'});
                         let url = window.URL.createObjectURL(blob);
-                        window.open(`../../static/pdf_source/web/viewer.html?file=${encodeURIComponent(url)}`)
+                        window.open(`../../static/pdf_source/web/viewer.html?file=${encodeURIComponent(url)}`);
                     }
                 }).catch(err => {
                     if (err.data && err.data.hasOwnProperty('data')) {
@@ -218,57 +218,57 @@
                             case 'cla.invalid_token':
                                 this.$store.commit('errorSet', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.invalid_token'),
+                                    dialogMessage: this.$t('tips.invalid_token')
                                 });
                                 break;
                             case 'cla.missing_token':
                                 this.$store.commit('errorSet', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.missing_token'),
+                                    dialogMessage: this.$t('tips.missing_token')
                                 });
                                 break;
                             case 'cla.unknown_token':
                                 this.$store.commit('errorSet', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.unknown_token'),
+                                    dialogMessage: this.$t('tips.unknown_token')
                                 });
                                 break;
 
                             case 'cla.system_error':
                                 this.$store.commit('errorCodeSet', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.system_error'),
+                                    dialogMessage: this.$t('tips.system_error')
                                 });
                                 break;
                             default :
                                 this.$store.commit('errorCodeSet', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.unknown_error'),
+                                    dialogMessage: this.$t('tips.unknown_error')
                                 });
                                 break;
                         }
                     } else {
                         this.$store.commit('errorCodeSet', {
                             dialogVisible: true,
-                            dialogMessage: this.$t('tips.system_error'),
-                        })
+                            dialogMessage: this.$t('tips.system_error')
+                        });
                     }
-                })
+                });
             },
             loginOut() {
                 sessionStorage.clear();
                 if (this.loginRole === 'corp') {
-                    this.$router.push('/corporationManagerLogin')
+                    this.$router.push('/corporationManagerLogin');
                 } else {
-                    this.$router.push('/')
+                    this.$router.push('/');
                 }
             },
             chooseLng(value) {
                 if (this.value !== value) {
-                    this.value = value
+                    this.value = value;
                     this.language = this.options[value].label;
                     localStorage.setItem('lang', this.language);
-                    this.changeI18N(this.language)
+                    this.changeI18N(this.language);
                 }
                 this.isActive = true;
             },
@@ -291,13 +291,13 @@
             setLangValue(language) {
                 for (let i = 0; i < this.options.length; i++) {
                     if (this.options[i].label === language) {
-                        this.value = i
+                        this.value = i;
                     }
                 }
             },
             init(value) {
                 if (value !== '' && value !== undefined) {
-                    this.language = value
+                    this.language = value;
                 } else {
                     let lang = localStorage.getItem('lang');
                     switch (lang) {
@@ -324,9 +324,9 @@
                 }
                 this.showHeaderMenu = util.getMenuState(this);
                 if (this.showHeaderMenu === 'corp' || this.showHeaderMenu === 'org') {
-                    this.loginRole = this.showHeaderMenu
+                    this.loginRole = this.showHeaderMenu;
                 }
-            },
+            }
         },
         created() {
             this.init();
@@ -337,11 +337,11 @@
                     this.isActive = true;
                 }
                 if (e.target.id !== 'svgCover') {
-                    this.menuVisible = false
+                    this.menuVisible = false;
                 }
-            })
+            });
         }
-    }
+    };
 </script>
 
 <style scoped lang="less">
@@ -598,6 +598,5 @@
 
         }
     }
-
 
 </style>

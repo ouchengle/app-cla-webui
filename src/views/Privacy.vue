@@ -10,23 +10,23 @@
 </template>
 
 <script>
-    import Footer from '../components/NewFooter'
-    import Header from '../components/NewHeader'
-    import axios from 'axios'
-    import VueMarkdown from 'vue-markdown'
+    import Footer from '../components/NewFooter';
+    import Header from '../components/NewHeader';
+    import axios from 'axios';
+    import VueMarkdown from 'vue-markdown';
 
     export default {
-        name: "Privacy",
+        name: 'Privacy',
         components: {
             Header,
             Footer,
-            VueMarkdown,
+            VueMarkdown
         },
         inject: ['setClientHeight'],
         computed: {
             privacyText() {
-                return this.$store.state.privacyData
-            },
+                return this.$store.state.privacyData;
+            }
         },
         data() {
             return {
@@ -35,24 +35,24 @@
                 repo: 'app-cla-server',
                 path: 'clasign_privacy_policy_20210513.md',
                 langOptions: [{value: 0, label: 'Chinese'}]
-            }
+            };
         },
         methods: {
             getPrivacy(platform, owner, repo, path) {
                 if (!this.privacyText) {
                     let _url = '';
                     if (platform === 'gitee') {
-                        _url = `https://gitee.com/api/v5/repos/${owner}/${repo}/contents/${path}`
+                        _url = `https://gitee.com/api/v5/repos/${owner}/${repo}/contents/${path}`;
                     } else if (platform === 'github') {
-                        _url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`
+                        _url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
                     }
                     axios({
                         url: _url
                     }).then(res => {
                         let Base64 = require('js-base64').Base64;
                         let privacy = Base64.decode(res.data.content);
-                        this.$store.commit('setPrivacyData', privacy)
-                    })
+                        this.$store.commit('setPrivacyData', privacy);
+                    });
                 }
             },
             init() {
@@ -60,7 +60,7 @@
                 localStorage.setItem('lang', this.langOptions[0].label);
                 this.$emit('initHeader', this.langOptions[0].label);
                 this.getPrivacy(this.platform, this.owner, this.repo, this.path);
-            },
+            }
         },
         activated() {
             this.$emit('getLangOptions', this.langOptions);
@@ -68,13 +68,13 @@
             this.$emit('initHeader', this.langOptions[0].label);
         },
         created() {
-            this.init()
+            this.init();
         },
         mounted() {
-            this.setClientHeight()
+            this.setClientHeight();
         }
 
-    }
+    };
 </script>
 
 <style scoped lang="less">

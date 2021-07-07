@@ -9,19 +9,19 @@
 </template>
 
 <script>
-    import Step from '../components/FindPwdSteps'
+    import Step from '../components/FindPwdSteps';
 
     export default {
-        name: "ResetPwdDone",
+        name: 'ResetPwdDone',
         components: {
-            Step,
+            Step
         },
         methods: {
             toLogin() {
-                this.$router.push('/corporationManagerLogin')
-            },
-        },
-    }
+                this.$router.push('/corporationManagerLogin');
+            }
+        }
+    };
 </script>
 
 <style scoped>

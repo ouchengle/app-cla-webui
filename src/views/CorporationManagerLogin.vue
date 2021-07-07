@@ -13,7 +13,7 @@
                                       :placeholder="$t('corp.pwd')" @keydown.native="pressEnter"></el-input>
                         </el-form-item>
                         <el-form-item style="text-align: right">
-                            <span class="pointer" @click="findPwd" id="forgetPwd">{{$t('corp.forget_pwd')}}</span>
+                            <span class="pointer" id="forgetPwd">{{$t('corp.forget_pwd')}}</span>
                         </el-form-item>
                         <el-form-item style="text-align: center">
                             <button class="button" type="button" @click="submitForm('ruleForm')">
@@ -29,31 +29,31 @@
 </template>
 
 <script>
-    import * as url from '../util/api'
-    import http from '../util/http'
-    import {mapActions} from 'vuex'
-    import * as util from '../util/util'
-    import reTryDialog from '../components/ReTryDialog'
+    import * as url from '../util/api';
+    import http from '../util/http';
+    import {mapActions} from 'vuex';
+    import * as util from '../util/util';
+    import reTryDialog from '../components/ReTryDialog';
 
     export default {
-        name: "RepoSelect",
+        name: 'RepoSelect',
         components: {
-            reTryDialog,
+            reTryDialog
         },
         computed: {
             corpReLoginMsg() {
-                return this.$store.state.dialogMessage
+                return this.$store.state.dialogMessage;
             },
             corpReTryDialogVisible() {
-                return this.$store.state.reTryDialogVisible
-            },
+                return this.$store.state.reTryDialogVisible;
+            }
         },
         data() {
             var validateAccount = (rule, value, callback) => {
                 if (value === '') {
                     callback(new Error(this.$t('tips.not_fill_email')));
                 } else {
-                    callback()
+                    callback();
                 }
 
             };
@@ -61,14 +61,12 @@
                 if (value === '') {
                     callback(new Error(this.$t('tips.fill_pwd')));
                 } else {
-                    callback()
+                    callback();
                 }
-
             };
             return {
-
                 myStyle: {
-                    height: '',
+                    height: ''
                 },
                 rules: {
                     userName: [
@@ -76,12 +74,12 @@
                     ],
                     pwd: [
                         {required: true, validator: validatePass, trigger: ['blur', 'change']}
-                    ],
+                    ]
                 },
                 ruleForm: {
                     userName: '',
-                    pwd: '',
-                },
+                    pwd: ''
+                }
             };
         },
         inject: ['setClientHeight'],
@@ -89,11 +87,8 @@
             ...mapActions(['setLoginInfoAct', 'setCorpTokenAct']),
             pressEnter() {
                 if (event.keyCode === 13) {
-                    this.submitForm('ruleForm')
+                    this.submitForm('ruleForm');
                 }
-            },
-            findPwd() {
-                // this.$router.push('/password')
             },
             login(userName, pwd) {
                 let obj = {
@@ -103,11 +98,11 @@
                 http({
                     url: url.corporationManagerAuth,
                     method: 'post',
-                    data: obj,
+                    data: obj
                 }).then(res => {
                     let data = [];
                     if (res.data) {
-                        data = res.data.data
+                        data = res.data.data;
                     }
                     if (data.length) {
                         new Promise((resolve, reject) => {
@@ -115,7 +110,7 @@
                             Object.assign(userInfo, {userName: userName});
                             this.setLoginInfoAct(userInfo);
                             if (data.length > 1) {
-                                this.$router.push('/orgSelect')
+                                this.$router.push('/orgSelect');
                             } else {
                                 this.setCorpTokenAct(data[0].token);
                                 Object.assign(userInfo, {orgValue: 0});
@@ -123,46 +118,45 @@
                                 this.setLoginInfoAct(userInfo);
                                 if (data[0].initial_pw_changed) {
                                     if (data[0].role === 'admin') {
-                                        this.$router.push('/rootManager')
+                                        this.$router.push('/rootManager');
                                     } else {
-                                        this.$router.push('/signedRepo')
+                                        this.$router.push('/signedRepo');
                                     }
-
                                 } else {
-                                    this.$router.push('/resetPassword')
+                                    this.$router.push('/resetPassword');
                                 }
                             }
                             resolve('completed');
                         }).then(res => {
                         }, err => {
-                        })
+                        });
                     } else {
                         this.$store.commit('errorCodeSet', {
                             dialogVisible: true,
-                            dialogMessage: this.$t('tips.id_pwd_err'),
-                        })
+                            dialogMessage: this.$t('tips.id_pwd_err')
+                        });
                     }
                 }).catch(err => {
-                    util.catchErr(err, 'errorSet',this);
-                })
+                    util.catchErr(err, 'errorSet', this);
+                });
             },
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        this.login(this.ruleForm.userName, this.ruleForm.pwd)
+                        this.login(this.ruleForm.userName, this.ruleForm.pwd);
                     } else {
                         return false;
                     }
                 });
-            },
+            }
         },
         created() {
             util.clearManagerSession(this);
         },
         mounted() {
-            this.setClientHeight()
+            this.setClientHeight();
         }
-    }
+    };
 </script>
 
 <style lang="less">
