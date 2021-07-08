@@ -330,5 +330,10 @@ module.exports = {
         not_complete: '未完成',
         complete: '已完成',
         cla_format_err: 'CLA文件必须是PDF',
+        config_cla_language_select_placeholder: '选择语言',
+        config_cla_language_title: '请选择需要下载的空白签名页的语言',
+        config_cla_first_tips: '提示：绑定前需要准备一个与CLA语言相同的签名文件，单击此处',
+        blank_signature: '空白页',
+        complete_information: '并填写完整信息',
     },
 };

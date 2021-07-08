@@ -329,5 +329,10 @@ module.exports = {
         not_complete: 'Not Complete',
         complete: 'Complete',
         cla_format_err: 'CLA file must be pdf',
+        config_cla_language_select_placeholder: 'select language',
+        config_cla_language_title: 'Please select the language of the blank signature page to download',
+        config_cla_first_tips: 'Tip: before binding, you need to prepare a signature file with the same language as cla. Click here to',
+        blank_signature: 'blank signature',
+        complete_information: 'and complete the information',
     },
 };

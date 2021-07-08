@@ -1,6 +1,10 @@
 <template>
     <el-row id="configOne">
         <div class="itemBox">
+            <div class="margin-bottom-1rem">
+                {{$t('org.config_cla_first_tips')}}<span @click="downloadPageVisible = true" class="downloadText"> {{$t('org.config_cla_corp_file_download')}}</span>
+                {{$t('org.blank_signature')}} {{$t('org.complete_information')}}
+            </div>
             <div class="stepTitle">
                 ① {{$t('org.config_cla_select_org_tile')}}
             </div>
@@ -46,6 +50,39 @@
         <div class="orgStepBtBox">
             <button class="step_button" @click="toConfigClaLink">{{$t('org.next_step')}}</button>
         </div>
+        <el-dialog
+                title=""
+                :visible.sync="downloadPageVisible"
+                :close-on-press-escape="false"
+                :show-close="false"
+                :close-on-click-modal="false"
+                :width="dialogWidth">
+            <el-row>
+                <el-col align="center">
+                    <p class="font-size-1rem margin-bottom-2rem">{{$t('org.config_cla_language_title')}}</p>
+                    <el-select
+                            class="margin-bottom-3rem"
+                            :placeholder="$t('org.config_cla_language_select_placeholder')"
+                            filterable
+                            v-model="language">
+                        <el-option
+                                v-for="item in languageArr"
+                                :key="item.value"
+                                :value="item.value"
+                                :label="item.label">
+                        </el-option>
+                    </el-select>
+                    <el-row>
+                        <el-col align="center" :span="12">
+                            <button class="cancelBt" @click="downloadPageVisible=false">{{$t('corp.cancel')}}</button>
+                        </el-col>
+                        <el-col align="center" :span="12">
+                            <button class="button_submit" @click="downloadFile">{{$t('tips.dialogBt')}}</button>
+                        </el-col>
+                    </el-row>
+                </el-col>
+            </el-row>
+        </el-dialog>
         <ReTryDialog :message="reTryMsg" :dialogVisible="reTryVisible"></ReTryDialog>
         <ReLoginDialog :message="reTryMsg" :dialogVisible="orgReLoginVisible"></ReLoginDialog>
         <CustomDialog :message="reTryMsg" :dialogVisible="customVisible"></CustomDialog>
@@ -53,66 +90,76 @@
 </template>
 
 <script>
-    import ReTryDialog from '../components/ReTryDialog'
-    import ReLoginDialog from '../components/ReLoginDialog'
-    import CustomDialog from '../components/CustomDialog'
-    import * as url from '../util/api'
-    import _axios from '../util/_axios'
-    import platform_http from '../util/platform_http'
+    import ReTryDialog from '../components/ReTryDialog';
+    import ReLoginDialog from '../components/ReLoginDialog';
+    import CustomDialog from '../components/CustomDialog';
+    import * as url from '../util/api';
+    import _axios from '../util/_axios';
+    import http from '../util/http';
+    import * as util from '../util/util';
+    import platform_http from '../util/platform_http';
+    import download from 'downloadjs';
 
     export default {
-        name: "ConfigOne",
+        name: 'ConfigOne',
         components: {
             ReTryDialog,
             ReLoginDialog,
-            CustomDialog,
+            CustomDialog
         },
         computed: {
+            dialogWidth() {
+                if (this.IS_MOBILE) {
+                    return '80%';
+                } else {
+                    return '30%';
+                }
+            },
             reTryMsg() {
-                return this.$store.state.dialogMessage
+                return this.$store.state.dialogMessage;
             },
             orgReLoginVisible() {
-                return this.$store.state.orgReLoginDialogVisible
+                return this.$store.state.orgReLoginDialogVisible;
             },
             reTryVisible() {
-                return this.$store.state.reTryDialogVisible
+                return this.$store.state.reTryDialogVisible;
             },
             customVisible() {
-                return this.$store.state.customVisible
+                return this.$store.state.customVisible;
             },
             orgOptions() {
                 try {
-                    return JSON.parse(this.$store.state.orgOptions)
+                    return JSON.parse(this.$store.state.orgOptions);
                 } catch (e) {
-                    return this.$store.state.orgOptions
+                    return this.$store.state.orgOptions;
                 }
             },
             orgChoose() {
                 return `${this.$store.state.orgChoose}` === 'true';
             },
             repositoryChoose() {
-                return `${this.$store.state.repositoryChoose}` === 'true'
+                return `${this.$store.state.repositoryChoose}` === 'true';
             },
             repositoryOptions() {
                 try {
-                    return JSON.parse(this.$store.state.repositoryOptions)
+                    return JSON.parse(this.$store.state.repositoryOptions);
                 } catch (e) {
-                    return this.$store.state.repositoryOptions
+                    return this.$store.state.repositoryOptions;
                 }
 
             },
             orgValue() {
                 if (this.$store.state.orgValue === undefined || this.$store.state.orgValue === '' || this.$store.state.orgValue === 'undefined') {
-                    return undefined
+                    return undefined;
                 } else {
-                    return Number(this.$store.state.orgValue)
+                    return Number(this.$store.state.orgValue);
                 }
             },
             repositoryValue() {
                 if (this.$store.state.repositoryValue === undefined || this.$store.state.repositoryValue === '' || this.$store.state.repositoryValue === 'undefined') {
-                    return undefined
+                    return undefined;
                 } else {
-                    return Number(this.$store.state.repositoryValue)
+                    return Number(this.$store.state.repositoryValue);
                 }
             },
             org_alias: {
@@ -120,26 +167,48 @@
                     return this.$store.state.orgAlias;
                 },
                 set(value) {
-                    this.$store.commit('setOrgAlias', value)
-                },
+                    this.$store.commit('setOrgAlias', value);
+                }
             },
             repo: {
                 get() {
                     return this.$store.state.repo;
                 },
                 set(value) {
-                    this.$store.commit('setRepo', value)
-                },
-            },
+                    this.$store.commit('setRepo', value);
+                }
+            }
         },
         data() {
             return {
+                language: '',
+                languageArr: LANGUAGE_ARR,
+                downloadPageVisible: false,
                 org_id: '',
-                org: this.$store.state.chooseOrg,
-            }
+                org: this.$store.state.chooseOrg
+            };
         },
         inject: ['setClientHeight'],
         methods: {
+            downloadFile() {
+                if (this.language) {
+                    http({
+                        url: `${url.getBlankSignature}/${this.language}`,
+                        responseType: 'blob'
+                    }).then(res => {
+                        if (res.data) {
+                            let time = util.getNowDateToTime();
+                            download((new Blob([res.data])), `${this.language}_blank_signature${time}.pdf`, 'application/pdf');
+                        }
+                        this.downloadPageVisible = false;
+                    }).catch(err => {
+                        util.catchErr(err, 'setOrgReLogin', this);
+                    });
+                } else {
+                    this.$message.closeAll();
+                    this.$message.error(this.$t('org.config_cla_download_empty_signature_tips'));
+                }
+            },
             checkRepo(org, repo) {
                 let _url = '';
                 let obj = {};
@@ -149,60 +218,60 @@
                     obj = {access_token: this.$store.state.platform_token};
                     _http = _axios;
                 } else if (this.$store.state.platform === 'Github') {
-                    _url = `https://api.github.com/repos/${org}/${repo}`
+                    _url = `https://api.github.com/repos/${org}/${repo}`;
                     _http = platform_http;
                 }
                 obj = {access_token: this.$store.state.platform_token};
                 _http({
                     url: _url,
-                    params: obj,
+                    params: obj
                 }).then(res => {
-                    this.$router.replace('/config-email')
+                    this.$router.replace('/config-email');
                 }).catch(err => {
                     switch (err.status) {
                         case 401:
                             if (err.data.message === GITEE_CHECK_REPO_401_ERROR_PRIVATE) {
                                 this.$store.commit('setCustomVisible', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.checkRepoMessage'),
+                                    dialogMessage: this.$t('tips.checkRepoMessage')
                                 });
                             } else if (err.data.message === GITEE_CHECK_REPO_401_ERROR_TOKEN_EXIST)
                                 this.$store.commit('setOrgReLogin', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.missing_token'),
+                                    dialogMessage: this.$t('tips.missing_token')
                                 });
                             break;
                         case 403:
                             this.$store.commit('setOrgReLogin', {
                                 dialogVisible: true,
-                                dialogMessage: this.$t('tips.missing_token'),
+                                dialogMessage: this.$t('tips.missing_token')
                             });
                             break;
                         case 404:
                             this.$store.commit('setCustomVisible', {
                                 dialogVisible: true,
-                                dialogMessage: this.$t('tips.checkRepoMessage'),
+                                dialogMessage: this.$t('tips.checkRepoMessage')
                             });
                             break;
                         default:
                             this.$store.commit('errorCodeSet', {
                                 dialogVisible: true,
-                                dialogMessage: this.$t('tips.system_error'),
-                            })
+                                dialogMessage: this.$t('tips.system_error')
+                            });
                     }
-                })
+                });
             },
             toConfigClaLink() {
                 if (this.org) {
                     if (this.repo) {
                         this.checkRepo(this.org, this.repo);
                     } else {
-                        this.$router.replace('/config-email')
+                        this.$router.replace('/config-email');
                     }
                 } else {
                     this.$store.commit('errorCodeSet', {
                         dialogVisible: true,
-                        dialogMessage: this.$t('corp.fill_complete'),
+                        dialogMessage: this.$t('corp.fill_complete')
                     });
                 }
             },
@@ -231,14 +300,14 @@
             getRepositoriesOfOrg(org, org_id) {
                 let _url = '';
                 if (this.$store.state.platform === 'Gitee') {
-                    _url = `https://gitee.com/api/v5/orgs/${org}/repos`
+                    _url = `https://gitee.com/api/v5/orgs/${org}/repos`;
                 } else if (this.$store.state.platform === 'Github') {
-                    _url = `https://api.github.com/orgs/${org}/repos`
+                    _url = `https://api.github.com/orgs/${org}/repos`;
                 }
                 let obj = {access_token: this.$store.state.platform_token, org: org, page: 1, per_page: 100};
                 _axios({
                     url: _url,
-                    params: obj,
+                    params: obj
                 }).then(res => {
                     let repositoryOptions = [];
                     res.data.forEach((item, index) => {
@@ -251,13 +320,13 @@
                             id: item.id
                         });
                     });
-                    this.$store.commit('setRepositoryOptions', repositoryOptions)
+                    this.$store.commit('setRepositoryOptions', repositoryOptions);
                 }).catch(err => {
                     this.$store.commit('errorCodeSet', {
                         dialogVisible: true,
-                        dialogMessage: this.$t('tips.system_error'),
-                    })
-                })
+                        dialogMessage: this.$t('tips.system_error')
+                    });
+                });
             },
             getOrgsInfo() {
                 let _url = '';
@@ -274,36 +343,36 @@
                 }
                 _http({
                     url: _url,
-                    params: obj,
+                    params: obj
                 }).then(res => {
                     if (res.status === 200) {
                         let orgOptions = [];
                         res.data.forEach((item, index) => {
                             orgOptions.push({value: index, label: item.login, id: item.id});
                         });
-                        this.$store.commit('setOrgOption', orgOptions)
+                        this.$store.commit('setOrgOption', orgOptions);
                     }
                 }).catch(err => {
                     switch (err.status) {
                         case 401:
                             this.$store.commit('setOrgReLogin', {
                                 dialogVisible: true,
-                                dialogMessage: this.$t('tips.not_authorize_group'),
+                                dialogMessage: this.$t('tips.not_authorize_group')
                             });
                             break;
                         case 403:
                             this.$store.commit('setOrgReLogin', {
                                 dialogVisible: true,
-                                dialogMessage: this.$t('tips.invalid_token'),
+                                dialogMessage: this.$t('tips.invalid_token')
                             });
                             break;
                         default:
                             this.$store.commit('errorCodeSet', {
                                 dialogVisible: true,
-                                dialogMessage: this.$t('tips.system_error'),
-                            })
+                                dialogMessage: this.$t('tips.system_error')
+                            });
                     }
-                })
+                });
             },
             init() {
                 this.$store.commit('setOrgOption', []);
@@ -326,19 +395,19 @@
                 sessionStorage.removeItem('repositoryValue');
                 sessionStorage.removeItem('chooseOrg');
                 sessionStorage.removeItem('chooseRepo');
-            },
+            }
         },
         beforeRouteEnter(to, from, next) {
             next(vm => {
                 if (from.path === '/') {
                     vm.init();
                 }
-            })
+            });
         },
         updated() {
             this.setClientHeight();
-        },
-    }
+        }
+    };
 </script>
 
 <style lang="less">

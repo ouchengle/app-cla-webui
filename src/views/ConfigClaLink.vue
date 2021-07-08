@@ -157,7 +157,7 @@
         },
         data() {
             return {
-                languageOptions: [{value: 'english', label: 'English'}, {value: 'chinese', label: '中文'}],
+                languageOptions: LANGUAGE_ARR
             }
         },
         inject: ['setClientHeight'],

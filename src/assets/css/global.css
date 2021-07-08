@@ -350,3 +350,13 @@
 .grayColor {
     color: gray;
 }
+
+.downloadText {
+    text-decoration: underline;
+    cursor: pointer;
+    color: #319E55;
+}
+
+.font-size-1rem {
+    font-size: 1rem;
+}
