@@ -176,22 +176,22 @@
 
 <script>
     export default {
-        name: "ConfigFields",
+        name: 'ConfigFields',
         computed: {
             individualCustomMetadataArr() {
                 if (this.$store.state.individualCustomMetadataArr) {
-                    return this.$store.state.individualCustomMetadataArr
+                    return this.$store.state.individualCustomMetadataArr;
                 } else {
                     return this.initIndividualCustomMetadata;
                 }
             },
             corporationCustomMetadataArr() {
                 if (this.$store.state.corporationCustomMetadataArr) {
-                    return this.$store.state.corporationCustomMetadataArr
+                    return this.$store.state.corporationCustomMetadataArr;
                 } else {
                     return this.initCorpCustomMetadata;
                 }
-            },
+            }
         },
         data() {
             return {
@@ -201,24 +201,24 @@
                 individualMetadataArr: INDIVIDUALMETADATAARR_EN,
                 corporationMetadataArr: CORPORATIONMETADATAARR_EN,
                 initIndividualCustomMetadata: INITCUSTOMMETADATA,
-                initCorpCustomMetadata: INITCUSTOMMETADATA,
-            }
+                initCorpCustomMetadata: INITCUSTOMMETADATA
+            };
         },
         beforeRouteEnter(to, from, next) {
             next(vm => {
                 if (from.path === '/') {
                     vm.flashInit();
                 }
-            })
+            });
         },
         inject: ['setClientHeight'],
         methods: {
             init() {
                 if (this.$store.state.individualLanguage === 'chinese') {
-                    this.individualMetadataArr = INDIVIDUALMETADATAARR_ZH
+                    this.individualMetadataArr = INDIVIDUALMETADATAARR_ZH;
                 }
                 if (this.$store.state.corpLanguage === 'chinese') {
-                    this.corporationMetadataArr = CORPORATIONMETADATAARR_ZH
+                    this.corporationMetadataArr = CORPORATIONMETADATAARR_ZH;
                 }
             },
             flashInit() {
@@ -233,7 +233,7 @@
                 sessionStorage.removeItem('corporationCustomMetadataArr');
             },
             toConfigClaLink() {
-                this.$router.replace('/config-cla-link')
+                this.$router.replace('/config-cla-link');
             },
             toNextPage() {
                 let metadataObj = this.checkMetadata();
@@ -245,7 +245,7 @@
                     this.$router.replace('/config-check');
                 } else {
                     this.$message.closeAll();
-                    this.$message.error(this.$t('tips.title_type_repeat'))
+                    this.$message.error(this.$t('tips.title_type_repeat'));
                 }
             },
             checkMetadata() {
@@ -253,12 +253,12 @@
                 let corpMetadata = [];
                 this.individualCustomMetadataArr.forEach((item) => {
                     if (item.title !== '' && item.type !== '') {
-                        individualMetadata.push(item)
+                        individualMetadata.push(item);
                     }
                 });
                 this.corporationCustomMetadataArr.forEach((item) => {
                     if (item.title !== '' && item.type !== '') {
-                        corpMetadata.push(item)
+                        corpMetadata.push(item);
                     }
                 });
                 let individualArr = this.individualMetadataArr.concat(individualMetadata);
@@ -281,13 +281,13 @@
                     title: '',
                     type: '',
                     description: '',
-                    required: false,
+                    required: false
                 });
                 corpMetadata.push({
                     title: '',
                     type: '',
                     description: '',
-                    required: false,
+                    required: false
                 });
                 this.individualMetadata = individualMetadata;
                 this.corpMetadata = corpMetadata;
@@ -299,50 +299,50 @@
                     title: '',
                     type: '',
                     description: '',
-                    required: false,
+                    required: false
                 });
-                this.$store.commit('setIndividualCustomMetadataArr', metadata)
+                this.$store.commit('setIndividualCustomMetadataArr', metadata);
             },
             myDeleteRow(index) {
                 let metadata = JSON.parse(JSON.stringify(this.individualCustomMetadataArr));
                 if (metadata.length === 1) {
                     metadata[0].type = '';
                     metadata[0].title = '';
-                    metadata[0].description = ''
+                    metadata[0].description = '';
                 } else {
                     metadata.splice(index, 1);
                 }
-                this.$store.commit('setIndividualCustomMetadataArr', metadata)
+                this.$store.commit('setIndividualCustomMetadataArr', metadata);
             },
             addCorpRow(index) {
-                let metadata =JSON.parse(JSON.stringify(this.corporationCustomMetadataArr))
+                let metadata = JSON.parse(JSON.stringify(this.corporationCustomMetadataArr));
                 metadata.splice(index + 1, 0, {
                     title: '',
                     type: '',
                     description: '',
-                    required: false,
+                    required: false
                 });
-                this.$store.commit('setCorporationCustomMetadataArr', metadata)
+                this.$store.commit('setCorporationCustomMetadataArr', metadata);
             },
             myCorpDeleteRow(index) {
-                let metadata = JSON.parse(JSON.stringify(this.corporationCustomMetadataArr))
+                let metadata = JSON.parse(JSON.stringify(this.corporationCustomMetadataArr));
                 if (metadata.length === 1) {
                     metadata[0].type = '';
                     metadata[0].title = '';
-                    metadata[0].description = ''
+                    metadata[0].description = '';
                 } else {
                     metadata.splice(index, 1);
                 }
-                this.$store.commit('setCorporationCustomMetadataArr', metadata)
-            },
+                this.$store.commit('setCorporationCustomMetadataArr', metadata);
+            }
         },
         created() {
             this.init();
         },
         updated() {
             this.setClientHeight();
-        },
-    }
+        }
+    };
 </script>
 
 <style lang="less">

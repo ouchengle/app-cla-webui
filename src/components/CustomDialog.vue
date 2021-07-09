@@ -30,48 +30,48 @@
 
 <script>
     export default {
-        name: "CustomDialog",
+        name: 'CustomDialog',
         props: ['dialogVisible', 'message'],
         computed: {
             dialogWidth() {
                 if (this.IS_MOBILE) {
-                    return '80%'
+                    return '80%';
                 } else {
-                    return '30%'
+                    return '30%';
                 }
             },
             dialogMessage() {
                 if (localStorage.getItem('lang') === this.english) {
-                    return 'dialogMessageEn'
+                    return 'dialogMessageEn';
                 } else if (localStorage.getItem('lang') === this.chinese) {
-                    return 'dialogMessage'
+                    return 'dialogMessage';
                 }
-            },
+            }
         },
         data() {
             return {
-                chinese:'Chinese',
-                english:'English',
-            }
+                chinese: 'Chinese',
+                english: 'English'
+            };
         },
         methods: {
             cancel() {
                 this.$store.commit('setCustomVisible', {
                     dialogVisible: false,
-                    dialogMessage: '',
-                })
+                    dialogMessage: ''
+                });
             },
-            toNext(){
+            toNext() {
                 this.cancel();
-                this.$router.replace('/config-email')
-            },
-        },
-    }
+                this.$router.replace('/config-email');
+            }
+        }
+    };
 </script>
 
 <style lang="less">
     #customDialog {
-        .cancelBt{
+        .cancelBt {
             margin-top: 3rem;
             width: 8rem;
             height: 3rem;
@@ -82,6 +82,7 @@
             cursor: pointer;
             outline: none;
         }
+
         .dialogBt {
             margin-top: 3rem;
             width: 8rem;

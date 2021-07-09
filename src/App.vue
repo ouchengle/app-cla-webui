@@ -11,32 +11,38 @@
         text-align: center;
         color: #2c3e50;
     }
+
     body {
         padding: 0;
         margin: 0;
 
     }
-    @media screen and (min-width:1920px) {
+
+    @media screen and (min-width: 1920px) {
         html {
             font-size: 18px;
         }
     }
-    @media screen and (min-width:1024px) and (max-width:1920px) {
+
+    @media screen and (min-width: 1024px) and (max-width: 1920px) {
         html {
             font-size: 16px;
         }
     }
-    @media screen and (min-width:800px) and (max-width:1024px) {
+
+    @media screen and (min-width: 800px) and (max-width: 1024px) {
         html {
             font-size: 14px;
         }
     }
-    @media screen and  (max-width:800px) {
+
+    @media screen and  (max-width: 800px) {
         html {
             font-size: 12px;
         }
     }
-    @media screen and (min-width: 100px) and (max-width:768px) {
+
+    @media screen and (min-width: 100px) and (max-width: 768px) {
         html {
             font-size: 10px;
         }

@@ -1,7 +1,7 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import Vue from 'vue';
+import Vuex from 'vuex';
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 export default new Vuex.Store({
     state: {
         chooseRepo: sessionStorage.getItem('chooseRepo') || undefined,
@@ -51,7 +51,7 @@ export default new Vuex.Store({
         findPwdEmail: sessionStorage.getItem('findPwdEmail') || undefined,
         pafData: '',
         privacyData: '',
-        emailSuffixArr: JSON.parse(sessionStorage.getItem('emailSuffixArr')) || undefined,
+        emailSuffixArr: JSON.parse(sessionStorage.getItem('emailSuffixArr')) || undefined
     },
     mutations: {
         setEmailSuffix(state, data) {
@@ -158,7 +158,7 @@ export default new Vuex.Store({
             sessionStorage.setItem('token', data.access_token);
             sessionStorage.setItem('refresh_token', data.refresh_token);
             sessionStorage.setItem('platform_token', data.platform_token);
-            data.resolve('complete')
+            data.resolve('complete');
         },
         setPlatform(state, platform) {
             state.platform = platform;
@@ -206,27 +206,27 @@ export default new Vuex.Store({
         },
         errorSet(state, obj) {
             state.dialogVisible = obj.dialogVisible;
-            state.dialogMessage = obj.dialogMessage
+            state.dialogMessage = obj.dialogMessage;
         },
         setCustomVisible(state, obj) {
             state.customVisible = obj.dialogVisible;
-            state.dialogMessage = obj.dialogMessage
+            state.dialogMessage = obj.dialogMessage;
         },
         errorCodeSet(state, obj) {
             state.reTryDialogVisible = obj.dialogVisible;
-            state.dialogMessage = obj.dialogMessage
+            state.dialogMessage = obj.dialogMessage;
         },
         setSignSuccess(state, obj) {
             state.signSuccessDialogVisible = obj.dialogVisible;
-            state.dialogMessage = obj.dialogMessage
+            state.dialogMessage = obj.dialogMessage;
         },
         setSignReLogin(state, obj) {
             state.signReLoginDialogVisible = obj.dialogVisible;
-            state.dialogMessage = obj.dialogMessage
+            state.dialogMessage = obj.dialogMessage;
         },
         setOrgReLogin(state, obj) {
             state.orgReLoginDialogVisible = obj.dialogVisible;
-            state.dialogMessage = obj.dialogMessage
+            state.dialogMessage = obj.dialogMessage;
         },
         setCorpToken(state, token) {
             state.access_token = token;
@@ -234,8 +234,8 @@ export default new Vuex.Store({
         },
         setDomain(state, domain) {
             state.domain = domain;
-            sessionStorage.setItem('domain', domain)
-        },
+            sessionStorage.setItem('domain', domain);
+        }
 
 
     },
@@ -253,17 +253,17 @@ export default new Vuex.Store({
             commit('setRepoInfo', obj);
         },
         setLoginTypeAct({commit}, loginType) {
-            commit('setLoginType', loginType)
+            commit('setLoginType', loginType);
         },
         setPlatformAct({commit}, platform) {
             let initials = platform.substring(0, 1);
             let upper = initials.toUpperCase();
             let end = platform.substring(1);
-            commit('setPlatform', upper + end)
+            commit('setPlatform', upper + end);
         },
         setTokenAct({commit}, data) {
             commit('setToken', data);
-        },
+        }
     },
     modules: {}
-})
+});

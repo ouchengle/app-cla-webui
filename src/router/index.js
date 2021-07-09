@@ -1,7 +1,7 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
+import Vue from 'vue';
+import VueRouter from 'vue-router';
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 const routes = [
     {
@@ -9,22 +9,22 @@ const routes = [
         name: 'Index',
         redirect: '/index',
         meta: {
-            title: 'index',
-        },
+            title: 'index'
+        }
     },
 
     {
         path: '/index',
         component: () => import('../views/Index.vue'),
         meta: {
-            title: 'index',
+            title: 'index'
         },
         children: [
             {
                 path: '/',
                 name: 'LoginTypeSelect',
                 meta: {
-                    title: 'index',
+                    title: 'index'
                 },
                 component: () => import('../views/LoginTypeSelect.vue')
             },
@@ -34,38 +34,38 @@ const routes = [
                 name: 'PlatformSelect',
                 component: () => import('../views/PlatformSelect.vue'),
                 meta: {
-                    title: 'platformSelect',
-                },
+                    title: 'platformSelect'
+                }
             },
             {
                 path: '/corporationManagerLogin',
                 name: 'CorporationManagerLogin',
                 component: () => import('../views/CorporationManagerLogin.vue'),
                 meta: {
-                    title: 'corporationManagerLogin',
-                },
+                    title: 'corporationManagerLogin'
+                }
             },
             {
                 path: '/orgSelect',
                 name: 'OrgSelect',
                 meta: {
-                    title: 'orgSelect',
+                    title: 'orgSelect'
                 },
                 component: () => import('../views/OrgSelect.vue')
-            },
+            }
         ]
     },
     {
         path: '/home',
         component: () => import('../views/Home.vue'),
         meta: {
-            title: 'home',
+            title: 'home'
         },
         children: [
             {
                 path: '/',
                 meta: {
-                    title: 'linkedRepo',
+                    title: 'linkedRepo'
                 },
                 redirect: '/linkedRepo'
             },
@@ -73,7 +73,7 @@ const routes = [
                 path: '/linkedRepo',
                 name: 'LinkedRepo',
                 meta: {
-                    title: 'linkedRepo',
+                    title: 'linkedRepo'
                 },
                 component: () => import('../views/LinkedRepo.vue')
             },
@@ -81,7 +81,7 @@ const routes = [
                 path: '/corporationList',
                 name: 'CorporationList',
                 meta: {
-                    title: 'corporationList',
+                    title: 'corporationList'
                 },
                 component: () => import('../views/CorporationList.vue')
             },
@@ -89,21 +89,21 @@ const routes = [
                 path: '/bind-cla',
                 component: () => import('../views/ConfigCla.vue'),
                 meta: {
-                    title: 'bind-cla',
+                    title: 'bind-cla'
                 },
                 children: [
                     {
                         path: '/',
                         redirect: '/config-org',
                         meta: {
-                            title: 'bind-cla',
-                        },
+                            title: 'bind-cla'
+                        }
                     },
                     {
                         path: '/config-org',
                         name: 'ConfigOrg',
                         meta: {
-                            title: 'bind-cla',
+                            title: 'bind-cla'
                         },
                         component: () => import('../views/ConfigOrg.vue')
                     },
@@ -126,7 +126,7 @@ const routes = [
                         path: '/config-check',
                         name: 'ConfigCheck',
                         component: () => import('../views/ConfigCheck.vue')
-                    },]
+                    }]
             },
             {
                 path: '/addIndividualCla',
@@ -134,16 +134,16 @@ const routes = [
                 children: [
                     {
                         path: '/',
-                        redirect: '/addIndividualUrl',
+                        redirect: '/addIndividualUrl'
                     },
                     {
                         path: '/addIndividualUrl',
                         name: 'AddIndividualUrl',
                         meta: {
-                            title: 'addIndividualCla',
+                            title: 'addIndividualCla'
                         },
                         component: () => import('../views/AddIndividualUrl.vue')
-                    },
+                    }
                 ]
             },
             {
@@ -152,16 +152,16 @@ const routes = [
                 children: [
                     {
                         path: '/',
-                        redirect: '/addCorpUrl',
+                        redirect: '/addCorpUrl'
                     },
                     {
                         path: '/addCorpUrl',
                         name: 'AddCorpUrl',
                         meta: {
-                            title: 'addCorpCla',
+                            title: 'addCorpCla'
                         },
                         component: () => import('../views/AddCorpUrl.vue')
-                    },
+                    }
                 ]
             }
         ]
@@ -172,16 +172,16 @@ const routes = [
         children: [
             {
                 path: '/',
-                redirect: '/employeeList',
+                redirect: '/employeeList'
             },
             {
                 path: '/employeeList',
                 name: 'EmployeeList',
                 meta: {
-                    title: 'employeeList',
+                    title: 'employeeList'
                 },
-                component: () => import('../views/EmployeeList.vue'),
-            },]
+                component: () => import('../views/EmployeeList.vue')
+            }]
     },
     {
         path: '/rootManager',
@@ -189,54 +189,54 @@ const routes = [
         children: [
             {
                 path: '/',
-                redirect: '/managerList',
+                redirect: '/managerList'
             },
             {
                 path: '/managerList',
                 name: 'ManagerList',
                 meta: {
-                    title: 'managerList',
+                    title: 'managerList'
                 },
-                component: () => import('../views/ManagerList.vue'),
+                component: () => import('../views/ManagerList.vue')
             },
             {
                 path: '/subemail',
                 name: 'Subemail',
                 meta: {
-                    title: 'subemail',
+                    title: 'subemail'
                 },
-                component: () => import('../views/Subemail.vue'),
+                component: () => import('../views/Subemail.vue')
             },
             {
                 path: '/add-subemail',
                 name: 'AddSubemail',
                 meta: {
-                    title: 'add-subemail',
+                    title: 'add-subemail'
                 },
-                component: () => import('../views/AddSubemail.vue'),
+                component: () => import('../views/AddSubemail.vue')
             },
             {
                 path: '/createManager',
                 name: 'CreateManager',
                 meta: {
-                    title: 'createManager',
+                    title: 'createManager'
                 },
-                component: () => import('../views/CreateManager.vue'),
+                component: () => import('../views/CreateManager.vue')
             },
             {
                 path: '/resetPassword',
                 name: 'resetPassword',
                 meta: {
-                    title: 'resetPassword',
+                    title: 'resetPassword'
                 },
-                component: () => import('../views/ResetPassword.vue'),
-            },]
+                component: () => import('../views/ResetPassword.vue')
+            }]
     },
     {
         path: '/sign/:params',
         name: 'SignType',
         meta: {
-            title: 'sign',
+            title: 'sign'
         },
         component: () => import('../views/SignType.vue')
     },
@@ -244,7 +244,7 @@ const routes = [
         path: '/sign/:params/:orgAddress',
         name: 'SignType_back',
         meta: {
-            title: 'sign',
+            title: 'sign'
         },
         component: () => import('../views/SignType.vue')
     },
@@ -253,7 +253,7 @@ const routes = [
         path: '/sign-page',
         name: 'SignPage',
         meta: {
-            title: 'sign-page',
+            title: 'sign-page'
         },
         component: () => import('../views/SignPage.vue'),
         children: [
@@ -265,23 +265,23 @@ const routes = [
                 path: '/sign-cla',
                 name: 'SignCla',
                 meta: {
-                    title: 'sign-cla',
+                    title: 'sign-cla'
                 },
-                component: () => import('../views/SignCla.vue'),
+                component: () => import('../views/SignCla.vue')
             },
             {
                 path: '/privacy',
                 name: 'Privacy',
                 meta: {
-                    title: 'privacy',
+                    title: 'privacy'
                 },
                 component: () => import('../views/Privacy.vue')
-            },]
+            }]
     },
     {
         path: '/password',
         meta: {
-            title: 'password',
+            title: 'password'
         },
         component: () => import('../views/ForgetPassword.vue'),
         children: [
@@ -293,32 +293,32 @@ const routes = [
                 path: '/verify-email',
                 name: 'VerifyEmail',
                 meta: {
-                    title: 'verify email',
+                    title: 'verify email'
                 },
-                component: () => import('../views/VerifyEmail.vue'),
+                component: () => import('../views/VerifyEmail.vue')
             },
             {
                 path: '/reset-password',
                 name: 'FindPassword',
                 meta: {
-                    title: 'find password',
+                    title: 'find password'
                 },
-                component: () => import('../views/FindPassword.vue'),
+                component: () => import('../views/FindPassword.vue')
             },
             {
                 path: '/reset-done',
                 name: 'ResetDone',
                 meta: {
-                    title: 'reset done',
+                    title: 'reset done'
                 },
-                component: () => import('../views/ResetPwdDone.vue'),
-            }],
+                component: () => import('../views/ResetPwdDone.vue')
+            }]
     },
     {
         path: '/cla-pdf',
         name: 'ClaPdf',
         meta: {
-            title: 'cla-pdf',
+            title: 'cla-pdf'
         },
         component: () => import('../views/ClaPdf.vue')
     },
@@ -326,10 +326,10 @@ const routes = [
         path: '*',
         name: 'ErrorPath',
         meta: {
-            title: 'ErrorPath',
+            title: 'ErrorPath'
         },
         component: () => import('../views/ErrorPath.vue')
-    },
+    }
 
 ];
 
@@ -342,19 +342,19 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
     window.scrollTo(0, 0);
     if (to.meta.title) {
-        document.title = to.meta.title
+        document.title = to.meta.title;
     }
     if (from.path === '/resetPassword') {
         if (to.path === '/corporationManagerLogin') {
-            next()
+            next();
         } else {
             if (sessionStorage.getItem('pwdIsChanged') === 'true') {
-                next()
+                next();
             } else {
             }
         }
     } else {
-        next()
+        next();
     }
 });
 router.afterEach((to, from, next) => {
@@ -368,4 +368,4 @@ router.onError((error) => {
         router.replace(targetPath);
     }
 });
-export default router
+export default router;

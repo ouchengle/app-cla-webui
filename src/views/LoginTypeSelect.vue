@@ -23,8 +23,6 @@
                                 </button>
                             </el-tooltip>
                         </div>
-
-
                     </div>
                 </el-col>
             </el-row>
@@ -32,46 +30,47 @@
     </el-row>
 </template>
 <script>
-    import {mapActions} from 'vuex'
-    import * as util from '../util/util'
+    import {mapActions} from 'vuex';
+    import * as util from '../util/util';
 
     export default {
-        name: "RepoSelect",
+        name: 'RepoSelect',
         data() {
             return {};
         },
         methods: {
             ...mapActions(['setLoginTypeAct']),
             setDomain() {
-                this.$store.commit('setDomain', window.location.href.split('/index')[0])
+                this.$store.commit('setDomain', window.location.href.split('/index')[0]);
             },
             submit(loginType) {
                 this.setLoginTypeAct(loginType);
                 if (loginType === 'orgManager') {
-                    this.$router.push('/platformSelect')
+                    this.$router.push('/platformSelect');
                 } else if (loginType === 'corporationManager') {
-                    this.$router.push('/corporationManagerLogin')
+                    this.$router.push('/corporationManagerLogin');
                 } else {
-                    this.$router.push('/signCla')
+                    this.$router.push('/signCla');
                 }
             },
             clearSessionStorage() {
                 let showHeaderMenu = sessionStorage.getItem('showHeaderMenu');
                 sessionStorage.clear();
-                sessionStorage.setItem('showHeaderMenu',showHeaderMenu);
+                sessionStorage.setItem('showHeaderMenu', showHeaderMenu);
                 this.setDomain();
-            },
+            }
         },
         created() {
             this.clearSessionStorage();
         },
         mounted() {
-            util.setMinHeight('loginType', 'btBox')
+            util.setMinHeight('loginType', 'btBox');
         }
-    }
+    };
 </script>
 <style scoped lang="less">
     @import "../assets/font/css/Roboto-Bold.css";
+
     .loginTypeSelect {
         font-family: Roboto-Bold, sans-serif;
 

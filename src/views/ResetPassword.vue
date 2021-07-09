@@ -29,15 +29,15 @@
 </template>
 
 <script>
-    import * as url from '../util/api'
-    import http from '../util/http'
-    import * as util from '../util/util'
-    import corpReLoginDialog from '../components/CorpReLoginDialog'
-    import reTryDialog from '../components/ReTryDialog'
+    import * as url from '../util/api';
+    import http from '../util/http';
+    import * as util from '../util/util';
+    import corpReLoginDialog from '../components/CorpReLoginDialog';
+    import reTryDialog from '../components/ReTryDialog';
 
     export default {
 
-        name: "ResetPassword",
+        name: 'ResetPassword',
         components: {
             corpReLoginDialog,
             reTryDialog
@@ -46,28 +46,28 @@
             '$i18n.locale'() {
                 this.$refs['ruleForm'] && this.$refs['ruleForm'].fields.forEach(item => {
                     if (item.validateState === 'error') {
-                        this.$refs['ruleForm'].validateField(item.labelFor)
+                        this.$refs['ruleForm'].validateField(item.labelFor);
                     }
                 });
-            },
+            }
         },
         computed: {
             orgValue() {
-                return this.$store.state.loginInfo.orgValue
+                return this.$store.state.loginInfo.orgValue;
             },
             userInfo() {
-                return this.$store.state.loginInfo.userInfo
+                return this.$store.state.loginInfo.userInfo;
             },
             corpReLoginDialogVisible() {
-                return this.$store.state.dialogVisible
+                return this.$store.state.dialogVisible;
             }
             ,
             corpReLoginMsg() {
-                return this.$store.state.dialogMessage
+                return this.$store.state.dialogMessage;
             },
             corpReTryDialogVisible() {
-                return this.$store.state.reTryDialogVisible
-            },
+                return this.$store.state.reTryDialogVisible;
+            }
         },
         data() {
             var validatePass = (rule, value, callback) => {
@@ -107,7 +107,7 @@
                 ruleForm: {
                     oldPassword: '',
                     newPassword: '',
-                    checkPwd: '',
+                    checkPwd: ''
                 },
                 rules: {
                     oldPassword: [
@@ -118,23 +118,23 @@
                     ],
                     checkPwd: [
                         {require: true, validator: validatePass3, trigger: 'blur'}
-                    ],
+                    ]
 
                 }
-            }
+            };
         },
         methods: {
             checkIllegalChar(str) {
                 for (let char of str) {
                     if (char.charCodeAt() > PWD_MAX_ASCII || char.charCodeAt() < PWD_MIN_ASCII) {
-                        return true
+                        return true;
                     }
                 }
-                return false
+                return false;
             },
             pressEnter() {
                 if (event.keyCode === 13) {
-                    this.submit('ruleForm')
+                    this.submit('ruleForm');
                 }
             },
             resetPassword() {
@@ -145,14 +145,14 @@
                 http({
                     url: url.resetPassword,
                     method: 'patch',
-                    data: obj,
+                    data: obj
                 }).then(res => {
                     this.$store.commit('setPwdIsChanged', true);
                     util.successMessage(this);
                     if (this.$store.state.loginInfo.userInfo[0].role === 'manager') {
-                        this.$router.push('/employeeList')
+                        this.$router.push('/employeeList');
                     } else {
-                        this.$router.push('/managerList')
+                        this.$router.push('/managerList');
                     }
                 }).catch(err => {
                     if (err.data.hasOwnProperty('data')) {
@@ -160,92 +160,92 @@
                             case 'cla.invalid_token':
                                 this.$store.commit('errorSet', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.invalid_token'),
+                                    dialogMessage: this.$t('tips.invalid_token')
                                 });
                                 break;
                             case 'cla.missing_token':
                                 this.$store.commit('errorSet', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.missing_token'),
+                                    dialogMessage: this.$t('tips.missing_token')
                                 });
                                 break;
                             case 'cla.unknown_token':
                                 this.$store.commit('errorSet', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.unknown_token'),
+                                    dialogMessage: this.$t('tips.unknown_token')
                                 });
                                 break;
                             case 'cla.expired_token':
                                 this.$store.commit('errorSet', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.invalid_token'),
+                                    dialogMessage: this.$t('tips.invalid_token')
                                 });
                                 break;
 
                             case 'cla.invalid_parameter':
                                 this.$store.commit('errorCodeSet', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.invalid_parameter'),
+                                    dialogMessage: this.$t('tips.invalid_parameter')
                                 });
                                 break;
                             case 'cla.too_short_or_long_password':
                                 this.$store.commit('errorCodeSet', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.newPwd_length_err'),
+                                    dialogMessage: this.$t('tips.newPwd_length_err')
                                 });
                                 break;
                             case 'cla.invalid_password':
                                 this.$store.commit('errorCodeSet', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.newPwd_contains_Illegal_character'),
+                                    dialogMessage: this.$t('tips.newPwd_contains_Illegal_character')
                                 });
                                 break;
                             case 'cla.invalid_account_or_pw':
                                 this.$store.commit('errorCodeSet', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.invalid_account_or_pw'),
+                                    dialogMessage: this.$t('tips.invalid_account_or_pw')
                                 });
                                 break;
                             case 'cla.no_db_record':
                                 this.$store.commit('errorCodeSet', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.invalid_account_or_pw'),
+                                    dialogMessage: this.$t('tips.invalid_account_or_pw')
                                 });
                                 break;
                             case 'cla.system_error':
                                 this.$store.commit('errorCodeSet', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.system_error'),
+                                    dialogMessage: this.$t('tips.system_error')
                                 });
                                 break;
                             default :
                                 this.$store.commit('errorCodeSet', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.unknown_error'),
+                                    dialogMessage: this.$t('tips.unknown_error')
                                 });
                                 break;
                         }
                     } else {
                         this.$store.commit('errorCodeSet', {
                             dialogVisible: true,
-                            dialogMessage: this.$t('tips.system_error'),
-                        })
+                            dialogMessage: this.$t('tips.system_error')
+                        });
                     }
-                })
+                });
             },
             submit(formName) {
                 this.$refs[formName].validate((valid => {
                     if (valid) {
-                        this.resetPassword()
+                        this.resetPassword();
                     } else {
                         return false;
                     }
-                }))
+                }));
             },
             reset(formName) {
                 this.$refs[formName].resetFields();
-            },
-        },
+            }
+        }
     };
 
 </script>

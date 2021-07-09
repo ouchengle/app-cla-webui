@@ -6,50 +6,50 @@
 </template>
 
 <script>
-    import pdf from 'vue-pdf'
-    import http from '../util/_axios'
-    import * as url from '../util/api'
+    import pdf from 'vue-pdf';
+    import http from '../util/_axios';
+    import * as url from '../util/api';
 
     export default {
-        name: "ClaPdf",
+        name: 'ClaPdf',
         components: {
-            pdf,
+            pdf
         },
         data() {
             return {
                 claText: '',
-                numPages: null,
-            }
+                numPages: null
+            };
         },
         computed: {
             apply_to() {
                 if (this.$store.state.loginType === 'corporation') {
-                    return this.$store.state.loginType
+                    return this.$store.state.loginType;
                 }
-                return 'individual'
+                return 'individual';
             },
             claTextUrl() {
-                return this.$store.state.domain
-            },
+                return this.$store.state.domain;
+            }
         },
         created() {
-            this.getData()
+            this.getData();
         },
         methods: {
             getData() {
                 window.addEventListener('message', (event) => {
                     if (event.data) {
-                        this.setClaText(event.data)
+                        this.setClaText(event.data);
                     }
-                }, false)
+                }, false);
             },
             getNumPages(url) {
-                let loadingTask = pdf.createLoadingTask(url)
+                let loadingTask = pdf.createLoadingTask(url);
                 loadingTask.promise.then(pdf => {
-                    this.numPages = pdf.numPages
+                    this.numPages = pdf.numPages;
                 }).catch(err => {
                     console.error('pdf 加载失败', err);
-                })
+                });
             },
             setClaText(obj) {
                 let dataFromParent = obj;
@@ -59,13 +59,13 @@
                             this.claText && window.URL.revokeObjectURL(this.claText);
                             this.claText = window.URL.createObjectURL(dataFromParent.pdfData[i][dataFromParent.lang]);
                             this.getNumPages(this.claText);
-                            return
+                            return;
                         }
                     }
                 }
                 http({
                     url: `${url.getCLAPdf}/${dataFromParent.link_id}/${this.apply_to}/${dataFromParent.lang}/${dataFromParent.hash}`,
-                    responseType: 'blob',
+                    responseType: 'blob'
                 }).then(res => {
                     if (res && res.data) {
                         let blob = new Blob([(res.data)], {type: 'application/pdf'});
@@ -82,51 +82,50 @@
                             case 'cla.invalid_token':
                                 this.$store.commit('errorSet', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.invalid_token'),
+                                    dialogMessage: this.$t('tips.invalid_token')
                                 });
                                 break;
                             case 'cla.missing_token':
                                 this.$store.commit('errorSet', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.missing_token'),
+                                    dialogMessage: this.$t('tips.missing_token')
                                 });
                                 break;
                             case 'cla.expired_token':
                                 this.$store.commit('errorSet', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.invalid_token'),
+                                    dialogMessage: this.$t('tips.invalid_token')
                                 });
                                 break;
                             case 'cla.unknown_token':
                                 this.$store.commit('errorSet', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.unknown_token'),
+                                    dialogMessage: this.$t('tips.unknown_token')
                                 });
                                 break;
-
                             case 'cla.system_error':
                                 this.$store.commit('errorCodeSet', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.system_error'),
+                                    dialogMessage: this.$t('tips.system_error')
                                 });
                                 break;
                             default :
                                 this.$store.commit('errorCodeSet', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.unknown_error'),
+                                    dialogMessage: this.$t('tips.unknown_error')
                                 });
                                 break;
                         }
                     } else {
                         this.$store.commit('errorCodeSet', {
                             dialogVisible: true,
-                            dialogMessage: this.$t('tips.system_error'),
-                        })
+                            dialogMessage: this.$t('tips.system_error')
+                        });
                     }
-                })
+                });
             }
-        },
-    }
+        }
+    };
 </script>
 
 <style scoped lang="less">

@@ -5,7 +5,7 @@
                 <div class="box" @click="join">
                     <svg-icon icon-class="github" class="footerIcon"></svg-icon>
                 </div>
-                <div class="box" @click="viewPrivacy">
+                <div class="box">
                     <span class="copyright">{{this.copyright}}</span>
                 </div>
             </el-col>
@@ -14,24 +14,19 @@
 </template>
 
 <script>
-    import {mapActions} from 'vuex'
-
     export default {
-        name: "NewFooter",
+        name: 'NewFooter',
         data() {
             return {
-                copyright: COPYRIGHT,
-            }
+                copyright: COPYRIGHT
+            };
         },
         methods: {
             join() {
-                window.open('https://github.com/opensourceways/app-cla-server')
-            },
-            viewPrivacy() {
-                // window.open('/privacy')
-            },
-        },
-    }
+                window.open('https://github.com/opensourceways/app-cla-server');
+            }
+        }
+    };
 </script>
 
 <style scoped lang="less">

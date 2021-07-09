@@ -33,58 +33,58 @@
 </template>
 
 <script>
-    import * as url from '../util/api'
-    import http from '../util/http'
-    import corpReLoginDialog from '../components/CorpReLoginDialog'
-    import reTryDialog from '../components/ReTryDialog'
-    import * as util from '../util/util'
+    import * as url from '../util/api';
+    import http from '../util/http';
+    import corpReLoginDialog from '../components/CorpReLoginDialog';
+    import reTryDialog from '../components/ReTryDialog';
+    import * as util from '../util/util';
 
     export default {
-        name: "Subemail",
+        name: 'Subemail',
         components: {
             corpReLoginDialog,
-            reTryDialog,
+            reTryDialog
         },
         computed: {
             corpReLoginDialogVisible() {
-                return this.$store.state.dialogVisible
+                return this.$store.state.dialogVisible;
             },
             corpReLoginMsg() {
-                return this.$store.state.dialogMessage
+                return this.$store.state.dialogMessage;
             },
             corpReTryDialogVisible() {
-                return this.$store.state.reTryDialogVisible
-            },
+                return this.$store.state.reTryDialogVisible;
+            }
         },
         data() {
             return {
-                tableData: [],
-            }
+                tableData: []
+            };
         },
         methods: {
             addSubEmail() {
-                this.$router.push('/add-subemail')
+                this.$router.push('/add-subemail');
             },
             getEmails() {
                 http({
-                    url: url.addSubEmail,
+                    url: url.addSubEmail
                 }).then(res => {
                     let data = res.data.data;
                     this.$store.commit('setEmailSuffix', data);
                     let newData = [];
                     data.forEach((item, index) => {
-                        newData.push({id: index + 1, email: item})
+                        newData.push({id: index + 1, email: item});
                     });
                     this.tableData = newData;
                 }).catch(err => {
-                    util.catchErr(err,'errorSet',this)
-                })
-            },
+                    util.catchErr(err, 'errorSet', this);
+                });
+            }
         },
         created() {
             this.getEmails();
         }
-    }
+    };
 </script>
 
 <style scoped lang="less">

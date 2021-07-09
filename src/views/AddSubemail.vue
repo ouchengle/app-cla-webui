@@ -39,50 +39,50 @@
 </template>
 
 <script>
-    import * as url from '../util/api'
-    import http from '../util/http'
-    import * as util from '../util/util'
-    import corpReLoginDialog from '../components/CorpReLoginDialog'
-    import reTryDialog from '../components/ReTryDialog'
+    import * as url from '../util/api';
+    import http from '../util/http';
+    import * as util from '../util/util';
+    import corpReLoginDialog from '../components/CorpReLoginDialog';
+    import reTryDialog from '../components/ReTryDialog';
 
     export default {
-        name: "AddSubemail",
+        name: 'AddSubemail',
         components: {
             corpReLoginDialog,
             reTryDialog
         },
         computed: {
             corpReLoginDialogVisible() {
-                return this.$store.state.dialogVisible
+                return this.$store.state.dialogVisible;
             },
             corpReLoginMsg() {
-                return this.$store.state.dialogMessage
+                return this.$store.state.dialogMessage;
             },
             corpReTryDialogVisible() {
-                return this.$store.state.reTryDialogVisible
+                return this.$store.state.reTryDialogVisible;
             },
             sendBtTextFromLang: {
                 get: function () {
                     return this.sendBtText;
                 },
                 set: function (value) {
-                    this.sendBtText = value
+                    this.sendBtText = value;
                 }
-            },
+            }
         },
         watch: {
             '$i18n.locale'() {
                 if (this.sendBtTextFromLang === 'send code' || this.sendBtTextFromLang === '发送验证码') {
-                    this.sendBtTextFromLang = this.$t('signPage.sendCode')
+                    this.sendBtTextFromLang = this.$t('signPage.sendCode');
                 } else {
-                    this.sendBtTextFromLang = this.$t('signPage.reSendCode', {second: this.second})
+                    this.sendBtTextFromLang = this.$t('signPage.reSendCode', {second: this.second});
                 }
                 this.$refs['ruleForm'] && this.$refs['ruleForm'].fields.forEach(item => {
                     if (item.validateState === 'error') {
-                        this.$refs['ruleForm'].validateField(item.labelFor)
+                        this.$refs['ruleForm'].validateField(item.labelFor);
                     }
                 });
-            },
+            }
         },
         data() {
             return {
@@ -91,9 +91,9 @@
                 ruleForm: {email: '', code: ''},
                 rules: {
                     email: [{required: true, validator: this.verifyFormEmail, trigger: ['blur', 'change']}],
-                    code: [{required: true, validator: this.verifyCodeCheck, trigger: ['blur', 'change']}],
-                },
-            }
+                    code: [{required: true, validator: this.verifyCodeCheck, trigger: ['blur', 'change']}]
+                }
+            };
         },
         methods: {
             async verifyFormEmail(rule, value, callback) {
@@ -101,53 +101,53 @@
                 if (EMAIL_REG.test(email)) {
                     callback();
                 } else {
-                    callback(new Error(this.$t('tips.invalid_email')))
+                    callback(new Error(this.$t('tips.invalid_email')));
                 }
             },
             async verifyCodeCheck(rule, value, callback) {
                 if (value) {
                     callback();
                 } else {
-                    callback(new Error(this.$t('tips.fill_verification_code')))
+                    callback(new Error(this.$t('tips.fill_verification_code')));
                 }
             },
             isExistSuffix(suffixArr, suffix) {
                 if (!suffixArr) {
                     this.$message.closeAll();
                     this.$message.error(this.$t('tips.noSession'));
-                    return
+                    return;
                 }
                 let isExist = false;
                 for (let i = 0; i < suffixArr.length; i++) {
                     if (suffixArr[i] === suffix) {
                         isExist = true;
-                        break
+                        break;
                     }
                 }
-                return isExist
+                return isExist;
             },
             submitSubEmail() {
                 let subEmailSplit = this.ruleForm.email.trim().split('@');
                 if (this.isExistSuffix(this.$store.state.emailSuffixArr, subEmailSplit[subEmailSplit.length - 1])) {
                     this.$store.commit('errorCodeSet', {
                         dialogVisible: true,
-                        dialogMessage: this.$t('tips.sameEmailSuffix'),
+                        dialogMessage: this.$t('tips.sameEmailSuffix')
                     });
-                    return
+                    return;
                 }
                 http({
                     url: url.addSubEmail,
                     method: 'post',
                     data: {
                         verification_code: this.ruleForm.code.trim(),
-                        sub_email: this.ruleForm.email.trim(),
+                        sub_email: this.ruleForm.email.trim()
                     }
                 }).then(res => {
                     util.successMessage(this);
-                    this.$router.push('/subemail')
+                    this.$router.push('/subemail');
                 }).catch(err => {
                     util.catchErr(err, 'errorSet', this);
-                })
+                });
             },
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
@@ -155,11 +155,11 @@
                         if (!this.compareEmailSuffix(this.$store.state.loginInfo.userName, this.ruleForm.email.trim())) {
                             this.$store.commit('errorCodeSet', {
                                 dialogVisible: true,
-                                dialogMessage: this.$t('tips.subemailErr'),
+                                dialogMessage: this.$t('tips.subemailErr')
                             });
-                            return
+                            return;
                         }
-                        this.submitSubEmail()
+                        this.submitSubEmail();
                     } else {
                         return false;
                     }
@@ -170,10 +170,10 @@
                 let loginSuffixArr, subSuffixArr = [];
                 if (loginEmailOrID.indexOf('@') !== -1) {
                     let suffixArr = loginEmailOrID.split('@');
-                    loginSuffix = suffixArr[suffixArr.length - 1]
+                    loginSuffix = suffixArr[suffixArr.length - 1];
                 } else {
                     let suffixArr = loginEmailOrID.split('_');
-                    loginSuffix = suffixArr[suffixArr.length - 1]
+                    loginSuffix = suffixArr[suffixArr.length - 1];
                 }
                 let suffixArr = subemail.split('@');
                 subSuffix = suffixArr[suffixArr.length - 1];
@@ -184,12 +184,12 @@
                     for (let i = 0; i < 2; i++) {
                         if (loginSuffixArr[loginSuffixArr.length - 1 - i] !== subSuffixArr[subSuffixArr.length - 1 - i]) {
                             isPass = false;
-                            break
+                            break;
                         }
                     }
-                    return isPass
+                    return isPass;
                 } else {
-                    return false
+                    return false;
                 }
             },
             sendCode() {
@@ -198,13 +198,13 @@
                     if (!this.compareEmailSuffix(this.$store.state.loginInfo.userName, email)) {
                         this.$store.commit('errorCodeSet', {
                             dialogVisible: true,
-                            dialogMessage: this.$t('tips.subemailErr'),
+                            dialogMessage: this.$t('tips.subemailErr')
                         });
-                        return
+                        return;
                     }
                     http({
                         url: `${url.sendVerifyCode}/${email}`,
-                        method: 'post',
+                        method: 'post'
                     }).then(res => {
                         this.$message.closeAll();
                         this.$message.success({message: this.$t('tips.sending_email'), duration: 5000});
@@ -212,22 +212,22 @@
                         let codeInterval = setInterval(() => {
                             if (this.second !== 0) {
                                 this.second--;
-                                this.sendBtTextFromLang = this.$t('signPage.reSendCode', {second: this.second})
+                                this.sendBtTextFromLang = this.$t('signPage.reSendCode', {second: this.second});
                             } else {
                                 this.sendBtTextFromLang = this.$t('signPage.sendCode');
-                                clearInterval(codeInterval)
+                                clearInterval(codeInterval);
                             }
-                        }, 1000)
+                        }, 1000);
                     }).catch(err => {
                         util.catchErr(err, 'errorSet', this);
-                    })
+                    });
                 } else {
                     this.$message.closeAll();
-                    this.$message.error(this.$t('tips.not_fill_email'))
+                    this.$message.error(this.$t('tips.not_fill_email'));
                 }
-            },
-        },
-    }
+            }
+        }
+    };
 </script>
 
 <style lang="less">

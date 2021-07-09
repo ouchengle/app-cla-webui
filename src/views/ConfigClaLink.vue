@@ -99,51 +99,51 @@
 
 </template>
 <script>
-    import * as url from '../util/api'
-    import * as util from '../util/util'
-    import http from '../util/http'
-    import download from 'downloadjs'
-    import ReTryDialog from '../components/ReTryDialog'
-    import ReLoginDialog from '../components/ReLoginDialog'
+    import * as url from '../util/api';
+    import * as util from '../util/util';
+    import http from '../util/http';
+    import download from 'downloadjs';
+    import ReTryDialog from '../components/ReTryDialog';
+    import ReLoginDialog from '../components/ReLoginDialog';
 
     export default {
-        name: "ConfigClaLink",
+        name: 'ConfigClaLink',
         components: {
             ReTryDialog,
-            ReLoginDialog,
+            ReLoginDialog
         },
         computed: {
             reTryVisible() {
-                return this.$store.state.reTryDialogVisible
+                return this.$store.state.reTryDialogVisible;
             },
             reLoginDialogVisible() {
-                return this.$store.state.orgReLoginDialogVisible
+                return this.$store.state.orgReLoginDialogVisible;
             },
             reLoginMsg() {
-                return this.$store.state.dialogMessage
+                return this.$store.state.dialogMessage;
             },
             cla_link_individual: {
                 get() {
                     return this.$store.state.claLinkIndividual;
                 },
                 set(value) {
-                    this.$store.commit('setClaLinkIndividual', value)
-                },
+                    this.$store.commit('setClaLinkIndividual', value);
+                }
             },
             cla_link_corporation: {
                 get() {
                     return this.$store.state.claLinkCorp;
                 },
                 set(value) {
-                    this.$store.commit('setClaLinkCorp', value)
-                },
+                    this.$store.commit('setClaLinkCorp', value);
+                }
             },
             individualClaLanguageValue: {
                 get() {
                     return this.$store.state.individualLanguage;
                 },
                 set(value) {
-                    this.$store.commit('setIndividualLanguage', value)
+                    this.$store.commit('setIndividualLanguage', value);
                 }
             },
             corpClaLanguageValue: {
@@ -151,14 +151,14 @@
                     return this.$store.state.corpLanguage;
                 },
                 set(value) {
-                    this.$store.commit('setCorpLanguage', value)
+                    this.$store.commit('setCorpLanguage', value);
                 }
-            },
+            }
         },
         data() {
             return {
-                languageOptions: [{value: 'english', label: 'English'}, {value: 'chinese', label: '中文'}],
-            }
+                languageOptions: [{value: 'english', label: 'English'}, {value: 'chinese', label: '中文'}]
+            };
         },
         inject: ['setClientHeight'],
         methods: {
@@ -174,13 +174,13 @@
 
             },
             changeIndividualLanguage(value) {
-                this.$store.commit('setIndividualLanguage', value)
+                this.$store.commit('setIndividualLanguage', value);
             },
             changeCorpLanguage(value) {
-                this.$store.commit('setCorpLanguage', value)
+                this.$store.commit('setCorpLanguage', value);
             },
             toPreviousPage() {
-                this.$router.replace('/config-email')
+                this.$router.replace('/config-email');
             },
             toNextPage() {
                 if (this.cla_link_individual && this.individualClaLanguageValue) {
@@ -190,38 +190,38 @@
                         if (this.cla_link_corporation) {
                             let arr = this.cla_link_corporation.split('.');
                             if (arr[arr.length - 1] !== 'pdf') {
-                                isRightFormat = false
+                                isRightFormat = false;
                             }
                         }
                         if (arr[arr.length - 1] === 'pdf' && isRightFormat) {
-                            this.$router.replace('/config-fields')
+                            this.$router.replace('/config-fields');
                         } else {
                             this.$message.closeAll();
-                            this.$message.error(this.$t('org.cla_format_err'))
+                            this.$message.error(this.$t('org.cla_format_err'));
                         }
                     } else if (this.cla_link_corporation) {
                         this.$store.commit('errorCodeSet', {
                             dialogVisible: true,
-                            dialogMessage: this.$t('tips.select_corp_language'),
+                            dialogMessage: this.$t('tips.select_corp_language')
                         });
                     } else {
                         this.$store.commit('errorCodeSet', {
                             dialogVisible: true,
-                            dialogMessage: this.$t('tips.paste_corp_link'),
+                            dialogMessage: this.$t('tips.paste_corp_link')
                         });
                     }
                 } else if (this.cla_link_individual) {
                     this.$store.commit('errorCodeSet', {
                         dialogVisible: true,
-                        dialogMessage: this.$t('tips.select_individual_language'),
+                        dialogMessage: this.$t('tips.select_individual_language')
                     });
                 } else {
                     this.$store.commit('errorCodeSet', {
                         dialogVisible: true,
-                        dialogMessage: this.$t('tips.paste_individual_link'),
+                        dialogMessage: this.$t('tips.paste_individual_link')
                     });
                 }
-            },
+            }
         },
         updated() {
             this.setClientHeight();
@@ -231,9 +231,9 @@
                 if (from.path === '/') {
                     vm.init();
                 }
-            })
-        },
-    }
+            });
+        }
+    };
 </script>
 <style lang="less">
     #configTwo {

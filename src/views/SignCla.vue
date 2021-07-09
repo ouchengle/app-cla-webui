@@ -113,69 +113,69 @@
 </template>
 
 <script>
-    import * as util from '../util/util'
-    import * as url from '../util/api'
-    import {mapActions} from 'vuex'
-    import axios from '../util/_axios'
-    import ReLoginDialog from '../components/ReLoginDialog'
-    import ReTryDialog from '../components/ReTryDialog'
-    import SignSuccessDialog from '../components/SignSuccessDialog'
-    import SignReLoginDialog from '../components/SignReLoginDialog'
+    import * as util from '../util/util';
+    import * as url from '../util/api';
+    import {mapActions} from 'vuex';
+    import axios from '../util/_axios';
+    import ReLoginDialog from '../components/ReLoginDialog';
+    import ReTryDialog from '../components/ReTryDialog';
+    import SignSuccessDialog from '../components/SignSuccessDialog';
+    import SignReLoginDialog from '../components/SignReLoginDialog';
 
     export default {
-        name: "SignCla",
+        name: 'SignCla',
         computed: {
             pdfData() {
                 if (this.$store.state.pafData) {
-                    return this.$store.state.pafData
+                    return this.$store.state.pafData;
                 }
-                return []
+                return [];
             },
             loginType() {
-                return this.$store.state.loginType
+                return this.$store.state.loginType;
             },
             org() {
                 let org = this.$store.state.repoInfo.org_id;
                 if (org.length > 1) {
-                    return org.charAt(0).toUpperCase() + org.substring(1)
+                    return org.charAt(0).toUpperCase() + org.substring(1);
                 } else {
-                    return org.charAt(0).toUpperCase()
+                    return org.charAt(0).toUpperCase();
                 }
             },
             reLoginDialogVisible() {
-                return this.$store.state.dialogVisible
+                return this.$store.state.dialogVisible;
             },
             reLoginMsg() {
-                return this.$store.state.dialogMessage
+                return this.$store.state.dialogMessage;
             },
             reTryDialogVisible() {
-                return this.$store.state.reTryDialogVisible
+                return this.$store.state.reTryDialogVisible;
             },
             signSuccessDialogVisible() {
-                return this.$store.state.signSuccessDialogVisible
+                return this.$store.state.signSuccessDialogVisible;
             },
             signReLoginDialogVisible() {
-                return this.$store.state.signReLoginDialogVisible
+                return this.$store.state.signReLoginDialogVisible;
             },
             sendBtTextFromLang: {
                 get: function () {
                     return this.sendBtText;
                 },
                 set: function (value) {
-                    this.sendBtText = value
+                    this.sendBtText = value;
                 }
             },
             claTextUrl() {
-                return `${this.$store.state.domain}/cla-pdf`
-            },
+                return `${this.$store.state.domain}/cla-pdf`;
+            }
         },
         watch: {
             '$i18n.locale'() {
                 if (this.$route.path !== '/sign-cla') {
-                    return
+                    return;
                 }
                 this.cla_lang = '';
-                this.lang = localStorage.getItem('lang').toLowerCase()
+                this.lang = localStorage.getItem('lang').toLowerCase();
                 this.signPageData.forEach((item, index) => {
                     if (item.language === this.lang) {
                         this.cla_lang = item.language;
@@ -186,7 +186,7 @@
                             lang: this.lang,
                             hash: this.cla_hash,
                             pdfData: this.pdfData
-                        }, this.claTextUrl)
+                        }, this.claTextUrl);
                         this.fields = this.signPageData[this.value].fields;
                         if (Object.keys(this.rules).length === 0) {
                             this.setFieldsData();
@@ -194,24 +194,24 @@
                     }
                 });
                 if (this.sendBtTextFromLang === 'send code' || this.sendBtTextFromLang === '发送验证码') {
-                    this.sendBtTextFromLang = this.$t('signPage.sendCode')
+                    this.sendBtTextFromLang = this.$t('signPage.sendCode');
                 } else {
-                    this.sendBtTextFromLang = this.$t('signPage.reSendCode', {second: this.second})
+                    this.sendBtTextFromLang = this.$t('signPage.reSendCode', {second: this.second});
                 }
                 this.$refs['ruleForm'] && this.$refs['ruleForm'].fields.forEach(item => {
                     if (item.validateState === 'error') {
-                        this.$refs['ruleForm'].validateField(item.labelFor)
+                        this.$refs['ruleForm'].validateField(item.labelFor);
                     }
                 });
 
-            },
+            }
         },
         inject: ['setClientHeight'],
         components: {
             ReLoginDialog,
             ReTryDialog,
             SignSuccessDialog,
-            SignReLoginDialog,
+            SignReLoginDialog
         },
         data() {
             return {
@@ -244,8 +244,8 @@
                 rules: {},
                 isRead: false,
                 value: '',
-                cla_lang: '',
-            }
+                cla_lang: ''
+            };
         },
         methods: {
             ...mapActions(['setTokenAct', 'setRepoInfoAct']),
@@ -254,10 +254,10 @@
                     if (event.data instanceof Array && event.origin === this.$store.state.domain) {
                         this.$store.commit('setPafData', event.data);
                     }
-                }, false)
+                }, false);
             },
             previewPrivacy() {
-                this.$router.push('/privacy')
+                this.$router.push('/privacy');
             },
             toIndex() {
                 let date = new Date();
@@ -267,11 +267,11 @@
                 let params = repoInfo.repo_id ? `${repoInfo.platform}/${repoInfo.org_id}/${repoInfo.repo_id}` : `${repoInfo.platform}/${repoInfo.org_id}`;
                 let path = '';
                 if (sessionStorage.getItem('orgAddress')) {
-                    path = `${this.signRouter}/${util.strToBase64(params)}/${sessionStorage.getItem('orgAddress')}`
+                    path = `${this.signRouter}/${util.strToBase64(params)}/${sessionStorage.getItem('orgAddress')}`;
                 } else {
-                    path = `${this.signRouter}/${util.strToBase64(params)}`
+                    path = `${this.signRouter}/${util.strToBase64(params)}`;
                 }
-                window.open(`${this.domain}${path}`)
+                window.open(`${this.domain}${path}`);
             },
             async requireVerifyTel(rule, value, callback) {
                 if (value) {
@@ -279,10 +279,10 @@
                     if (reg.test(value)) {
                         callback();
                     } else {
-                        callback(new Error(this.$t('tips.invalid_telephone_num')))
+                        callback(new Error(this.$t('tips.invalid_telephone_num')));
                     }
                 } else {
-                    callback(new Error(this.$t('tips.not_fill_telephone_num')))
+                    callback(new Error(this.$t('tips.not_fill_telephone_num')));
                 }
             },
             async verifyTel(rule, value, callback) {
@@ -291,20 +291,20 @@
                     if (reg.test(value)) {
                         callback();
                     } else {
-                        callback(new Error(this.$t('tips.invalid_telephone_num')))
+                        callback(new Error(this.$t('tips.invalid_telephone_num')));
                     }
                 }
             },
             async verifyAddr(rule, value, callback) {
                 if (!value) {
-                    callback(new Error(this.$t('tips.not_fill_address')))
+                    callback(new Error(this.$t('tips.not_fill_address')));
                 } else {
                     callback();
                 }
             },
             async verifyFax(rule, value, callback) {
                 if (!value) {
-                    callback(new Error(this.$t('tips.not_fill_fax')))
+                    callback(new Error(this.$t('tips.not_fill_fax')));
                 } else {
                     callback();
                 }
@@ -318,61 +318,61 @@
                 if (reg.test(email)) {
                     callback();
                 } else {
-                    callback(new Error(this.$t('tips.invalid_email')))
+                    callback(new Error(this.$t('tips.invalid_email')));
                 }
             },
             async verifyName(rule, value, callback) {
                 if (value) {
                     callback();
                 } else {
-                    callback(new Error(this.$t('tips.fill_name')))
+                    callback(new Error(this.$t('tips.fill_name')));
                 }
             },
             async verifyCorpName(rule, value, callback) {
                 if (!value) {
-                    callback(new Error(this.$t('tips.fill_corp_name')))
+                    callback(new Error(this.$t('tips.fill_corp_name')));
                 } else {
                     callback();
                 }
             },
             async verifyTitle(rule, value, callback) {
                 if (!value) {
-                    callback(new Error(this.$t('tips.fill_representative_title')))
+                    callback(new Error(this.$t('tips.fill_representative_title')));
                 } else {
                     callback();
                 }
             },
             async verifyAuthorized(rule, value, callback) {
                 if (!value) {
-                    callback(new Error(this.$t('tips.fill_representative_name')))
+                    callback(new Error(this.$t('tips.fill_representative_name')));
                 } else {
                     callback();
                 }
             },
             async verifyDate(rule, value, callback) {
                 if (!value) {
-                    callback(new Error(this.$t('tips.fill_date')))
+                    callback(new Error(this.$t('tips.fill_date')));
                 } else {
                     callback();
                 }
             },
             async verifyCodeCheck(rule, value, callback) {
                 if (!value) {
-                    callback(new Error(this.$t('tips.fill_verification_code')))
+                    callback(new Error(this.$t('tips.fill_verification_code')));
                 } else {
                     callback();
                 }
             },
             setMyForm(type, value) {
-                this.myForm[type] = value
+                this.myForm[type] = value;
             },
             sendCode() {
-                let reg = new RegExp("^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$");
+                let reg = new RegExp('^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$');
                 let email = this.myForm.email;
                 if (email && reg.test(email)) {
                     axios({
                         url: `${url.sendVerifyCode}/${this.link_id}/${this.myForm.email}`,
-                        method: 'post',
+                        method: 'post'
                     }).then(res => {
                         this.$message.closeAll();
                         this.$message.success({message: this.$t('tips.sending_email'), duration: 8000});
@@ -380,74 +380,74 @@
                         let codeInterval = setInterval(() => {
                             if (this.second !== 0) {
                                 this.second--;
-                                this.sendBtTextFromLang = this.$t('signPage.reSendCode', {second: this.second})
+                                this.sendBtTextFromLang = this.$t('signPage.reSendCode', {second: this.second});
                             } else {
                                 this.sendBtTextFromLang = this.$t('signPage.sendCode');
-                                clearInterval(codeInterval)
+                                clearInterval(codeInterval);
                             }
-                        }, 1000)
+                        }, 1000);
                     }).catch(err => {
                         if (err.data && err.data.hasOwnProperty('data')) {
                             switch (err.data.data.error_code) {
                                 case 'cla.invalid_parameter':
                                     this.$store.commit('setSignReLogin', {
                                         dialogVisible: true,
-                                        dialogMessage: this.$t('tips.invalid_parameter'),
+                                        dialogMessage: this.$t('tips.invalid_parameter')
                                     });
                                     break;
                                 case 'cla.invalid_token':
                                     this.$store.commit('setSignReLogin', {
                                         dialogVisible: true,
-                                        dialogMessage: this.$t('tips.invalid_token'),
+                                        dialogMessage: this.$t('tips.invalid_token')
                                     });
                                     break;
                                 case 'cla.missing_token':
                                     this.$store.commit('setSignReLogin', {
                                         dialogVisible: true,
-                                        dialogMessage: this.$t('tips.missing_token'),
+                                        dialogMessage: this.$t('tips.missing_token')
                                     });
                                     break;
                                 case 'cla.unknown_token':
                                     this.$store.commit('setSignReLogin', {
                                         dialogVisible: true,
-                                        dialogMessage: this.$t('tips.unknown_token'),
+                                        dialogMessage: this.$t('tips.unknown_token')
                                     });
                                     break;
                                 case 'cla.failed_to_send_email':
                                     this.$store.commit('errorCodeSet', {
                                         dialogVisible: true,
-                                        dialogMessage: this.$t('tips.failed_to_send_email'),
+                                        dialogMessage: this.$t('tips.failed_to_send_email')
                                     });
                                     break;
                                 case 'cla.not_same_corp':
                                     this.$store.commit('errorCodeSet', {
                                         dialogVisible: true,
-                                        dialogMessage: this.$t('tips.not_same_corp'),
+                                        dialogMessage: this.$t('tips.not_same_corp')
                                     });
                                     break;
                                 case 'cla.system_error':
                                     this.$store.commit('errorCodeSet', {
                                         dialogVisible: true,
-                                        dialogMessage: this.$t('tips.system_error'),
+                                        dialogMessage: this.$t('tips.system_error')
                                     });
                                     break;
                                 default :
                                     this.$store.commit('errorCodeSet', {
                                         dialogVisible: true,
-                                        dialogMessage: this.$t('tips.unknown_error'),
+                                        dialogMessage: this.$t('tips.unknown_error')
                                     });
                                     break;
                             }
                         } else {
                             this.$store.commit('errorCodeSet', {
                                 dialogVisible: true,
-                                dialogMessage: this.$t('tips.system_error'),
-                            })
+                                dialogMessage: this.$t('tips.system_error')
+                            });
                         }
-                    })
+                    });
                 } else {
                     this.$message.closeAll();
-                    this.$message.error(this.$t('tips.not_fill_email'))
+                    this.$message.error(this.$t('tips.not_fill_email'));
                 }
             },
             getNowDate() {
@@ -468,7 +468,7 @@
                 let initials = word.substring(0, 1);
                 let upper = initials.toUpperCase();
                 let end = word.substring(1);
-                return upper + end
+                return upper + end;
             },
             setData(res, resolve) {
                 if (res && res.data.data) {
@@ -476,12 +476,12 @@
                         this.signPageData = res.data.data.clas;
                         this.link_id = res.data.data.link_id;
                         if (localStorage.getItem('lang') !== undefined) {
-                            this.lang = localStorage.getItem('lang').toLowerCase()
+                            this.lang = localStorage.getItem('lang').toLowerCase();
                         }
                         let langOptions = [];
                         let langLabel = '';
                         this.signPageData.forEach((item, index) => {
-                            langLabel = this.upperFirstCase(item.language)
+                            langLabel = this.upperFirstCase(item.language);
                             langOptions.push({value: index, label: langLabel});
                             if (item.language === this.lang) {
                                 this.cla_lang = item.language;
@@ -495,13 +495,13 @@
                                 });
                                 this.setFields(this.value);
                                 this.setFieldsData();
-                                resolve('complete')
+                                resolve('complete');
                             }
                         });
-                        this.$emit('getLangOptions', langOptions)
+                        this.$emit('getLangOptions', langOptions);
                         if (!this.cla_lang) {
-                            this.lang = this.signPageData[0].language
-                            this.cla_lang = this.signPageData[0].language
+                            this.lang = this.signPageData[0].language;
+                            this.cla_lang = this.signPageData[0].language;
                             this.value = 0;
                             this.cla_hash = this.signPageData[0].cla_hash;
                             this.setClaText({
@@ -512,22 +512,22 @@
                             });
                             this.setFields(this.value);
                             this.setFieldsData();
-                            localStorage.setItem('lang', this.upperFirstCase(this.lang))
+                            localStorage.setItem('lang', this.upperFirstCase(this.lang));
                         }
-                        this.$emit('initHeader', this.upperFirstCase(this.lang))
+                        this.$emit('initHeader', this.upperFirstCase(this.lang));
                     } else {
                         let message = '';
                         if (this.$store.state.loginType === this.corporation) {
-                            message = this.$t('tips.no_cla_binding_corp')
+                            message = this.$t('tips.no_cla_binding_corp');
                         } else if (this.$store.state.loginType === this.employee) {
-                            message = this.$t('tips.no_cla_binding_emp')
+                            message = this.$t('tips.no_cla_binding_emp');
                         }
                         if (this.$store.state.loginType === this.individual) {
-                            message = this.$t('tips.no_cla_binding_individual')
+                            message = this.$t('tips.no_cla_binding_individual');
                         }
                         this.$store.commit('setSignReLogin', {
                             dialogVisible: true,
-                            dialogMessage: message,
+                            dialogMessage: message
                         });
                     }
 
@@ -539,120 +539,120 @@
                 this.loginType === this.corporation ? applyTo = this.loginType : applyTo = this.individual;
                 try {
                     if (this.$store.state.repoInfo.repo_id) {
-                        _url = `${url.getSignPage}/${this.$store.state.repoInfo.platform}/${this.$store.state.repoInfo.org_id}:${this.$store.state.repoInfo.repo_id}/${applyTo}`
+                        _url = `${url.getSignPage}/${this.$store.state.repoInfo.platform}/${this.$store.state.repoInfo.org_id}:${this.$store.state.repoInfo.repo_id}/${applyTo}`;
                     } else {
-                        _url = `${url.getSignPage}/${this.$store.state.repoInfo.platform}/${this.$store.state.repoInfo.org_id}/${applyTo}`
+                        _url = `${url.getSignPage}/${this.$store.state.repoInfo.platform}/${this.$store.state.repoInfo.org_id}/${applyTo}`;
                     }
-                }catch (e) {
+                } catch (e) {
                     this.$store.commit('errorCodeSet', {
                         dialogVisible: true,
-                        dialogMessage: this.$t('tips.page_error'),
+                        dialogMessage: this.$t('tips.page_error')
                     });
-                    return
+                    return;
                 }
                 axios({
-                    url: _url,
+                    url: _url
                 }).then(res => {
-                    this.setData(res, resolve)
+                    this.setData(res, resolve);
                 }).catch(err => {
                     if (err.data && err.data.hasOwnProperty('data')) {
                         switch (err.data.data.error_code) {
                             case 'cla.no_cla_binding':
                                 let message = '';
                                 if (this.$store.state.loginType === this.corporation) {
-                                    message = this.$t('tips.no_cla_binding_corp')
+                                    message = this.$t('tips.no_cla_binding_corp');
                                 } else if (this.$store.state.loginType === this.employee) {
-                                    message = this.$t('tips.no_cla_binding_emp')
+                                    message = this.$t('tips.no_cla_binding_emp');
                                 }
                                 if (this.$store.state.loginType === this.individual) {
-                                    message = this.$t('tips.no_cla_binding_individual')
+                                    message = this.$t('tips.no_cla_binding_individual');
                                 }
                                 this.$store.commit('setSignReLogin', {
                                     dialogVisible: true,
-                                    dialogMessage: message,
+                                    dialogMessage: message
                                 });
                                 break;
                             case 'cla.invalid_parameter':
                                 this.$store.commit('setSignReLogin', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.invalid_parameter'),
+                                    dialogMessage: this.$t('tips.invalid_parameter')
                                 });
                                 break;
                             case 'cla.no_corp_manager':
                                 this.$store.commit('setSignReLogin', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.no_corp_manager'),
+                                    dialogMessage: this.$t('tips.no_corp_manager')
                                 });
                                 break;
                             case 'cla.has_not_signed':
                                 this.$store.commit('setSignReLogin', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.has_not_signed'),
+                                    dialogMessage: this.$t('tips.has_not_signed')
                                 });
                                 break;
                             case 'cla.invalid_token':
                                 this.$store.commit('setSignReLogin', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.invalid_token'),
+                                    dialogMessage: this.$t('tips.invalid_token')
                                 });
                                 break;
                             case 'cla.expired_token':
                                 this.$store.commit('setSignReLogin', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.invalid_token'),
+                                    dialogMessage: this.$t('tips.invalid_token')
                                 });
                                 break;
                             case 'cla.missing_token':
                                 this.$store.commit('setSignReLogin', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.missing_token'),
+                                    dialogMessage: this.$t('tips.missing_token')
                                 });
                                 break;
                             case 'cla.unknown_token':
                                 this.$store.commit('setSignReLogin', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.unknown_token'),
+                                    dialogMessage: this.$t('tips.unknown_token')
                                 });
                                 break;
                             case 'cla.uncompleted_signing':
                                 this.$store.commit('setSignReLogin', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.uncompleted_signing'),
+                                    dialogMessage: this.$t('tips.uncompleted_signing')
                                 });
                                 break;
                             case 'cla.not_ready_to_sign':
                                 this.$store.commit('setSignReLogin', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.not_ready_to_sign'),
+                                    dialogMessage: this.$t('tips.not_ready_to_sign')
                                 });
                                 break;
                             case 'cla.system_error':
                                 this.$store.commit('errorCodeSet', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.system_error'),
+                                    dialogMessage: this.$t('tips.system_error')
                                 });
                                 break;
                             default :
                                 this.$store.commit('errorCodeSet', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.unknown_error'),
+                                    dialogMessage: this.$t('tips.unknown_error')
                                 });
                                 break;
                         }
                     } else {
                         this.$store.commit('errorCodeSet', {
                             dialogVisible: true,
-                            dialogMessage: this.$t('tips.system_error'),
-                        })
+                            dialogMessage: this.$t('tips.system_error')
+                        });
                     }
-                })
+                });
             },
             setClaText(obj) {
                 this.$nextTick(() => {
                     this.$refs.pdf_iframe.contentWindow.onload = () => {
-                        this.$refs.pdf_iframe.contentWindow.postMessage(obj, this.claTextUrl)
-                    }
-                })
+                        this.$refs.pdf_iframe.contentWindow.postMessage(obj, this.claTextUrl);
+                    };
+                });
             },
             setFields(key) {
                 for (let i = 0; i < this.signPageData[key].fields.length; i++) {
@@ -660,7 +660,7 @@
                         if (Number(this.signPageData[key].fields[i].id) > Number(this.signPageData[key].fields[j].id)) {
                             let field = this.signPageData[key].fields[i];
                             this.signPageData[key].fields[i] = this.signPageData[key].fields[j];
-                            this.signPageData[key].fields[j] = field
+                            this.signPageData[key].fields[j] = field;
                         }
                     }
                 }
@@ -679,9 +679,9 @@
                                     required: item.required,
                                     validator: this.verifyName,
                                     trigger: ['blur', 'change']
-                                },
-                            ],
-                        })
+                                }
+                            ]
+                        });
                     } else if (item.type === 'corporationName') {
                         Object.assign(this.myForm, {corporationName: ''});
                         item.required && Object.assign(rules, {
@@ -690,9 +690,9 @@
                                     required: item.required,
                                     validator: this.verifyCorpName,
                                     trigger: ['blur', 'change']
-                                },
-                            ],
-                        })
+                                }
+                            ]
+                        });
                     } else if (item.type === 'title') {
                         Object.assign(this.myForm, {title: ''});
                         item.required && Object.assign(rules, {
@@ -701,9 +701,9 @@
                                     required: item.required,
                                     validator: this.verifyTitle,
                                     trigger: ['blur', 'change']
-                                },
-                            ],
-                        })
+                                }
+                            ]
+                        });
                     } else if (item.type === 'authorized') {
                         Object.assign(this.myForm, {authorized: ''});
                         item.required && Object.assign(rules, {
@@ -712,9 +712,9 @@
                                     required: item.required,
                                     validator: this.verifyAuthorized,
                                     trigger: ['blur', 'change']
-                                },
-                            ],
-                        })
+                                }
+                            ]
+                        });
                     } else if (item.type === 'date') {
                         Object.assign(this.myForm, {date: ''});
                         item.required && Object.assign(rules, {
@@ -723,8 +723,8 @@
                                     required: item.required,
                                     validator: this.verifyDate,
                                     trigger: ['blur', 'change']
-                                }],
-                        })
+                                }]
+                        });
                     } else if (item.type === 'email') {
                         Object.assign(this.myForm, {email: ''});
                         item.required && Object.assign(rules, {
@@ -732,8 +732,8 @@
                                 required: item.required,
                                 validator: this.verifyFormEmail,
                                 trigger: ['blur', 'change']
-                            }],
-                        })
+                            }]
+                        });
                     } else if (item.type === 'telephone') {
                         Object.assign(this.myForm, {telephone: ''});
                         if (item.required) {
@@ -742,15 +742,15 @@
                                     required: item.required,
                                     validator: this.requireVerifyTel,
                                     trigger: ['blur', 'change']
-                                }],
-                            })
+                                }]
+                            });
                         } else {
                             Object.assign(rules, {
                                 [item.id]: [{
                                     validator: this.verifyTel,
                                     trigger: ['blur', 'change']
-                                }],
-                            })
+                                }]
+                            });
                         }
                     } else if (item.type === 'address') {
                         Object.assign(this.myForm, {address: ''});
@@ -759,8 +759,8 @@
                                 required: item.required,
                                 validator: this.verifyAddr,
                                 trigger: ['blur', 'change']
-                            }],
-                        })
+                            }]
+                        });
                     } else if (item.type === 'fax') {
                         Object.assign(this.myForm, {fax: ''});
                         item.required && Object.assign(rules, {
@@ -768,8 +768,8 @@
                                 required: item.required,
                                 validator: this.verifyFax,
                                 trigger: ['blur', 'change']
-                            }],
-                        })
+                            }]
+                        });
                     }
                 });
                 Object.assign(form, {code: ''});
@@ -779,10 +779,10 @@
                         required: true,
                         validator: this.verifyCodeCheck,
                         trigger: ['blur', 'change']
-                    },]
+                    }]
                 });
                 this.ruleForm = form;
-                this.rules = rules
+                this.rules = rules;
             },
             signCla() {
                 let info = {};
@@ -790,7 +790,7 @@
                 let obj = {};
                 for (let key in this.ruleForm) {
                     if (this.ruleForm[key] !== '') {
-                        Object.assign(info, {[key]: this.ruleForm[key] + ''})
+                        Object.assign(info, {[key]: this.ruleForm[key] + ''});
                     }
                 }
                 if (this.$store.state.loginType === this.corporation) {
@@ -802,14 +802,14 @@
                         enabled: true,
                         info: info,
                         verification_code: this.ruleForm.code
-                    }
+                    };
                 } else {
                     obj = {
                         name: this.myForm.name,
                         email: this.myForm.email,
                         verification_code: this.ruleForm.code,
-                        info: info,
-                    }
+                        info: info
+                    };
                     if (this.$store.state.loginType === this.individual) {
                         myUrl = `${url.individual_signing}/${this.link_id}/${this.cla_lang}/${this.cla_hash}`;
                     } else if (this.$store.state.loginType === this.employee) {
@@ -817,27 +817,27 @@
                     }
                 }
 
-                this.sign(myUrl, obj)
+                this.sign(myUrl, obj);
             },
             sign(myUrl, obj) {
                 if (!myUrl) {
-                    return
+                    return;
                 }
                 axios({
                     url: myUrl,
                     method: 'post',
-                    data: obj,
+                    data: obj
                 }).then(res => {
                     if (this.$store.state.loginType === this.corporation) {
-                        this.tipsMessage = this.$t('tips.corp_sign')
+                        this.tipsMessage = this.$t('tips.corp_sign');
                     } else if (this.$store.state.loginType === this.employee) {
-                        this.tipsMessage = this.$t('tips.emp_sign')
+                        this.tipsMessage = this.$t('tips.emp_sign');
                     } else if (this.$store.state.loginType === this.individual) {
-                        this.tipsMessage = this.$t('tips.individual_sign')
+                        this.tipsMessage = this.$t('tips.individual_sign');
                     }
                     this.$store.commit('setSignSuccess', {
                         dialogVisible: true,
-                        dialogMessage: this.tipsMessage,
+                        dialogMessage: this.tipsMessage
                     });
 
                 }).catch(err => {
@@ -848,117 +848,117 @@
                                 if (this.$store.state.loginType === this.corporation) {
                                     message = this.$t('tips.corp_has_signed');
                                 } else {
-                                    message = this.$t('tips.has_signed')
+                                    message = this.$t('tips.has_signed');
                                 }
                                 this.$store.commit('setSignReLogin', {
                                     dialogVisible: true,
-                                    dialogMessage: message,
+                                    dialogMessage: message
                                 });
                                 break;
                             case 'cla.invalid_parameter':
                                 this.$store.commit('setSignReLogin', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.invalid_parameter'),
+                                    dialogMessage: this.$t('tips.invalid_parameter')
                                 });
                                 break;
                             case 'cla.expired_token':
                                 this.$store.commit('setSignReLogin', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.invalid_token'),
+                                    dialogMessage: this.$t('tips.invalid_token')
                                 });
                                 break;
                             case 'cla.missing_token':
                                 this.$store.commit('setSignReLogin', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.missing_token'),
+                                    dialogMessage: this.$t('tips.missing_token')
                                 });
                                 break;
                             case 'cla.unknown_token':
                                 this.$store.commit('setSignReLogin', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.unknown_token'),
+                                    dialogMessage: this.$t('tips.unknown_token')
                                 });
                                 break;
                             case 'cla.unauthorized_token':
                                 this.$store.commit('setSignReLogin', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.unauthorized_token'),
+                                    dialogMessage: this.$t('tips.unauthorized_token')
                                 });
                                 break;
                             case 'cla.go_to_sign_employee_cla':
                                 this.$store.commit('setSignReLogin', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.go_to_sign_employee_cla'),
+                                    dialogMessage: this.$t('tips.go_to_sign_employee_cla')
                                 });
                                 break;
                             case 'cla.no_employee_manager':
                                 this.$store.commit('setSignReLogin', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.no_corp_manager'),
+                                    dialogMessage: this.$t('tips.no_corp_manager')
                                 });
                                 break;
                             case 'cla.failed_to_send_email':
                                 this.$store.commit('errorCodeSet', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.failed_to_send_email'),
+                                    dialogMessage: this.$t('tips.failed_to_send_email')
                                 });
                                 break;
                             case 'cla.wrong_verification_code':
                                 this.$store.commit('errorCodeSet', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.wrong_verification_code'),
+                                    dialogMessage: this.$t('tips.wrong_verification_code')
                                 });
                                 break;
                             case 'cla.restricted_email_suffix':
                                 this.$store.commit('errorCodeSet', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.restricted_email_suffix'),
+                                    dialogMessage: this.$t('tips.restricted_email_suffix')
                                 });
                                 break;
                             case 'cla.expired_verification_code':
                                 this.$store.commit('errorCodeSet', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.expired_verification_code'),
+                                    dialogMessage: this.$t('tips.expired_verification_code')
                                 });
                                 break;
                             case 'cla.error_parsing_api_body':
                                 this.$store.commit('errorCodeSet', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.error_parsing_api_body'),
+                                    dialogMessage: this.$t('tips.error_parsing_api_body')
                                 });
                                 break;
                             case 'cla.no_link':
                                 this.$store.commit('setSignReLogin', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.no_link'),
+                                    dialogMessage: this.$t('tips.no_link')
                                 });
                                 break;
                             case 'cla.unmatched_cla':
                                 this.$store.commit('errorCodeSet', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.unmatched_cla'),
+                                    dialogMessage: this.$t('tips.unmatched_cla')
                                 });
                                 break;
                             case 'cla.system_error':
                                 this.$store.commit('errorCodeSet', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.system_error'),
+                                    dialogMessage: this.$t('tips.system_error')
                                 });
                                 break;
                             default :
                                 this.$store.commit('errorCodeSet', {
                                     dialogVisible: true,
-                                    dialogMessage: this.$t('tips.unknown_error'),
+                                    dialogMessage: this.$t('tips.unknown_error')
                                 });
                                 break;
                         }
                     } else {
                         this.$store.commit('errorCodeSet', {
                             dialogVisible: true,
-                            dialogMessage: this.$t('tips.system_error'),
-                        })
+                            dialogMessage: this.$t('tips.system_error')
+                        });
                     }
-                })
+                });
             },
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
@@ -967,7 +967,7 @@
                             this.signCla();
                         } else {
                             this.$message.closeAll();
-                            this.$message.error(this.$t('tips.review_privacy'))
+                            this.$message.error(this.$t('tips.review_privacy'));
                         }
                     } else {
                         return false;
@@ -976,25 +976,25 @@
             },
             setClientHeight() {
                 this.$nextTick(() => {
-                    document.getElementById("signCla").style.minHeight = '0px';
+                    document.getElementById('signCla').style.minHeight = '0px';
                     if (util.getClientHeight() > document.getElementById('signCla').offsetHeight) {
-                        document.getElementById("signCla").style.minHeight = util.getClientHeight() + 'px'
+                        document.getElementById('signCla').style.minHeight = util.getClientHeight() + 'px';
                     } else {
-                        document.getElementById("signCla").style.minHeight = document.getElementById('signCla').offsetHeight + 'px'
+                        document.getElementById('signCla').style.minHeight = document.getElementById('signCla').offsetHeight + 'px';
                     }
-                })
-            },
+                });
+            }
         },
         activated() {
             if (this.signPageData) {
                 if (localStorage.getItem('lang') !== undefined) {
-                    this.lang = localStorage.getItem('lang').toLowerCase()
+                    this.lang = localStorage.getItem('lang').toLowerCase();
                 }
                 let langOptions = [];
                 let langLabel = '';
                 this.cla_lang = '';
                 this.signPageData.forEach((item, index) => {
-                    langLabel = this.upperFirstCase(item.language)
+                    langLabel = this.upperFirstCase(item.language);
                     langOptions.push({value: index, label: langLabel});
                     if (item.language === this.lang) {
                         this.cla_lang = item.language;
@@ -1009,9 +1009,9 @@
                         this.setFields(this.value);
                     }
                 });
-                this.$emit('getLangOptions', langOptions)
+                this.$emit('getLangOptions', langOptions);
                 if (!this.cla_lang) {
-                    this.lang = this.signPageData[0].language
+                    this.lang = this.signPageData[0].language;
                     this.value = 0;
                     this.cla_hash = this.signPageData[0].cla_hash;
                     this.setClaText({
@@ -1021,17 +1021,17 @@
                         pdfData: this.pdfData
                     });
                     this.setFields(this.value);
-                    localStorage.setItem('lang', this.upperFirstCase(this.lang))
+                    localStorage.setItem('lang', this.upperFirstCase(this.lang));
                 }
-                this.$emit('initHeader', this.upperFirstCase(this.lang))
+                this.$emit('initHeader', this.upperFirstCase(this.lang));
                 this.$refs.pdf_iframe.contentWindow.onload = () => {
                     this.$refs.pdf_iframe.contentWindow.postMessage({
                         link_id: this.link_id,
                         lang: this.lang,
                         hash: this.cla_hash,
-                        pdfData: this.pdfData,
-                    }, this.claTextUrl)
-                }
+                        pdfData: this.pdfData
+                    }, this.claTextUrl);
+                };
             }
         },
         created() {
@@ -1039,13 +1039,13 @@
             new Promise((resolve, reject) => {
                 this.getSignPage(resolve);
             }).then(res => {
-                this.getNowDate()
-            })
+                this.getNowDate();
+            });
         },
         mounted() {
             this.setClientHeight();
         }
-    }
+    };
 </script>
 
 <style lang="less">

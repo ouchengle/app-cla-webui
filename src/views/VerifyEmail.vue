@@ -32,14 +32,14 @@
 </template>
 
 <script>
-    import Step from '../components/FindPwdSteps'
-    import http from '../util/_axios'
-    import * as url from '../util/api'
+    import Step from '../components/FindPwdSteps';
+    import http from '../util/_axios';
+    import * as url from '../util/api';
 
     export default {
-        name: "verifyEmail",
+        name: 'verifyEmail',
         components: {
-            Step,
+            Step
         },
         computed: {
             sendBtTextFromLang: {
@@ -47,23 +47,23 @@
                     return this.sendBtText;
                 },
                 set: function (value) {
-                    this.sendBtText = value
+                    this.sendBtText = value;
                 }
-            },
+            }
         },
         watch: {
             '$i18n.locale'() {
                 if (this.sendBtTextFromLang === 'send code' || this.sendBtTextFromLang === '发送验证码') {
-                    this.sendBtTextFromLang = this.$t('signPage.sendCode')
+                    this.sendBtTextFromLang = this.$t('signPage.sendCode');
                 } else {
-                    this.sendBtTextFromLang = this.$t('signPage.reSendCode', {second: this.second})
+                    this.sendBtTextFromLang = this.$t('signPage.reSendCode', {second: this.second});
                 }
                 this.$refs['ruleForm'] && this.$refs['ruleForm'].fields.forEach(item => {
                     if (item.validateState === 'error') {
-                        this.$refs['ruleForm'].validateField(item.labelFor)
+                        this.$refs['ruleForm'].validateField(item.labelFor);
                     }
                 });
-            },
+            }
         },
         data() {
             return {
@@ -72,8 +72,8 @@
                 rules: {
                     email: [{required: true, validator: this.verifyFormEmail, trigger: ['blur', 'change']}],
                     code: [{required: true, validator: this.verifyCodeCheck, trigger: ['blur', 'change']}]
-                },
-            }
+                }
+            };
         },
         methods: {
             async verifyFormEmail(rule, value, callback) {
@@ -82,14 +82,14 @@
                 if (reg.test(email)) {
                     callback();
                 } else {
-                    callback(new Error(this.$t('tips.invalid_email')))
+                    callback(new Error(this.$t('tips.invalid_email')));
                 }
             },
             async verifyCodeCheck(rule, value, callback) {
                 if (value) {
                     callback();
                 } else {
-                    callback(new Error(this.$t('tips.fill_verification_code')))
+                    callback(new Error(this.$t('tips.fill_verification_code')));
                 }
             },
             submitVerifyCode() {
@@ -98,26 +98,22 @@
                     method: 'post',
                     data: {email: this.ruleForm.email, verifyCode: this.ruleForm.code}
                 }).then(res => {
-                    console.log(res);
-                    this.$store.commit('setFindPwdEmail', this.ruleForm.email)
-                    this.$router.push('/reset-password')
+                    this.$store.commit('setFindPwdEmail', this.ruleForm.email);
+                    this.$router.push('/reset-password');
                 }).catch(err => {
-                    console.log(err);
-                })
+                });
             },
             submitForm(formName) {
-                console.log(formName);
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        this.submitVerifyCode()
+                        this.submitVerifyCode();
                     } else {
                         return false;
                     }
                 });
             },
             sendCode() {
-                console.log('sendCode');
-                let reg = new RegExp("^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$");
+                let reg = new RegExp('^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$');
                 let email = this.ruleForm.email;
                 if (email && reg.test(email)) {
                     http({
@@ -128,15 +124,15 @@
                         console.log(res);
                     }).catch(err => {
                         console.log(err);
-                    })
+                    });
                 } else {
                     this.$message.closeAll();
-                    this.$message.error(this.$t('tips.not_fill_email'))
+                    this.$message.error(this.$t('tips.not_fill_email'));
                 }
 
-            },
+            }
         }
-    }
+    };
 </script>
 
 <style lang="less">

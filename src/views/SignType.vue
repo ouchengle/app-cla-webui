@@ -763,15 +763,15 @@
     </el-row>
 </template>
 <script>
-    import NewHeader from '@components/NewHeader'
-    import NewFooter from '@components/NewFooter'
-    import * as util from '../util/util'
-    import * as url from '../util/api'
-    import _axios from '../util/_axios'
-    import _cookie from 'js-cookie'
-    import {mapActions} from 'vuex'
-    import ReTryDialog from '../components/ReTryDialog'
-    import EmailReTryDialog from '../components/EmailReTryDialog'
+    import NewHeader from '@components/NewHeader';
+    import NewFooter from '@components/NewFooter';
+    import * as util from '../util/util';
+    import * as url from '../util/api';
+    import _axios from '../util/_axios';
+    import _cookie from 'js-cookie';
+    import {mapActions} from 'vuex';
+    import ReTryDialog from '../components/ReTryDialog';
+    import EmailReTryDialog from '../components/EmailReTryDialog';
 
     export default {
         name: 'SignType',
@@ -779,38 +779,38 @@
             NewHeader,
             NewFooter,
             ReTryDialog,
-            EmailReTryDialog,
+            EmailReTryDialog
         },
         computed: {
             corpBtTooltip() {
                 if (this.isBindCorpCLA) {
-                    return `${this.$t('signType.corpStep1_1')}${this.$t('signType.corpBt')}${this.$t('signType.corpStep1_2')}`
+                    return `${this.$t('signType.corpStep1_1')}${this.$t('signType.corpBt')}${this.$t('signType.corpStep1_2')}`;
                 } else {
-                    return this.$t('signType.not_support_corp')
+                    return this.$t('signType.not_support_corp');
                 }
             },
             empBtTooltip() {
                 if (this.isBindCorpCLA) {
-                    return `${this.$t('signType.empStep1_1')}${this.$t('signType.empBt')}${this.$t('signType.corpStep1_2')}`
+                    return `${this.$t('signType.empStep1_1')}${this.$t('signType.empBt')}${this.$t('signType.corpStep1_2')}`;
                 } else {
-                    return this.$t('signType.not_support_emp')
+                    return this.$t('signType.not_support_emp');
                 }
             },
             individualBtTooltip() {
-                return `${this.$t('signType.individualStep1_1')}${this.$t('signType.individualBt')}${this.$t('signType.corpStep1_2')}`
+                return `${this.$t('signType.individualStep1_1')}${this.$t('signType.individualBt')}${this.$t('signType.corpStep1_2')}`;
             },
             emailReTryDialogVisible() {
-                return this.$store.state.emailErrVisible
+                return this.$store.state.emailErrVisible;
             },
             reTryDialogVisible() {
-                return this.$store.state.reTryDialogVisible
+                return this.$store.state.reTryDialogVisible;
             },
             reLoginMsg() {
-                return this.$store.state.dialogMessage
+                return this.$store.state.dialogMessage;
             },
             domain() {
-                return this.$store.state.domain
-            },
+                return this.$store.state.domain;
+            }
         },
         data() {
             return {
@@ -824,14 +824,14 @@
                 repo: '',
                 signType: 'corporation',
                 transparentDiv: {
-                    height: '',
-                },
-            }
+                    height: ''
+                }
+            };
         },
         provide() {
             return {
                 setClientHeight: this.setClientHeight
-            }
+            };
         },
         methods: {
             ...mapActions(['setLoginTypeAct', 'setRepoInfoAct']),
@@ -842,15 +842,15 @@
                 this.employeeGuideIsOpen = !this.employeeGuideIsOpen;
             },
             clickCorpGuide() {
-                this.corpGuideIsOpen = !this.corpGuideIsOpen
+                this.corpGuideIsOpen = !this.corpGuideIsOpen;
             },
             toCorpLogin() {
                 this.$store.commit('setLoginType', 'corporationManager');
-                this.$router.push('/corporationManagerLogin')
+                this.$router.push('/corporationManagerLogin');
             },
             setLangLocale() {
                 if (parseInt(localStorage.getItem('lang'))) {
-                    this.value = parseInt(localStorage.getItem('lang'))
+                    this.value = parseInt(localStorage.getItem('lang'));
                 }
                 switch (this.value) {
                     case 0:
@@ -872,27 +872,27 @@
                         let name = cookieKeyValue[0].trim();
                         let value = cookieKeyValue[1].trim();
                         _cookie.remove(name, {path: '/'});
-                        if (name === "error_code") {
+                        if (name === 'error_code') {
                             switch (value) {
                                 case 'auth_failed':
                                     this.$store.commit('errorCodeSet', {
                                         dialogVisible: true,
-                                        dialogMessage: this.$t('tips.refuse_authorize', {platform: this.$store.state.repoInfo.platform}),
+                                        dialogMessage: this.$t('tips.refuse_authorize', {platform: this.$store.state.repoInfo.platform})
                                     });
                                     break;
                                 case EMAIL_UNAUTHORIZE:
                                     this.$store.commit('errorCodeSet', {
                                         dialogVisible: true,
-                                        dialogMessage: this.$t('tips.not_authorize_email'),
+                                        dialogMessage: this.$t('tips.not_authorize_email')
                                     });
                                     break;
                                 case NO_PUBLIC_EMAIL:
-                                    this.$store.commit('setEmailErr', true,);
+                                    this.$store.commit('setEmailErr', true);
                                     break;
                                 case SYSTEM_ERROR:
                                     this.$store.commit('errorCodeSet', {
                                         dialogVisible: true,
-                                        dialogMessage: this.$t('tips.system_error'),
+                                        dialogMessage: this.$t('tips.system_error')
                                     });
                                     break;
                             }
@@ -906,10 +906,10 @@
 
                     if (repoInfo.repo_id) {
                         this.repo = repoInfo.repo_id;
-                        params = `${repoInfo.platform}/${repoInfo.org_id}/${repoInfo.repo_id}`
+                        params = `${repoInfo.platform}/${repoInfo.org_id}/${repoInfo.repo_id}`;
                     } else {
-                        params = `${repoInfo.platform}/${repoInfo.org_id}`
-                        this.repo = ''
+                        params = `${repoInfo.platform}/${repoInfo.org_id}`;
+                        this.repo = '';
                     }
                     let base64Params = util.strToBase64(params);
                     this.$router.replace(`${this.$store.state.signRouter}/${base64Params}`);
@@ -918,29 +918,29 @@
                     if (params.indexOf('/') !== -1) {
                         repoInfoParams = params.substring(0, params.indexOf('/'));
                         let orgAddress = params.substring(params.indexOf('/') + 1);
-                        sessionStorage.setItem('orgAddress', orgAddress)
+                        sessionStorage.setItem('orgAddress', orgAddress);
                     } else {
                         sessionStorage.removeItem('orgAddress');
-                        repoInfoParams = params
+                        repoInfoParams = params;
                     }
                     let arg = util.base64ToStr(repoInfoParams);
                     if (arg) {
                         let args = arg.split('/');
                         if (args.length < 2) {
-                            this.$router.push({name: 'ErrorPath'})
+                            this.$router.push({name: 'ErrorPath'});
                         } else {
                             this.platform = args[0];
                             this.org = args[1];
                             if (args[2]) {
-                                this.repo = args[2]
+                                this.repo = args[2];
                             } else {
-                                this.repo = ''
+                                this.repo = '';
                             }
                             this.setRepoInfoAct({platform: this.platform, org_id: this.org, repo_id: this.repo});
-                            this.getSignPage(this.platform, this.org, this.repo, 'corporation')
+                            this.getSignPage(this.platform, this.org, this.repo, 'corporation');
                         }
                     } else {
-                        this.$router.push({name: 'ErrorPath'})
+                        this.$router.push({name: 'ErrorPath'});
                     }
 
                 }
@@ -949,42 +949,42 @@
             getSignPage(platform, org_id, repo_id, applyTo) {
                 let _url = '';
                 if (repo_id) {
-                    _url = `${url.getSignPage}/${platform}/${org_id}:${repo_id}/${applyTo}`
+                    _url = `${url.getSignPage}/${platform}/${org_id}:${repo_id}/${applyTo}`;
                 } else {
-                    _url = `${url.getSignPage}/${platform}/${org_id}/${applyTo}`
+                    _url = `${url.getSignPage}/${platform}/${org_id}/${applyTo}`;
                 }
                 _axios({
-                    url: _url,
+                    url: _url
                 }).then(res => {
                     if (res && res.data.data && res.data.data.clas) {
                         if (res.data.data.clas.length && applyTo === 'corporation') {
-                            this.isBindCorpCLA = true
+                            this.isBindCorpCLA = true;
                         }
                     }
                 }).catch(err => {
-                })
+                });
             },
 
             submit(loginType) {
                 this.setLoginTypeAct(loginType);
-                this.$router.push('/sign-cla')
+                this.$router.push('/sign-cla');
             },
             clickSignTypeGuide(type) {
                 this.signType = type;
             },
             setClientHeight() {
                 this.$nextTick(() => {
-                    document.getElementById("transparentDiv").style.minHeight = '0px';
+                    document.getElementById('transparentDiv').style.minHeight = '0px';
                     if (util.getClientHeight() > document.getElementById('transparentDiv').offsetHeight) {
-                        document.getElementById("transparentDiv").style.minHeight = util.getClientHeight() + 'px'
+                        document.getElementById('transparentDiv').style.minHeight = util.getClientHeight() + 'px';
                     } else {
-                        document.getElementById("transparentDiv").style.minHeight = document.getElementById('transparentDiv').offsetHeight + 'px'
+                        document.getElementById('transparentDiv').style.minHeight = document.getElementById('transparentDiv').offsetHeight + 'px';
                     }
-                })
+                });
             },
             setDomain() {
-                this.$store.commit('setDomain', window.location.href.split('/sign')[0])
-            },
+                this.$store.commit('setDomain', window.location.href.split('/sign')[0]);
+            }
         },
         created() {
             this.setDomain();
@@ -997,14 +997,14 @@
             this.setClientHeight();
             window.onresize = () => {
                 if (util.getClientHeight() > document.getElementById('transparentDiv').offsetHeight) {
-                    document.getElementById("transparentDiv").style.minHeight = util.getClientHeight() + 'px';
+                    document.getElementById('transparentDiv').style.minHeight = util.getClientHeight() + 'px';
                 }
-            }
+            };
         },
         destroyed() {
             window.onresize = null;
         }
-    }
+    };
 </script>
 <style lang="less">
     @import "../assets/font/css/Roboto-Bold.css";
@@ -1353,6 +1353,5 @@
         font-family: Roboto-Regular, sans-serif;
         font-size: 1.5rem;
     }
-
 
 </style>
