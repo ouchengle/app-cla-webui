@@ -116,10 +116,10 @@ const PWD_MAX_ASCII = 126;
 const LANGUAGE_ARR = [{label: 'English', value: 'english'}, {label: '中文', value: 'chinese'}];
 const PRIVACY_POLICY_DATA = [                           
     {
-        platform: 'github',                              //隐私声明存储的平台，支持gitee和github
-        owner: 'ouchengle',                              //隐私声明存储的公开组织
-        repo: 'Test',                                    //隐私声明存储的公开仓库
-        path: 'en-privacy.md',                           //隐私声明在仓库中的路径
+        platform: 'gitee',                              //隐私声明存储的平台，支持gitee和github
+        owner: 'pityonline',                              //隐私声明存储的公开组织
+        repo: 'cla-test',                                    //隐私声明存储的公开仓库
+        path: 'privacy.txt',                           //隐私声明在仓库中的路径
         language: 'English',                             //隐私声明的语言类别
     },
     {
