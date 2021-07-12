@@ -119,7 +119,7 @@ const PRIVACY_POLICY_DATA = [
         platform: 'gitee',                              //隐私声明存储的平台，支持gitee和github
         owner: 'pityonline',                              //隐私声明存储的公开组织
         repo: 'cla-test',                                    //隐私声明存储的公开仓库
-        path: 'privacy.txt',                           //隐私声明在仓库中的路径
+        path: 'privacy.md',                           //隐私声明在仓库中的路径
         language: 'English',                             //隐私声明的语言类别
     },
     {
