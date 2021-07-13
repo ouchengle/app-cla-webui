@@ -70,11 +70,9 @@
                                             <div :class="{'isShow':value!==item.value,'mark':item.label}">
                                             </div>
                                         </div>
-
                                         <div>
                                             {{item.label}}
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
@@ -137,8 +135,6 @@
                     }
                 } else if (this.$route.path === '/add-subemail') {
                     this.$router.push('/subemail');
-                } else if (this.$route.path === '/privacy') {
-                    this.$router.push('/sign-cla');
                 }
             },
             openOrCloseMenu() {

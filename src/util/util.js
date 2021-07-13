@@ -240,6 +240,11 @@ export const catchErr = (err, commit, _this) => {
         });
     }
 };
+export const toPrivacy = (_this) => {
+    if (_this.$route.path !== '/privacy') {
+        _this.$router.push('/privacy');
+    }
+};
 
 
 
