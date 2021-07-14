@@ -126,8 +126,8 @@
         name: 'SignCla',
         computed: {
             pdfData() {
-                if (this.$store.state.pafData) {
-                    return this.$store.state.pafData;
+                if (this.$store.state.pdfData) {
+                    return this.$store.state.pdfData;
                 }
                 return [];
             },
@@ -252,7 +252,7 @@
             setIframeEventListener() {
                 window.addEventListener('message', (event) => {
                     if (event.data instanceof Array && event.origin === this.$store.state.domain) {
-                        this.$store.commit('setPafData', event.data);
+                        this.$store.commit('setPdfData', event.data);
                     }
                 }, false);
             },

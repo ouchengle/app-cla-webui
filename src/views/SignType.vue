@@ -988,6 +988,7 @@
             }
         },
         created() {
+            this.$store.commit('setPdfData', '');
             this.setDomain();
             this.getRepoInfo();
         },

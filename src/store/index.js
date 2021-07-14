@@ -49,7 +49,7 @@ export default new Vuex.Store({
         addLang: sessionStorage.getItem('addLang') || undefined,
         add_bind_first: sessionStorage.getItem('add_bind_first') || undefined,
         findPwdEmail: sessionStorage.getItem('findPwdEmail') || undefined,
-        pafData: '',
+        pdfData: '',
         privacyData: '',
         emailSuffixArr: JSON.parse(sessionStorage.getItem('emailSuffixArr')) || undefined
     },
@@ -61,8 +61,8 @@ export default new Vuex.Store({
         setPrivacyData(state, data) {
             state.privacyData = data;
         },
-        setPafData(state, data) {
-            state.pafData = data;
+        setPdfData(state, data) {
+            state.pdfData = data;
         },
         setFindPwdEmail(state, data) {
             state.findPwdEmail = data;
