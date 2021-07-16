@@ -35,6 +35,7 @@
     import Step from '../components/FindPwdSteps';
     import http from '../util/_axios';
     import * as url from '../util/api';
+    import * as util from '../util/util';
 
     export default {
         name: 'verifyEmail',
@@ -101,6 +102,7 @@
                     this.$store.commit('setFindPwdEmail', this.ruleForm.email);
                     this.$router.push('/reset-password');
                 }).catch(err => {
+                    util.catchErr(err, '', this);
                 });
             },
             submitForm(formName) {
